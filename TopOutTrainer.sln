@@ -7,7 +7,13 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TopOutTrainer.Android", "To
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TopOutTrainer.iOS", "TopOutTrainer\TopOutTrainer.iOS\TopOutTrainer.iOS.csproj", "{4FAA2504-F8EE-40D4-ACA9-FF347AA0D0AC}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TopOutTrainer", "TopOutTrainer\TopOutTrainer\TopOutTrainer.csproj", "{86F17E27-D7DC-4D2F-A9C2-00C8A2422B30}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TopOutTrainer", "TopOutTrainer\TopOutTrainer\TopOutTrainer.csproj", "{86F17E27-D7DC-4D2F-A9C2-00C8A2422B30}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{967F3A28-6DD7-4592-AC04-327EECC92592}"
+	ProjectSection(SolutionItems) = preProject
+		TopOutTrainer\TopOutTrainer\obj\Debug\netstandard2.0\App.xaml.g.cs = TopOutTrainer\TopOutTrainer\obj\Debug\netstandard2.0\App.xaml.g.cs
+		TopOutTrainer\TopOutTrainer\obj\Debug\netstandard2.0\MainPage.xaml.g.cs = TopOutTrainer\TopOutTrainer\obj\Debug\netstandard2.0\MainPage.xaml.g.cs
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
