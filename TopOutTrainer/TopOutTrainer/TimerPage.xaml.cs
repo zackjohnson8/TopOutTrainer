@@ -22,7 +22,7 @@ namespace TopOutTrainer
         void OnSliderValueChanged(object sender, ValueChangedEventArgs args)
         {
             //valueLabel.Text = args.NewValue.ToString("F3");
-            //valueLabel.Text = ((Slider)sender).Value.ToString("F3");
+            valueLabel.Text = ((Slider)sender).Value.ToString("F3");
         }
 
         void OnButtonClicked(object sender, EventArgs args)
