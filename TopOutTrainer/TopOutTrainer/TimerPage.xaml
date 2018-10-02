@@ -14,7 +14,7 @@
                 HorizontalOptions="CenterAndExpand" />
 
             <Slider VerticalOptions="CenterAndExpand" 
-                     
+                     ValueChanged="OnSliderValueChanged"
                     />
 
             <Label Text="A simple Label"
@@ -26,7 +26,7 @@
             <Button Text="Click Me!"
                 HorizontalOptions="Center"
                 VerticalOptions="CenterAndExpand" 
-                
+                Clicked="OnButtonClicked"
                     />
 
         </StackLayout>
