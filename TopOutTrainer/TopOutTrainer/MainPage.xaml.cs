@@ -7,11 +7,12 @@ using Xamarin.Forms;
 
 namespace TopOutTrainer
 {
-    public partial class MainPage : ContentPage
+    public partial class MainPage : ContentPage // Partial class InitializeComponent in XamlSamples\XamlSamples\obj\Debug
     {
         public MainPage()
         {
             InitializeComponent();
+
         }
     }
 }
