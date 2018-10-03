@@ -12,11 +12,15 @@ namespace TopOutTrainer
 	[XamlCompilation(XamlCompilationOptions.Compile)]
 	public partial class TimerPage : ContentPage
 	{
-		public TimerPage ()
+        private const string contentPageBackgroundColor = "#303030";
+
+        public TimerPage ()
 		{
 			InitializeComponent ();
-
+            BackgroundColor = Color.FromHex(contentPageBackgroundColor);
             
+
+
         }
 
         void OnSliderValueChanged(object sender, ValueChangedEventArgs args)
