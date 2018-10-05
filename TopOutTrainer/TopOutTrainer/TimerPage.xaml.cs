@@ -13,10 +13,6 @@ namespace TopOutTrainer
 	public partial class TimerPage : ContentPage
 	{
         private const string contentPageBackgroundColor = "#303030";
-        private StackLayout stacklayout;
-        private Label labelTimerText;
-        private Label labelVisualHold;
-        private StackLayout stackLayoutButtonHolder;
 
         public TimerPage ()
 		{
@@ -26,57 +22,11 @@ namespace TopOutTrainer
             
         }
 
-        private void InitializeView()
+        void InitializeView()
         {
-            // Main Layout
-            stacklayout = new StackLayout
-            {
-                VerticalOptions = LayoutOptions.FillAndExpand,
-                Margin = new Thickness(10),
-            };
-
-            // Top Text Label
-            labelTimerText = new Label
-            {
-
-                Text = "TIMERTEXT",
-                FontSize = 50,
-                FontAttributes = FontAttributes.Bold,
-                HorizontalOptions = LayoutOptions.CenterAndExpand,
-                VerticalOptions = LayoutOptions.CenterAndExpand,
-                HeightRequest = 120,
-                BackgroundColor = Color.FromHex("#000000")
-            };
-            stacklayout.Children.Add(labelTimerText);
-
-            // Visual Hold Label
-            labelVisualHold = new Label
-            {
-
-                Text = "TIMERTEXT",
-                FontSize = 50,
-                FontAttributes = FontAttributes.Bold,
-                HorizontalOptions = LayoutOptions.CenterAndExpand,
-                VerticalOptions = LayoutOptions.CenterAndExpand,
-                HeightRequest = 120,
-                BackgroundColor = Color.FromHex("#000000")
-            };
-            stacklayout.Children.Add(labelVisualHold);
-
-            // StackLayout to fill with buttons
-            stackLayoutButtonHolder = new StackLayout
-            {
-                VerticalOptions = LayoutOptions.FillAndExpand,
-                HorizontalOptions = LayoutOptions.FillAndExpand,
-                Margin = new Thickness(10),
-                BackgroundColor = Color.FromHex("#000000")
-            };
-            stacklayout.Children.Add(stackLayoutButtonHolder);
-
-            Content = stacklayout;
+            TopOutTrainer.ContentViewHandler.BuildContentView(Content, ContentViewHandler.EnumViews.TimerPageView);
         }
 
-        // TODO: REMOVE
         void OnSliderValueChanged(object sender, ValueChangedEventArgs args)
         {
             //valueLabel.Text = args.NewValue.ToString("F3");
