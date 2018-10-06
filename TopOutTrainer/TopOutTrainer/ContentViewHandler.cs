@@ -5,9 +5,6 @@ using Xamarin.Forms;
 
 namespace TopOutTrainer
 {
-
-    
-
     public static class ContentViewHandler
     {
 
@@ -20,13 +17,16 @@ namespace TopOutTrainer
         private static Label timerPage_labelTimerText;
         private static Label timerPage_labelVisualHold;
         private static StackLayout timerPage_stackLayoutButtonHolder;
+        private static Button timerPage_buttonStart;
+        private static Button timerPage_buttonStop;
         private static View timerPage_Content;
 
-        public static void BuildContentView(View content, EnumViews ViewCreation)
+        public static View BuildContentView(EnumViews ViewCreation)
         {
             // TIMERPAGE CONTENT BUILD
             if (ViewCreation == EnumViews.TimerPageView)
             {
+ 
                 // Main Layout
                 if (timerPage_stacklayout != null)
                 {
@@ -87,19 +87,55 @@ namespace TopOutTrainer
 
                 }else
                 {
+
+                    timerPage_buttonStart = new Button
+                    {
+                        Text = "Start",
+                        VerticalOptions = LayoutOptions.CenterAndExpand,
+                        HorizontalOptions = LayoutOptions.CenterAndExpand,
+                        WidthRequest = 120,
+                        HeightRequest = 40,
+                        BorderColor = Color.FromHex("#66ffff"),
+                        BorderWidth = 3,
+                        CornerRadius = 2,
+                        // TODO: Clicked = "OnButtonClicked",
+                    };
+
+                    timerPage_buttonStop = new Button
+                    {
+                        Text = "Stop",
+                        VerticalOptions = LayoutOptions.CenterAndExpand,
+                        HorizontalOptions = LayoutOptions.CenterAndExpand,
+                        WidthRequest = 120,
+                        HeightRequest = 40,
+                        BorderColor = Color.FromHex("#66ffff"),
+                        BorderWidth = 3,
+                        CornerRadius = 2,
+                        // TODO: Clicked = "OnButtonClicked",
+                    };
+
+                    // Button Holder Creation and fill with new buttons
                     timerPage_stackLayoutButtonHolder = new StackLayout
                     {
                         VerticalOptions = LayoutOptions.FillAndExpand,
                         HorizontalOptions = LayoutOptions.FillAndExpand,
                         Margin = new Thickness(10),
-                        BackgroundColor = Color.FromHex("#000000")
+                        BackgroundColor = Color.FromHex("#303030"),
+                        Orientation = StackOrientation.Horizontal,
                     };
+
+                    timerPage_stackLayoutButtonHolder.Children.Add(timerPage_buttonStart);
+                    timerPage_stackLayoutButtonHolder.Children.Add(timerPage_buttonStop);
                     timerPage_stacklayout.Children.Add(timerPage_stackLayoutButtonHolder);
                 }
 
                 timerPage_Content = timerPage_stacklayout;
+
+                return timerPage_Content;
+
             }
 
+            return null;
         }
 
     }

@@ -24,7 +24,7 @@ namespace TopOutTrainer
 
         void InitializeView()
         {
-            TopOutTrainer.ContentViewHandler.BuildContentView(Content, ContentViewHandler.EnumViews.TimerPageView);
+            Content = ContentViewHandler.BuildContentView(ContentViewHandler.EnumViews.TimerPageView);
         }
 
         void OnSliderValueChanged(object sender, ValueChangedEventArgs args)
