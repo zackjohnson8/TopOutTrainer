@@ -21,6 +21,11 @@ namespace TopOutTrainer
         private static Button timerPage_buttonStop;
         private static View timerPage_Content;
 
+        private static String timerPage_totalTime = "Word";
+
+        private static Color timerPage_backgroundColor = Color.FromHex("#303030");
+        private static Color timerPage_textColor = Color.FromHex("#ffffff");
+
         public static View BuildContentView(EnumViews ViewCreation)
         {
             // TIMERPAGE CONTENT BUILD
@@ -47,17 +52,31 @@ namespace TopOutTrainer
                 }
                 else
                 {
+
+                    // Timer Text
+                    // Use previous slection screen to determine text number
                     timerPage_labelTimerText = new Label
                     {
-
-                        Text = "TIMERTEXT",
-                        FontSize = 50,
+                        Text = timerPage_totalTime,
+                        FontSize = Device.GetNamedSize(NamedSize.Large, typeof(Label)),
                         FontAttributes = FontAttributes.Bold,
                         HorizontalOptions = LayoutOptions.CenterAndExpand,
                         VerticalOptions = LayoutOptions.CenterAndExpand,
                         HeightRequest = 120,
-                        BackgroundColor = Color.FromHex("#000000")
+                        BackgroundColor = timerPage_backgroundColor,
+                        TextColor = timerPage_textColor,
                     };
+
+                    //Font-Family
+                    if (Device.RuntimePlatform == Device.iOS)
+                    {
+                        timerPage_labelTimerText.FontFamily = "OpenSans-Regular";
+                    }
+                    if(Device.RuntimePlatform == Device.Android)
+                    {
+                        timerPage_labelTimerText.FontFamily = "OpenSans-Regular.tff";
+                    }
+
                     timerPage_stacklayout.Children.Add(timerPage_labelTimerText);
                 }
 
