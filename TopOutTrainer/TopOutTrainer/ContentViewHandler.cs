@@ -20,7 +20,7 @@ namespace TopOutTrainer
         private static Button timerPage_buttonStart;
         private static Button timerPage_buttonStop;
         private static View timerPage_Content;
-        private static String timerPage_totalTime = "Word";
+        private static String timerPage_totalTime = "00:00";
         private static Color timerPage_backgroundColor = Color.FromHex("#303030");
         private static Color timerPage_textColor = Color.FromHex("#ffffff");
 
@@ -57,7 +57,7 @@ namespace TopOutTrainer
                     timerPage_labelTimerText = new Label
                     {
                         Text = timerPage_totalTime,
-                        FontSize = Device.GetNamedSize(NamedSize.Large, typeof(Label)),
+                        FontSize = 64,
                         FontAttributes = FontAttributes.Bold,
                         HorizontalOptions = LayoutOptions.CenterAndExpand,
                         VerticalOptions = LayoutOptions.CenterAndExpand,
@@ -73,7 +73,7 @@ namespace TopOutTrainer
                     }
                     if(Device.RuntimePlatform == Device.Android)
                     {
-                        timerPage_labelTimerText.FontFamily = "Lobster.otf#Lobster"; // Figure out where this is looking to find the string
+                        timerPage_labelTimerText.FontFamily = "font/montserrat/MontserratAlternates-Bold.otf#MontserratAlternates-Bold"; // Figure out where this is looking to find the string
                     }
 
                     timerPage_stacklayout.Children.Add(timerPage_labelTimerText);
