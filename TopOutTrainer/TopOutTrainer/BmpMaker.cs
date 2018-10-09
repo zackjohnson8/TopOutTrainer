@@ -1,14 +1,13 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
 using System.IO;
+using System.Text;
 using Xamarin.Forms;
 
 namespace TopOutTrainer
 {
-
     public class BmpMaker
     {
+        const int headerSize = 54;
         readonly byte[] buffer;
 
         public BmpMaker(int width, int height)
@@ -18,7 +17,7 @@ namespace TopOutTrainer
 
             int numPixels = Width * Height;
             int numPixelBytes = 4 * numPixels;
-            int fileSize = numPixelBytes;
+            int fileSize = headerSize + numPixelBytes;
             buffer = new byte[fileSize];
 
             // Write headers in MemoryStream and hence the buffer.
@@ -31,10 +30,10 @@ namespace TopOutTrainer
                     writer.Write(fileSize);                 // File size
                     writer.Write((short)0);                 // Reserved
                     writer.Write((short)0);                 // Reserved
-                    //writer.Write(headerSize);               // Offset to pixels if using header too
+                    writer.Write(headerSize);               // Offset to pixels
 
                     // Construct BitmapInfoHeader (40 bytes).
-                    //writer.Write(40);                       // Header size
+                    writer.Write(40);                       // Header size
                     writer.Write(Width);                    // Pixel width
                     writer.Write(Height);                   // Pixel height
                     writer.Write((short)1);                 // Planes
@@ -64,14 +63,14 @@ namespace TopOutTrainer
         public void SetPixel(int row, int col, Color color)
         {
             SetPixel(row, col, (int)(255 * color.R),
-                                (int)(255 * color.G),
-                                (int)(255 * color.B),
-                                (int)(255 * color.A));
+                               (int)(255 * color.G),
+                               (int)(255 * color.B),
+                               (int)(255 * color.A));
         }
 
         public void SetPixel(int row, int col, int r, int g, int b, int a = 255)
         {
-            int index = (row * Width + col) * 4;
+            int index = (row * Width + col) * 4 + headerSize;
             buffer[index + 0] = (byte)b;
             buffer[index + 1] = (byte)g;
             buffer[index + 2] = (byte)r;

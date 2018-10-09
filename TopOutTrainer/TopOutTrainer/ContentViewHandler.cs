@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Text;
 using Xamarin.Forms;
 
@@ -99,20 +100,18 @@ namespace TopOutTrainer
 
 
 
-                        
-                        int rows = 512;
-                        int cols = 256;
+
+                        int rows = 128;
+                        int cols = 64;
                         BmpMaker bmpMaker = new BmpMaker(cols, rows);
 
                         for (int row = 0; row < rows; row++)
                             for (int col = 0; col < cols; col++)
                             {
-                                //bmpMaker.SetPixel(row, col, 2 * row, 0, 2 * (128 - row));
-                                bmpMaker.SetPixel(row, col, Color.FromHex("#000000"));
+                                bmpMaker.SetPixel(row, col, 2 * row, 0, 2 * (128 - row));
                             }
 
                         ImageSource imageSource = bmpMaker.Generate();
-
 
                         timerPage_bitmapImage = new Image
                         {
@@ -193,5 +192,15 @@ namespace TopOutTrainer
             return null;
         }
 
+        private static ImageSource BuildBitmapImage()
+        {
+
+            MemoryStream memoryStream = new MemoryStream();
+
+            return null;
+        }
+
     }
+
+    
 }
