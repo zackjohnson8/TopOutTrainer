@@ -62,13 +62,15 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Assets\Lobster.otf" />
-    <None Include="Assets\OpenSans-Regular.ttf" />
+    <None Include="Assets\font\Lobster.otf" />
+    <None Include="Assets\font\OpenSans-Regular.ttf" />
+    <AndroidAsset Include="Assets\Lobster.otf" />
+    <AndroidAsset Include="Assets\OpenSans.ttf" />
     <None Include="Resources\AboutResources.txt" />
-    <None Include="Assets\AboutAssets.txt" />
+    <AndroidAsset Include="Assets\AboutAssets.txt" />
     <None Include="Properties\AndroidManifest.xml" />
-    <None Include="Resources\Lobster.otf" />
-    <None Include="Resources\OpenSans-Regular.ttf" />
+    <None Include="Resources\font\Lobster.otf" />
+    <None Include="Resources\font\OpenSans-Regular.ttf" />
   </ItemGroup>
   <ItemGroup>
     <AndroidResource Include="Resources\layout\Tabbar.axml" />

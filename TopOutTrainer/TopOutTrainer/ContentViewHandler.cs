@@ -20,11 +20,10 @@ namespace TopOutTrainer
         private static Button timerPage_buttonStart;
         private static Button timerPage_buttonStop;
         private static View timerPage_Content;
-
         private static String timerPage_totalTime = "Word";
-
         private static Color timerPage_backgroundColor = Color.FromHex("#303030");
         private static Color timerPage_textColor = Color.FromHex("#ffffff");
+
 
         public static View BuildContentView(EnumViews ViewCreation)
         {
@@ -74,12 +73,12 @@ namespace TopOutTrainer
                     }
                     if(Device.RuntimePlatform == Device.Android)
                     {
-                        timerPage_labelTimerText.FontFamily = "OpenSans-Regular.tff";
+                        timerPage_labelTimerText.FontFamily = "Lobster.otf#Lobster"; // Figure out where this is looking to find the string
                     }
 
                     timerPage_stacklayout.Children.Add(timerPage_labelTimerText);
                 }
-
+                
                 // Visual Hold Label
                 if(timerPage_labelVisualHold != null)
                 {

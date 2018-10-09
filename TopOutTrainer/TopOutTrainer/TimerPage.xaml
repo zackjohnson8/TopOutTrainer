@@ -4,13 +4,6 @@
              x:Class="TopOutTrainer.TimerPage"
              Title="TimerPage"
              >
-    <ContentPage.Content>
 
-        <StackLayout>
 
-            
-
-        </StackLayout>
-
-    </ContentPage.Content>
 </ContentPage>
