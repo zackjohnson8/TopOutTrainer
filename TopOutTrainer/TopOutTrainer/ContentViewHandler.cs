@@ -15,8 +15,9 @@ namespace TopOutTrainer
 
         private static StackLayout timerPage_stacklayout;
         private static Label timerPage_labelTimerText;
-        private static Label timerPage_labelVisualHold;
+        private static Image timerPage_bitmapImage;
         private static StackLayout timerPage_stackLayoutButtonHolder;
+        private static StackLayout timerPage_stackLayoutBitmapHolder;
         private static Button timerPage_buttonStart;
         private static Button timerPage_buttonStop;
         private static View timerPage_Content;
@@ -78,27 +79,63 @@ namespace TopOutTrainer
 
                     timerPage_stacklayout.Children.Add(timerPage_labelTimerText);
                 }
-                
-                // Visual Hold Label
-                if(timerPage_labelVisualHold != null)
+
+
+                // StackLayout to fill with buttons
+                if (timerPage_stackLayoutBitmapHolder != null)
                 {
 
-                }else
+                }
+                else
                 {
-                    timerPage_labelVisualHold = new Label
+                    // Visual Hold Label
+                    if (timerPage_bitmapImage != null)
                     {
 
-                        Text = "TIMERTEXT",
-                        FontSize = 50,
-                        FontAttributes = FontAttributes.Bold,
-                        HorizontalOptions = LayoutOptions.CenterAndExpand,
-                        VerticalOptions = LayoutOptions.CenterAndExpand,
-                        HeightRequest = 120,
-                        BackgroundColor = Color.FromHex("#000000")
-                    };
-                    timerPage_stacklayout.Children.Add(timerPage_labelVisualHold);
-                }
+                    }
+                    else
+                    {
 
+
+
+
+                        
+                        int rows = 512;
+                        int cols = 256;
+                        BmpMaker bmpMaker = new BmpMaker(cols, rows);
+
+                        for (int row = 0; row < rows; row++)
+                            for (int col = 0; col < cols; col++)
+                            {
+                                //bmpMaker.SetPixel(row, col, 2 * row, 0, 2 * (128 - row));
+                                bmpMaker.SetPixel(row, col, Color.FromHex("#000000"));
+                            }
+
+                        ImageSource imageSource = bmpMaker.Generate();
+
+
+                        timerPage_bitmapImage = new Image
+                        {
+                            HorizontalOptions = LayoutOptions.CenterAndExpand,
+                            VerticalOptions = LayoutOptions.CenterAndExpand,
+                            Aspect = Aspect.Fill,
+                            Source = imageSource
+                        };
+
+                        // Button Holder Creation and fill with new buttons
+                        timerPage_stackLayoutBitmapHolder = new StackLayout
+                        {
+                            VerticalOptions = LayoutOptions.FillAndExpand,
+                            HorizontalOptions = LayoutOptions.FillAndExpand,
+                            Margin = new Thickness(10),
+                            BackgroundColor = Color.FromHex("#ffffff"),
+                            Orientation = StackOrientation.Horizontal,
+                        };
+
+                        timerPage_stackLayoutBitmapHolder.Children.Add(timerPage_bitmapImage);
+                        timerPage_stacklayout.Children.Add(timerPage_stackLayoutBitmapHolder);
+                    }
+                }
                 // StackLayout to fill with buttons
                 if(timerPage_stackLayoutButtonHolder != null)
                 {
