@@ -77,6 +77,7 @@ namespace TopOutTrainer
             buffer[index + 3] = (byte)a;
         }
 
+
         public ImageSource Generate()
         {
             // Create MemoryStream from buffer with bitmap.

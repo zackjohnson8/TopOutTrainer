@@ -101,34 +101,44 @@ namespace TopOutTrainer
 
 
 
-                        int rows = 128;
-                        int cols = 64;
+                        
+
+                        // Button Holder Creation and fill with new buttons
+                        timerPage_stackLayoutBitmapHolder = new StackLayout
+                        {
+                            VerticalOptions = LayoutOptions.Center,
+                            HorizontalOptions = LayoutOptions.FillAndExpand,
+                            Margin = new Thickness(10),
+                            BackgroundColor = timerPage_backgroundColor,
+                            Orientation = StackOrientation.Horizontal,
+                        };
+
+                        //SizeRequest stackLayoutSize = timerPage_stackLayoutBitmapHolder.GetSizeRequest();
+
+                        int rows = 800;
+                        int cols = 800;
                         BmpMaker bmpMaker = new BmpMaker(cols, rows);
+
+                        //for (int row = 0; row < rows; row++)
+                        //    for (int col = 0; col < cols; col++)
+                        //    {
+                        //        bmpMaker.SetPixel(row, col, 2 * row, 0, 2 * (128 - row));
+                        //    }
 
                         for (int row = 0; row < rows; row++)
                             for (int col = 0; col < cols; col++)
                             {
-                                bmpMaker.SetPixel(row, col, 2 * row, 0, 2 * (128 - row));
+                                bmpMaker.SetPixel(row, col, 0, 0, 0);
                             }
 
                         ImageSource imageSource = bmpMaker.Generate();
-
+                        
                         timerPage_bitmapImage = new Image
                         {
                             HorizontalOptions = LayoutOptions.CenterAndExpand,
                             VerticalOptions = LayoutOptions.CenterAndExpand,
                             Aspect = Aspect.Fill,
                             Source = imageSource
-                        };
-
-                        // Button Holder Creation and fill with new buttons
-                        timerPage_stackLayoutBitmapHolder = new StackLayout
-                        {
-                            VerticalOptions = LayoutOptions.FillAndExpand,
-                            HorizontalOptions = LayoutOptions.FillAndExpand,
-                            Margin = new Thickness(10),
-                            BackgroundColor = Color.FromHex("#ffffff"),
-                            Orientation = StackOrientation.Horizontal,
                         };
 
                         timerPage_stackLayoutBitmapHolder.Children.Add(timerPage_bitmapImage);
@@ -188,14 +198,6 @@ namespace TopOutTrainer
                 return timerPage_Content;
 
             }
-
-            return null;
-        }
-
-        private static ImageSource BuildBitmapImage()
-        {
-
-            MemoryStream memoryStream = new MemoryStream();
 
             return null;
         }
