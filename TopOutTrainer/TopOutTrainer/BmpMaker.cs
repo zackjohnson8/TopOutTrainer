@@ -77,6 +77,43 @@ namespace TopOutTrainer
             buffer[index + 3] = (byte)a;
         }
 
+        public void DrawCircle(int row, int col, int thickness)
+        {
+
+            int diameter = row;
+            int radius = diameter / 2 - 10;
+            int center = row / 2; // division takes the lower number even with odd numbers
+            int radiusSqrd = radius * radius;
+
+           
+            for(int index = 0; index < radius; index++)
+            {
+                SetPixel(radius, radius + index, Color.White);
+            }
+
+
+            double x;
+            double y;
+            for (int index0 = 0; index0 < thickness; index0++)
+            {
+                for (int index = 0; index < 360; index++)
+                {
+                    x = center + (radius - index0) * Math.Cos((index) * Math.PI / 180);
+                    y = center + (radius - index0) * Math.Sin((index) * Math.PI / 180);
+                    SetPixel((int)x, (int)y, Color.White);
+                    SetPixel((int)x+1, (int)y, Color.White);
+                    SetPixel((int)x-1, (int)y, Color.White);
+                    SetPixel((int)x, (int)y+1, Color.White);
+                    SetPixel((int)x, (int)y-1, Color.White);
+                    SetPixel((int)x+1, (int)y+1, Color.White);
+                    SetPixel((int)x-1, (int)y-1, Color.White);
+                    SetPixel((int)x+1, (int)y-1, Color.White);
+                    SetPixel((int)x-1, (int)y+1, Color.White);
+
+                }
+            }
+
+        }
 
         public ImageSource Generate()
         {

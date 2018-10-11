@@ -131,6 +131,9 @@ namespace TopOutTrainer
                                 bmpMaker.SetPixel(row, col, 0, 0, 0);
                             }
 
+                        // Draw images to the bitmap
+                        bmpMaker.DrawCircle(rows, cols, 20);
+
                         ImageSource imageSource = bmpMaker.Generate();
                         
                         timerPage_bitmapImage = new Image
