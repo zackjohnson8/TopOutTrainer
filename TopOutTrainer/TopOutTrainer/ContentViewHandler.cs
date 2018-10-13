@@ -23,9 +23,14 @@ namespace TopOutTrainer
         private static Button timerPage_buttonStop;
         private static View timerPage_Content;
         private static String timerPage_totalTime = "00:00";
-        private static Color timerPage_backgroundColor = Color.FromHex("#303030");
+         //static Color timerPage_backgroundColor = Color.FromHex("#303030");
         private static Color timerPage_textColor = Color.FromHex("#ffffff");
 
+        public static Color timerPage_backgroundColor
+        {
+            private set;
+            get;
+        } = Color.FromHex("#303030");
 
         public static View BuildContentView(EnumViews ViewCreation)
         {
@@ -128,11 +133,11 @@ namespace TopOutTrainer
                         for (int row = 0; row < rows; row++)
                             for (int col = 0; col < cols; col++)
                             {
-                                bmpMaker.SetPixel(row, col, 0, 0, 0);
+                                bmpMaker.SetPixel(row, col, timerPage_backgroundColor);
                             }
 
                         // Draw images to the bitmap
-                        bmpMaker.DrawCircle(rows, cols, 20);
+                        bmpMaker.DrawCircle(rows, cols, 40);
 
                         ImageSource imageSource = bmpMaker.Generate();
                         

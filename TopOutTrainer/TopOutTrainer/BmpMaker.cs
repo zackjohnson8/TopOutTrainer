@@ -85,32 +85,89 @@ namespace TopOutTrainer
             int center = row / 2; // division takes the lower number even with odd numbers
             int radiusSqrd = radius * radius;
 
+            int centerX = row / 2;
+            int centerY = col / 2;
+
            
-            for(int index = 0; index < radius; index++)
+            //for(int index = 0; index < radius; index++)
+            //{
+            //    SetPixel(radius, radius + index, Color.White);
+            //}
+
+
+            //double x;
+            //double y;
+            //for (int index0 = 0; index0 < thickness; index0++)
+            //{
+            //    for (int index = 0; index < 1440; index++)
+            //    {
+            //x = center + (radius - index0) * Math.Cos((index) * Math.PI / 180);
+            //y = center + (radius - index0) * Math.Sin((index) * Math.PI / 180);
+
+            //SetPixel((int)x, (int)y, Color.White);
+            //SetPixel((int)x + 1, (int)y, Color.White);
+            //SetPixel((int)x - 1, (int)y, Color.White);
+            //SetPixel((int)x, (int)y + 1, Color.White);
+            //SetPixel((int)x, (int)y - 1, Color.White);
+            //SetPixel((int)x + 1, (int)y + 1, Color.White);
+            //SetPixel((int)x - 1, (int)y - 1, Color.White);
+            //SetPixel((int)x + 1, (int)y - 1, Color.White);
+            //SetPixel((int)x - 1, (int)y + 1, Color.White);
+
+            //    }
+            //}
+
+            int xSqrd;
+            int ySqrd;
+            int rSqrd = radius * radius;
+            int xySum;
+            for(int x = 0; x < row; x++)
             {
-                SetPixel(radius, radius + index, Color.White);
+                for(int y = 0; y < col; y++)
+                {
+
+                    // Was using the draw a line but it misses pixels. Gonna use the equation of a circle instead
+                    //x = center + (radius - index0) * Math.Cos((index) * Math.PI / 180);
+                    //y = center + (radius - index0) * Math.Sin((index) * Math.PI / 180);
+                    
+                    // Each cordinate (x,y) has a position inside or outside a circle. Equation of a circle is (x – h)2 + (y – k)2 = r2 where the center (h,k)
+                    xSqrd = (x - centerX) * (x - centerX);
+                    ySqrd = (y - centerY) * (y - centerY);
+                    xySum = xSqrd + ySqrd; // add together then just use a if statement to determine if within circle
+                    if (xySum < rSqrd)
+                    {
+
+                        SetPixel(x, y, Color.White);
+                    }
+
+                }
+
             }
 
 
-            double x;
-            double y;
-            for (int index0 = 0; index0 < thickness; index0++)
+            radius = (diameter - thickness) / 2 - 10;
+            rSqrd = radius * radius;
+            for (int x = 0; x < row; x++)
             {
-                for (int index = 0; index < 360; index++)
+                for (int y = 0; y < col; y++)
                 {
-                    x = center + (radius - index0) * Math.Cos((index) * Math.PI / 180);
-                    y = center + (radius - index0) * Math.Sin((index) * Math.PI / 180);
-                    SetPixel((int)x, (int)y, Color.White);
-                    SetPixel((int)x+1, (int)y, Color.White);
-                    SetPixel((int)x-1, (int)y, Color.White);
-                    SetPixel((int)x, (int)y+1, Color.White);
-                    SetPixel((int)x, (int)y-1, Color.White);
-                    SetPixel((int)x+1, (int)y+1, Color.White);
-                    SetPixel((int)x-1, (int)y-1, Color.White);
-                    SetPixel((int)x+1, (int)y-1, Color.White);
-                    SetPixel((int)x-1, (int)y+1, Color.White);
+
+                    // Was using the draw a line but it misses pixels. Gonna use the equation of a circle instead
+                    //x = center + (radius - index0) * Math.Cos((index) * Math.PI / 180);
+                    //y = center + (radius - index0) * Math.Sin((index) * Math.PI / 180);
+
+                    // Each cordinate (x,y) has a position inside or outside a circle. Equation of a circle is (x – h)2 + (y – k)2 = r2 where the center (h,k)
+                    xSqrd = (x - centerX) * (x - centerX);
+                    ySqrd = (y - centerY) * (y - centerY);
+                    xySum = xSqrd + ySqrd; // add together then just use a if statement to determine if within circle
+                    if (xySum < rSqrd)
+                    {
+
+                        SetPixel(x, y, ContentViewHandler.timerPage_backgroundColor);
+                    }
 
                 }
+
             }
 
         }
