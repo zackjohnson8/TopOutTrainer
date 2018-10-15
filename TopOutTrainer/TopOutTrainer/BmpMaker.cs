@@ -20,32 +20,53 @@ namespace TopOutTrainer
             int fileSize = headerSize + numPixelBytes;
             buffer = new byte[fileSize];
 
-            // Write headers in MemoryStream and hence the buffer.
-            using (MemoryStream memoryStream = new MemoryStream(buffer))
-            {
-                using (BinaryWriter writer = new BinaryWriter(memoryStream, Encoding.UTF8))
-                {
-                    // Construct BMP header (14 bytes).
-                    writer.Write(new char[] { 'B', 'M' });  // Signature
-                    writer.Write(fileSize);                 // File size
-                    writer.Write((short)0);                 // Reserved
-                    writer.Write((short)0);                 // Reserved
-                    writer.Write(headerSize);               // Offset to pixels
+            //try
+            //{
+            //    using (MemoryStream ms = new MemoryStream(buffer))
+            //    {
+            //        sw = new StreamWriter(ms);
 
-                    // Construct BitmapInfoHeader (40 bytes).
-                    writer.Write(40);                       // Header size
-                    writer.Write(Width);                    // Pixel width
-                    writer.Write(Height);                   // Pixel height
-                    writer.Write((short)1);                 // Planes
-                    writer.Write((short)32);                // Bits per pixel
-                    writer.Write(0);                        // Compression
-                    writer.Write(numPixelBytes);            // Image size in bytes
-                    writer.Write(0);                        // X pixels per meter
-                    writer.Write(0);                        // Y pixels per meter
-                    writer.Write(0);                        // Number colors in color table
-                    writer.Write(0);                        // Important color count
-                }
-            }
+            //        sw.WriteLine("data");
+            //        sw.WriteLine("data 2");
+            //        ms.Position = 0;
+
+            //    }
+            //}
+            //finally
+            //{
+            //    if (sw != null) sw.Dispose();
+            //}
+
+            // Write headers in MemoryStream and hence the buffer
+            MemoryStream memoryStream = new MemoryStream(buffer);
+            BinaryWriter writer = new BinaryWriter(memoryStream, Encoding.UTF8);
+
+            // Construct BMP header (14 bytes).
+            writer.Write(new char[] { 'B', 'M' });  // Signature
+            writer.Write(fileSize);                 // File size
+            writer.Write((short)0);                 // Reserved
+            writer.Write((short)0);                 // Reserved
+            writer.Write(headerSize);               // Offset to pixels
+
+            // Construct BitmapInfoHeader (40 bytes).
+            writer.Write(40);                       // Header size
+            writer.Write(Width);                    // Pixel width
+            writer.Write(Height);                   // Pixel height
+            writer.Write((short)1);                 // Planes
+            writer.Write((short)32);                // Bits per pixel
+            writer.Write(0);                        // Compression
+            writer.Write(numPixelBytes);            // Image size in bytes
+            writer.Write(0);                        // X pixels per meter
+            writer.Write(0);                        // Y pixels per meter
+            writer.Write(0);                        // Number colors in color table
+            writer.Write(0);                        // Important color count
+            writer.Flush();
+            memoryStream.Position = 0;
+
+
+                    
+                
+            
         }
 
         public int Width
@@ -87,35 +108,6 @@ namespace TopOutTrainer
 
             int centerX = row / 2;
             int centerY = col / 2;
-
-           
-            //for(int index = 0; index < radius; index++)
-            //{
-            //    SetPixel(radius, radius + index, Color.White);
-            //}
-
-
-            //double x;
-            //double y;
-            //for (int index0 = 0; index0 < thickness; index0++)
-            //{
-            //    for (int index = 0; index < 1440; index++)
-            //    {
-            //x = center + (radius - index0) * Math.Cos((index) * Math.PI / 180);
-            //y = center + (radius - index0) * Math.Sin((index) * Math.PI / 180);
-
-            //SetPixel((int)x, (int)y, Color.White);
-            //SetPixel((int)x + 1, (int)y, Color.White);
-            //SetPixel((int)x - 1, (int)y, Color.White);
-            //SetPixel((int)x, (int)y + 1, Color.White);
-            //SetPixel((int)x, (int)y - 1, Color.White);
-            //SetPixel((int)x + 1, (int)y + 1, Color.White);
-            //SetPixel((int)x - 1, (int)y - 1, Color.White);
-            //SetPixel((int)x + 1, (int)y - 1, Color.White);
-            //SetPixel((int)x - 1, (int)y + 1, Color.White);
-
-            //    }
-            //}
 
             int xSqrd;
             int ySqrd;

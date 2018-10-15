@@ -12,7 +12,7 @@ namespace TopOutTrainer
         public MainPage()
         {
             InitializeComponent();
-            Navigation.PushAsync(new TimerPage());
+            //Navigation.PushAsync(new TimerPage());
 
             Button button = new Button
             {
