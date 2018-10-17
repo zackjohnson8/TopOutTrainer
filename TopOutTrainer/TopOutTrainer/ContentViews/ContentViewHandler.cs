@@ -14,15 +14,15 @@ namespace TopOutTrainer
             TimerPageView,
         };
 
-        private static StackLayout timerPage_stacklayout;
-        private static Label timerPage_labelTimerText;
-        private static Image timerPage_bitmapImage;
-        private static StackLayout timerPage_stackLayoutButtonHolder;
-        private static StackLayout timerPage_stackLayoutBitmapHolder;
-        private static Button timerPage_buttonStart;
-        private static Button timerPage_buttonStop;
-        private static View timerPage_Content;
-        private static String timerPage_totalTime = "00:00";
+        public static StackLayout timerPage_stacklayout;
+        public static Label timerPage_labelTimerText;
+        public static Image timerPage_bitmapImage;
+        public static StackLayout timerPage_stackLayoutButtonHolder;
+        public static StackLayout timerPage_stackLayoutBitmapHolder;
+        public static Button timerPage_buttonStart;
+        public static Button timerPage_buttonStop;
+        public static View timerPage_Content;
+        public static String timerPage_totalTime = "00:00";
 
         public static Color timerPage_textColor
         {
@@ -115,7 +115,7 @@ namespace TopOutTrainer
                 timerPage_stacklayout.Children.Add(timerPage_stackLayoutBitmapHolder);
                 
             
-
+                // START BUTTON //
                 timerPage_buttonStart = new Button
                 {
                     Text = "Start",
@@ -128,6 +128,7 @@ namespace TopOutTrainer
                     CornerRadius = 2,
                     // TODO: Clicked = "OnButtonClicked",
                 };
+                
 
                 timerPage_buttonStop = new Button
                 {

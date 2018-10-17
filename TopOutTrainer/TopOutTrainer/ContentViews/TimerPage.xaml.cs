@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Timers;
 
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
@@ -14,8 +15,14 @@ namespace TopOutTrainer
 	{
         private const string contentPageBackgroundColor = "#303030";
 
+        private Timer timer;
+        private int timerSecond;
+        private int timerMinute;
+
         public TimerPage ()
 		{
+            timerSecond = 0;
+            timerMinute = 0;
 			InitializeComponent ();
             BackgroundColor = Color.FromHex(contentPageBackgroundColor);
             InitializeView();
@@ -24,7 +31,10 @@ namespace TopOutTrainer
 
         void InitializeView()
         {
+
             Content = ContentViewHandler.BuildContentView(ContentViewHandler.EnumViews.TimerPageView);
+            ContentViewHandler.timerPage_buttonStart.Clicked += new EventHandler(OnButtonClicked);
+
         }
 
         void OnSliderValueChanged(object sender, ValueChangedEventArgs args)
@@ -33,13 +43,23 @@ namespace TopOutTrainer
             //valueLabel.Text = ((Slider)sender).Value.ToString("F3");
         }
 
-        // TODO: REMOVE
-        async void OnButtonClicked(object sender, EventArgs args)
+        void OnButtonClicked(object sender, EventArgs args)
         {
-            //Button button = (Button)sender;
-            //await DisplayAlert("Clicked!",
-            //    "The button labeled '" + button.Text + "' has been clicked",
-            //    "OK");
+            // Create a timer with a two second interval.
+            timer = new System.Timers.Timer(1000); // Using 1000ms decreases lag
+            // Hook up the Elapsed event for the timer. 
+            timer.Elapsed += OnTimedEvent;
+            timer.AutoReset = true;
+            timer.Enabled = true;
+        }
+
+        public void OnTimedEvent(Object source, ElapsedEventArgs e)
+        {
+
+            timerSecond += 1;
+            ContentViewHandler.timerPage_labelTimerText.Text = "HELLO";// String.Concat(timerSecond, ':', timerSecond);
+            Application.DoEvents();
+
         }
     }
 }
