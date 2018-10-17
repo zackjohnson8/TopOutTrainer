@@ -15,22 +15,20 @@ namespace TopOutTrainer
 	{
         private const string contentPageBackgroundColor = "#303030";
 
-        private Timer timer;
-        private int timerSecond;
-        private int timerMinute;
+        private StopWatch stopwatch;
 
         public TimerPage ()
 		{
-            timerSecond = 0;
-            timerMinute = 0;
+
 			InitializeComponent ();
-            BackgroundColor = Color.FromHex(contentPageBackgroundColor);
             InitializeView();
             
         }
 
         void InitializeView()
         {
+
+            BackgroundColor = Color.FromHex(contentPageBackgroundColor);
 
             Content = ContentViewHandler.BuildContentView(ContentViewHandler.EnumViews.TimerPageView);
             ContentViewHandler.timerPage_buttonStart.Clicked += new EventHandler(OnButtonClicked);
@@ -45,21 +43,8 @@ namespace TopOutTrainer
 
         void OnButtonClicked(object sender, EventArgs args)
         {
-            // Create a timer with a two second interval.
-            timer = new System.Timers.Timer(1000); // Using 1000ms decreases lag
-            // Hook up the Elapsed event for the timer. 
-            timer.Elapsed += OnTimedEvent;
-            timer.AutoReset = true;
-            timer.Enabled = true;
-        }
-
-        public void OnTimedEvent(Object source, ElapsedEventArgs e)
-        {
-
-            timerSecond += 1;
-            ContentViewHandler.timerPage_labelTimerText.Text = "HELLO";// String.Concat(timerSecond, ':', timerSecond);
-            Application.DoEvents();
 
         }
+
     }
 }
