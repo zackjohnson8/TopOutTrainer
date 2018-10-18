@@ -8,7 +8,7 @@ namespace TopOutTrainer
 {
     public static class ContentViewHandler
     {
-
+        
         public enum EnumViews
         {
             TimerPageView,
@@ -57,12 +57,15 @@ namespace TopOutTrainer
                 Text = timerPage_totalTime,
                 FontSize = 64,
                 FontAttributes = FontAttributes.Bold,
-                HorizontalOptions = LayoutOptions.CenterAndExpand,
-                VerticalOptions = LayoutOptions.CenterAndExpand,
+                //HorizontalOptions = LayoutOptions.CenterAndExpand,
+                //VerticalOptions = LayoutOptions.CenterAndExpand,
+                HorizontalTextAlignment = TextAlignment.Center,
                 HeightRequest = 120,
                 BackgroundColor = TimerPage_backgroundColor,
                 TextColor = TimerPage_textColor,
+                
             };
+            
 
             //Font-Family
             if (Device.RuntimePlatform == Device.iOS)
@@ -73,6 +76,7 @@ namespace TopOutTrainer
             {
                 timerPage_labelTimerText.FontFamily = "font/montserrat/MontserratAlternates-Bold.otf#MontserratAlternates-Bold"; // Figure out where this is looking to find the string
             }
+
 
             timerPage_MainContainer.Children.Add(timerPage_labelTimerText);
 
@@ -164,6 +168,7 @@ namespace TopOutTrainer
 
         public static View BuildContentView(EnumViews ViewCreation)
         {
+
             // TIMERPAGE CONTENT BUILDER
             if (ViewCreation == EnumViews.TimerPageView)
             {
@@ -179,7 +184,7 @@ namespace TopOutTrainer
 
                 // Create button holder and buttons
                 Create_TPStartStopButton();
-
+                
                 return timerPage_Content = timerPage_MainContainer;
 
             }
