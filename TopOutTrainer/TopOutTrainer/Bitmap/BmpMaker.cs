@@ -20,23 +20,6 @@ namespace TopOutTrainer
             int fileSize = headerSize + numPixelBytes;
             buffer = new byte[fileSize];
 
-            //try
-            //{
-            //    using (MemoryStream ms = new MemoryStream(buffer))
-            //    {
-            //        sw = new StreamWriter(ms);
-
-            //        sw.WriteLine("data");
-            //        sw.WriteLine("data 2");
-            //        ms.Position = 0;
-
-            //    }
-            //}
-            //finally
-            //{
-            //    if (sw != null) sw.Dispose();
-            //}
-
             // Write headers in MemoryStream and hence the buffer
             MemoryStream memoryStream = new MemoryStream(buffer);
             BinaryWriter writer = new BinaryWriter(memoryStream, Encoding.UTF8);

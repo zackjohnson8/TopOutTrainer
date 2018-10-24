@@ -10,8 +10,9 @@ namespace TopOutTrainer
     {
 
         private const int elapsedMilliSec = 1000;
-        private static System.Timers.Timer aTimer;
-        private static bool bStarted;
+        private static System.Timers.Timer aTimer = new System.Timers.Timer(elapsedMilliSec);
+        private static bool eventRunning = false;
+
 
         private static Label mainObjectLabel = null;
 
@@ -33,7 +34,7 @@ namespace TopOutTrainer
             get;
         } = 0;
 
-        public static void UpdateLabel(Label defaultObj)
+        public static void AddLabelToDraw(Label defaultObj)
         {
             mainObjectLabel = defaultObj;
         }
@@ -45,31 +46,29 @@ namespace TopOutTrainer
 
         public static void Start()
         {
-
-            if (!bStarted)
+            // Hook up the Elapsed event for the timer. 
+            if (!eventRunning)
             {
-                // Create a timer with a two second interval.
-                aTimer = new System.Timers.Timer(elapsedMilliSec);
-                // Hook up the Elapsed event for the timer. 
                 aTimer.Elapsed += OnTimedEvent;
-                aTimer.AutoReset = true;
-                aTimer.Enabled = true;
-                bStarted = true;
+                eventRunning = true;
             }
-            else
-            {
-                aTimer.Enabled = true;
-            }
+            aTimer.AutoReset = true;
+            aTimer.Enabled = true;
         }
 
         public static void Reset()
         {
-
             MilliSecond = 0;
             Second = 0;
             Minute = 0;
 
-            aTimer.Enabled = false;
+            if (mainObjectLabel != null)
+            {
+
+                Device.BeginInvokeOnMainThread(() => {
+                    SetText(String.Concat("00", ':', "00"));
+                });
+            }
 
         }
         

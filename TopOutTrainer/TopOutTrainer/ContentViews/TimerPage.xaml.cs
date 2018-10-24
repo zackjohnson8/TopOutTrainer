@@ -32,6 +32,9 @@ namespace TopOutTrainer
             // Build the content view with ContentViewHandler_TimerPage 
             Content = myTimerView.GetContentView();
 
+            StopWatch.AddLabelToDraw(myTimerView.labelTimerText);
+            //StopWatch.Start();
+
         }
 
         void OnSliderValueChanged(object sender, ValueChangedEventArgs args)
