@@ -6,38 +6,33 @@ using Xamarin.Forms;
 
 namespace TopOutTrainer
 {
-    public static class ContentViewHandler_TimerPage
+    public class ContentViewHandler_TimerPage
     {
         
-        public enum EnumViews
-        {
-            TimerPageView,
-        };
-
-        public static StackLayout timerPage_MainContainer;
-        public static Label timerPage_labelTimerText;
-        public static Image timerPage_bitmapImage;
-        public static StackLayout timerPage_stackLayoutButtonHolder;
-        public static StackLayout timerPage_stackLayoutBitmapHolder;
-        public static Button timerPage_buttonStart;
-        public static Button timerPage_buttonStop;
-        public static View timerPage_Content;
-        public static String timerPage_totalTime = "00:00";
+        public StackLayout timerPage_MainContainer;
+        public Label timerPage_labelTimerText;
+        public Image timerPage_bitmapImage;
+        public StackLayout timerPage_stackLayoutButtonHolder;
+        public StackLayout timerPage_stackLayoutBitmapHolder;
+        public Button timerPage_buttonStart;
+        public Button timerPage_buttonStop;
+        public View timerPage_Content;
+        public String timerPage_totalTime = "00:00";
         private const int GraphicThickness = 80;
 
-        public static Color TimerPage_textColor
+        public Color TimerPage_textColor
         {
             private set;
             get;
         } = Color.FromHex("#ffffff");
 
-        public static Color TimerPage_backgroundColor
+        public Color TimerPage_backgroundColor
         {
             private set;
             get;
         } = Color.FromHex("#303030");
 
-        private static void Create_TPMainContainer()
+        private void Create_TPMainContainer()
         {
 
             timerPage_MainContainer = new StackLayout
@@ -48,7 +43,7 @@ namespace TopOutTrainer
 
         }
 
-        private static void Create_TPTotalTimeLabel()
+        private void Create_TPTotalTimeLabel()
         {
 
             // Timer Text
@@ -83,7 +78,7 @@ namespace TopOutTrainer
 
         }
 
-        private static void Create_TPBitMap()
+        private void Create_TPBitMap()
         {
 
             timerPage_stackLayoutBitmapHolder = new StackLayout
@@ -122,7 +117,7 @@ namespace TopOutTrainer
             timerPage_MainContainer.Children.Add(timerPage_stackLayoutBitmapHolder);
         }
 
-        private static void Create_TPStartStopButton()
+        private void Create_TPStartStopButton()
         {
             // START BUTTON //
             timerPage_buttonStart = new Button
@@ -135,8 +130,9 @@ namespace TopOutTrainer
                 BorderColor = Color.FromHex("#66ffff"),
                 BorderWidth = 3,
                 CornerRadius = 2,
-                // TODO: Clicked = "OnButtonClicked",
             };
+            //Clicked += "StartButtonClicked",
+            timerPage_buttonStart.Clicked += StartButtonClicked;
 
 
             timerPage_buttonStop = new Button
@@ -167,30 +163,45 @@ namespace TopOutTrainer
             timerPage_MainContainer.Children.Add(timerPage_stackLayoutButtonHolder);
         }
 
-        public static View BuildContentView_TimerPage(EnumViews ViewCreation)
+        // CONSTRUCTOR
+        public ContentViewHandler_TimerPage()
+        {
+            
+        }
+
+        public View GetContentView()
         {
 
-            // TIMERPAGE CONTENT BUILDER
-            if (ViewCreation == EnumViews.TimerPageView)
-            {
+            // Create main container for objects
+            Create_TPMainContainer();
 
-                // Create main container for objects
-                Create_TPMainContainer();
+            // Create upper label for total time
+            Create_TPTotalTimeLabel();
 
-                // Create upper label for total time
-                Create_TPTotalTimeLabel();
+            // Create bitmap for timer animation
+            Create_TPBitMap();
 
-                // Create bitmap for timer animation
-                Create_TPBitMap();
-
-                // Create button holder and buttons
-                Create_TPStartStopButton();
+            // Create button holder and buttons
+            Create_TPStartStopButton();
                 
-                return timerPage_Content = timerPage_MainContainer;
+            return timerPage_Content = timerPage_MainContainer;
 
-            }
+        }
 
-            return null;
+        // EVENTS
+        private void StartButtonClicked(object sender, EventArgs args)
+        {
+            StopWatch.Start();
+        }
+
+        private void StopButtonClicked(object sender, EventArgs args)
+        {
+            StopWatch.Stop();
+        }
+
+        private void ResetButtonClicked(object sender, EventArgs args)
+        {
+            StopWatch.Reset();
         }
 
     }

@@ -6,45 +6,44 @@ using Xamarin.Forms;
 
 namespace TopOutTrainer
 {
-    class StopWatch
+    public static class StopWatch
     {
 
         private const int elapsedMilliSec = 1000;
-        private System.Timers.Timer aTimer;
-        private bool bStarted;
+        private static System.Timers.Timer aTimer;
+        private static bool bStarted;
 
-        private Label mainObjectLabel = null;
+        private static Label mainObjectLabel = null;
 
-        public int Minute
+        public static int Minute
         {
             private set;
             get;
         } = 0;
 
-        public int Second
+        public static int Second
         {
             private set;
             get;
         } = 0;
 
-        public int MilliSecond
+        public static int MilliSecond
         {
             private set;
             get;
         } = 0;
 
-        // What does a stopwatch do? start, stop, reset, time, minute, second, millisecond
-        public StopWatch(Label defaultObj)
+        public static void UpdateLabel(Label defaultObj)
         {
             mainObjectLabel = defaultObj;
         }
 
-        public void Stop()
+        public static void Stop()
         {
             aTimer.Enabled = false;
         }
 
-        public void Start()
+        public static void Start()
         {
 
             if (!bStarted)
@@ -63,7 +62,7 @@ namespace TopOutTrainer
             }
         }
 
-        public void Reset()
+        public static void Reset()
         {
 
             MilliSecond = 0;
@@ -74,14 +73,14 @@ namespace TopOutTrainer
 
         }
         
-        private void SetText(string myString)
+        private static void SetText(string myString)
         {
             mainObjectLabel.Text = myString;
         }
 
-        string minuteString;
-        string secondString;
-        private void OnTimedEvent(Object source, ElapsedEventArgs e)
+        private static string minuteString;
+        private static string secondString;
+        private static void OnTimedEvent(Object source, ElapsedEventArgs e)
         {
 
             MilliSecond += elapsedMilliSec;

@@ -62,10 +62,6 @@ namespace TopOutTrainer
             writer.Write(0);                        // Important color count
             writer.Flush();
             memoryStream.Position = 0;
-
-
-                    
-                
             
         }
 
@@ -154,8 +150,7 @@ namespace TopOutTrainer
                     xySum = xSqrd + ySqrd; // add together then just use a if statement to determine if within circle
                     if (xySum < rSqrd)
                     {
-
-                        SetPixel(x, y, ContentViewHandler_TimerPage.TimerPage_backgroundColor);
+                        SetPixel(x, y, Color.FromHex("#303030"));
                     }
 
                 }
