@@ -77,7 +77,7 @@ namespace TopOutTrainer
             buffer[index + 3] = (byte)a;
         }
 
-        public void DrawCircle(int row, int col, int thickness)
+        public void DrawCircle(int row, int col, int thickness, int hangTime, int restTime, int hangIntervals)
         {
 
             int diameter = row;
@@ -92,6 +92,7 @@ namespace TopOutTrainer
             int ySqrd;
             int rSqrd = radius * radius;
             int xySum;
+            // Inside of outercircle
             for(int x = 0; x < row; x++)
             {
                 for(int y = 0; y < col; y++)
@@ -115,7 +116,27 @@ namespace TopOutTrainer
 
             }
 
+            // Outside of outer circle
+            for (int x = 0; x < row; x++)
+            {
+                for (int y = 0; y < col; y++)
+                {
 
+                    // Each cordinate (x,y) has a position inside or outside a circle. Equation of a circle is (x – h)2 + (y – k)2 = r2 where the center (h,k)
+                    xSqrd = (x - centerX) * (x - centerX);
+                    ySqrd = (y - centerY) * (y - centerY);
+                    xySum = xSqrd + ySqrd;
+                    if (xySum > rSqrd)
+                    {
+
+                        SetPixel(x, y, Color.FromHex("#303030"));
+                    }
+
+                }
+
+            }
+
+            // Draw inner circle
             radius = (diameter - thickness) / 2 - 10;
             rSqrd = radius * radius;
             for (int x = 0; x < row; x++)
@@ -139,6 +160,39 @@ namespace TopOutTrainer
                 }
 
             }
+
+            // Draw the inner workings of the timer onto the bitmap
+            // A circle is broken into 360 degrees
+            // Variables are rest time, hang time, and number of hangIntervals
+            // Hang for x seconds, rest for y seconds
+            // I need the length of each hang and rest compared to the degree
+            // Example: 3 hangs, hang for 7 seconds, and rest for 30 seconds
+            // TODO: Well thats a problem, if we do this based on a percentage worth
+            // there will be a problem with disproportionate amount of bar == to rest
+            // hhrrrrrrrrrrrrrrrrrrrrrrrrrrrrhhrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrhh
+            
+            // Theoretically I could have a round bar (currently have) which 
+            // switches between each hang and a long flat bar to show whats left
+            // or split everything evenly and just move some slower than others...
+            // Lets say we split everything evenly and only use the circle.
+            // Using this method we'd take...
+            
+            // Example: 360/(hangIntervals * 2) **hang and rest intervals**
+            // Ex: Each hang and rest will have a percentage of the 360
+            // Ex: 3 hangs, hang for 7 seconds, and rest for 30 seconds
+            // Ex: 360/3*2 = 60 degrees each. Starting from 270 degrees or bottom
+            // most part of the circle, we'd need to color the circle hangColor 270 to 210
+            // degrees, restColor 210 to 150, hangColor 150 to 90, restColor 90 to 30,
+            // hangColor 30 to 330, restColor 330 to 270
+
+            // Using sin and cos there shouldnt be a problem just subtracting 60 from 270
+            // even if it goes negative its still an equivalent degree that should translate
+            // accordingly
+
+            // So basically everything between the 60 degree angle and between the outer and
+            // inner circle should paint correctly... technically... -.-
+
+
 
         }
 

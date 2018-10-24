@@ -82,6 +82,7 @@ namespace TopOutTrainer
         private void Create_TPBitMap()
         {
 
+            // Bitmap stack container
             stackLayoutBitmapHolder = new StackLayout
             {
                 VerticalOptions = LayoutOptions.Center,
@@ -91,15 +92,17 @@ namespace TopOutTrainer
                 Orientation = StackOrientation.Horizontal,
             };
 
+            // Bitmap Size
             int rows = 800;
             int cols = 800;
             BmpMaker bmpMaker = new BmpMaker(cols, rows);
 
-            for (int row = 0; row < rows; row++)
-                for (int col = 0; col < cols; col++)
-                {
-                    bmpMaker.SetPixel(row, col, BackgroundColor);
-                }
+
+            //for (int row = 0; row < rows; row++)
+            //    for (int col = 0; col < cols; col++)
+            //    {
+            //        bmpMaker.SetPixel(row, col, BackgroundColor);
+            //    }
 
             // Draw images to the bitmap
             bmpMaker.DrawCircle(rows, cols, GraphicThickness);
