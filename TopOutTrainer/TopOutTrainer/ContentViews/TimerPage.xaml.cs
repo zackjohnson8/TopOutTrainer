@@ -27,9 +27,9 @@ namespace TopOutTrainer
             // Set the background color of TimerPage
             BackgroundColor = Color.FromHex(contentPageBackgroundColor);
             
-            Content = ContentViewHandler.BuildContentView(ContentViewHandler.EnumViews.TimerPageView);
-            ContentViewHandler.timerPage_buttonStart.Clicked += new EventHandler(OnButtonClicked);
-            stopwatch = new StopWatch(ContentViewHandler.timerPage_labelTimerText);
+            Content = ContentViewHandler_TimerPage.BuildContentView_TimerPage(ContentViewHandler_TimerPage.EnumViews.TimerPageView);
+            ContentViewHandler_TimerPage.timerPage_buttonStart.Clicked += new EventHandler(OnButtonClicked);
+            stopwatch = new StopWatch(ContentViewHandler_TimerPage.timerPage_labelTimerText);
             stopwatch.Start();
 
         }
@@ -44,7 +44,7 @@ namespace TopOutTrainer
         {
             if(stopwatch != null)
             {
-                stopwatch = new StopWatch(ContentViewHandler.timerPage_labelTimerText);
+                stopwatch = new StopWatch(ContentViewHandler_TimerPage.timerPage_labelTimerText);
             }
         }
 

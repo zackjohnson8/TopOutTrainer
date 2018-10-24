@@ -6,7 +6,7 @@ using Xamarin.Forms;
 
 namespace TopOutTrainer
 {
-    public static class ContentViewHandler
+    public static class ContentViewHandler_TimerPage
     {
         
         public enum EnumViews
@@ -23,6 +23,7 @@ namespace TopOutTrainer
         public static Button timerPage_buttonStop;
         public static View timerPage_Content;
         public static String timerPage_totalTime = "00:00";
+        private const int GraphicThickness = 80;
 
         public static Color TimerPage_textColor
         {
@@ -105,7 +106,7 @@ namespace TopOutTrainer
                 }
 
             // Draw images to the bitmap
-            bmpMaker.DrawCircle(rows, cols, 40);
+            bmpMaker.DrawCircle(rows, cols, GraphicThickness);
 
             ImageSource imageSource = bmpMaker.Generate();
 
@@ -166,7 +167,7 @@ namespace TopOutTrainer
             timerPage_MainContainer.Children.Add(timerPage_stackLayoutButtonHolder);
         }
 
-        public static View BuildContentView(EnumViews ViewCreation)
+        public static View BuildContentView_TimerPage(EnumViews ViewCreation)
         {
 
             // TIMERPAGE CONTENT BUILDER

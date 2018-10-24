@@ -155,7 +155,7 @@ namespace TopOutTrainer
                     if (xySum < rSqrd)
                     {
 
-                        SetPixel(x, y, ContentViewHandler.TimerPage_backgroundColor);
+                        SetPixel(x, y, ContentViewHandler_TimerPage.TimerPage_backgroundColor);
                     }
 
                 }
