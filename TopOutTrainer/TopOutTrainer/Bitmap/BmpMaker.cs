@@ -170,13 +170,13 @@ namespace TopOutTrainer
             // TODO: Well thats a problem, if we do this based on a percentage worth
             // there will be a problem with disproportionate amount of bar == to rest
             // hhrrrrrrrrrrrrrrrrrrrrrrrrrrrrhhrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrhh
-            
+
             // Theoretically I could have a round bar (currently have) which 
             // switches between each hang and a long flat bar to show whats left
             // or split everything evenly and just move some slower than others...
             // Lets say we split everything evenly and only use the circle.
             // Using this method we'd take...
-            
+
             // Example: 360/(hangIntervals * 2) **hang and rest intervals**
             // Ex: Each hang and rest will have a percentage of the 360
             // Ex: 3 hangs, hang for 7 seconds, and rest for 30 seconds
@@ -191,9 +191,128 @@ namespace TopOutTrainer
 
             // So basically everything between the 60 degree angle and between the outer and
             // inner circle should paint correctly... technically... -.-
+            FillCircleAnimation(row, col, thickness, hangTime, restTime, hangIntervals);
 
 
+        }
 
+        private void FillCircleAnimation(int row, int col, int thickness, int hangTime, int restTime, int hangIntervals)
+        {
+            int diameter = row;
+            int radiusOuter = diameter / 2 - 10;
+            int radiusInnter = (diameter - thickness) / 2 - 10;
+
+            int centerX = row / 2;
+            int centerY = col / 2;
+            int xSqrd;
+            int ySqrd;
+            int rSqrdOuter = radiusOuter * radiusOuter;
+            int rSqrdInner = radiusInnter * radiusInnter;
+            int xySum;
+            // Inside of outercircle
+            for (int x = 0; x < row; x++)
+            {
+                for (int y = 0; y < col; y++)
+                {
+
+                    
+
+                    // Each cordinate (x,y) has a position inside or outside a circle. Equation of a circle is (x – h)2 + (y – k)2 = r2 where the center (h,k)
+                    xSqrd = (x - centerX) * (x - centerX);
+                    ySqrd = (y - centerY) * (y - centerY);
+                    xySum = xSqrd + ySqrd; // add together then just use a if statement to determine if within circle
+                    float angle;
+                    if (xySum <= rSqrdOuter)
+                    {
+                        if(xySum >= rSqrdInner)
+                        {
+
+                            // Now seperate each section into the appropriate color
+                            // Was using the draw a line but it misses pixels. Gonna use the equation of a circle instead
+                            //x = center + (radius - index0) * Math.Cos((index) * Math.PI / 180);
+                            //y = center + (radius - index0) * Math.Sin((index) * Math.PI / 180);
+                            //if(checkPoint(radiusOuter, x, y, centerX, centerY, 12, 90))
+                            //{
+                            //    SetPixel(x, y, Color.Blue);
+                            //}
+                            angle = getAngleOfPoint(x, y, centerX, centerY);
+                            if (angle > 0 && angle < 60)
+                            {
+                                SetPixel(x, y, Color.Blue);
+                            }
+                            else
+                            if (angle > 60 && angle < 120)
+                            {
+                                SetPixel(x, y, Color.Orange);
+                            }
+                            else
+                            if (angle > 120 && angle < 180)
+                            {
+                                SetPixel(x, y, Color.Blue);
+                            }
+                            else
+                            if (angle > 180 && angle < 240)
+                            {
+                                SetPixel(x, y, Color.Orange);
+                            }
+                            else
+                            if (angle > 240 && angle < 300)
+                            {
+                                SetPixel(x, y, Color.Blue);
+                            }
+                            else
+                            if (angle > 300 && angle < 360)
+                            {
+                                SetPixel(x, y, Color.Orange);
+                            }
+
+                            // Alright I've got x, y and centerx, centery.
+                            // The angle of xy is tan(y/x)^-1 or 1/(tan(y/x))
+
+                        }
+                    }
+
+                }
+
+            }
+        }
+
+        private float getAngleOfPoint(int x, int y, int centerX, int centerY)
+        {
+
+
+            float dy = (y - centerY);
+            float dx = (x - centerX);
+            float angle = (float)(180 / Math.PI) * (float)Math.Atan2(dy, dx);
+
+            //if (angle < 0)
+            //{
+            //    angle += 180;
+            //}
+
+            return angle + 180;
+        }
+
+        private Boolean checkPoint(int radius, int x, int y, int centerX, int centerY,
+                    float percent, float startAngle)
+        {
+
+            // calculate endAngle 
+            float endAngle = (360 * percent / 100) + startAngle;
+
+            // Calculate polar co-ordinates 
+            float polarradius = (float)Math.Sqrt(x * x + y * y);
+
+            float Angle = (float)Math.Atan(y / x);
+
+            // Check whether polarradius is less then  
+            // radius of circle or not and Angle is  
+            // between startAngle and endAngle or not 
+            if (Angle >= startAngle && Angle <= endAngle
+                                && polarradius < radius)
+                return true;
+            else
+                return false;
         }
 
         public ImageSource Generate()
