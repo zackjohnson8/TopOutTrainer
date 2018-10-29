@@ -23,6 +23,11 @@ namespace TopOutTrainer.ContentViews
             InitializeComponent();
             InitializeView();
 
+            myTimerView.buttonStart.Clicked += async (sender, args) =>
+            {
+                await Navigation.PushAsync(new ContentViews.TimerPage());
+            };
+
         }
 
         void InitializeView()
