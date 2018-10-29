@@ -23,7 +23,7 @@ namespace TopOutTrainer
 
             button.Clicked += async (sender, args) =>
             {
-                await Navigation.PushAsync(new TimerPage());
+                await Navigation.PushAsync(new ContentViews.TimerPageSelection());
             };
 
             Content = button;

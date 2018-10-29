@@ -10,18 +10,19 @@ using Xamarin.Forms.Xaml;
 namespace TopOutTrainer.ContentViews
 {
 	[XamlCompilation(XamlCompilationOptions.Compile)]
-	public partial class TimerPage : ContentPage
+	public partial class TimerPageSelection : ContentPage
 	{
         private Color myBackgroundColor = Color.FromHex("#303030");
-        private ContentViewHandler_TimerPage myTimerView;
+        private ContentViewHandler_TimerPageSelection myTimerView;
 
-        public TimerPage ()
-		{
-            myTimerView = new ContentViewHandler_TimerPage();
-            
-            // TODO: what is initializecomponent
-            //InitializeComponent ();
+        public TimerPageSelection()
+        {
+
+            myTimerView = new ContentViewHandler_TimerPageSelection();
+
+            InitializeComponent();
             InitializeView();
+
         }
 
         void InitializeView()
@@ -33,16 +34,6 @@ namespace TopOutTrainer.ContentViews
             // Build the content view with ContentViewHandler_TimerPage 
             Content = myTimerView.GetContentView();
 
-            StopWatch.AddLabelToDraw(myTimerView.labelTimerText);
-            //StopWatch.Start();
-
         }
-
-        void OnSliderValueChanged(object sender, ValueChangedEventArgs args)
-        {
-            //valueLabel.Text = args.NewValue.ToString("F3");
-            //valueLabel.Text = ((Slider)sender).Value.ToString("F3");
-        }
-
     }
 }
