@@ -13,7 +13,8 @@ namespace TopOutTrainer.ContentViews
 
         public StackLayout MainContainer;
         public StackLayout NumberPickerContainer;
-        private StackLayout NumberPickerLabelContent;
+        private StackLayout NumberPickerLabelSecondContent;
+        private StackLayout NumberPickerLabelMinuteContent;
         private View Content;
 
         private ScrollView myScrollViewSecond;
@@ -49,7 +50,7 @@ namespace TopOutTrainer.ContentViews
                 HorizontalOptions = LayoutOptions.CenterAndExpand,
                 Orientation = ScrollOrientation.Vertical,
             };
-            myScrollViewSecond.Content = NumberPickerLabelContent;
+            myScrollViewSecond.Content = NumberPickerLabelSecondContent;
 
             myScrollViewMinute = new ScrollView
             {
@@ -61,7 +62,7 @@ namespace TopOutTrainer.ContentViews
                 Orientation = ScrollOrientation.Vertical,
                 
             };
-            myScrollViewMinute.Content = NumberPickerLabelContent;
+            myScrollViewMinute.Content = NumberPickerLabelMinuteContent;
 
             NumberPickerContainer.Children.Add(myScrollViewSecond);
             NumberPickerContainer.Children.Add(myScrollViewMinute);
@@ -85,24 +86,42 @@ namespace TopOutTrainer.ContentViews
             };
 
             // Fill with values
-            NumberPickerLabelContent = new StackLayout
+            NumberPickerLabelSecondContent = new StackLayout
             {
                 
             };
 
+            NumberPickerLabelMinuteContent = new StackLayout
+            {
+                
+            };
+
+
+
             foreach(int val in DIGIT_CONTAINER)
             {
-                NumberPickerLabelContent.Children.Add(
+                NumberPickerLabelSecondContent.Children.Add(
                     new Label
                     {
                         Text = val.ToString(),
                         FontSize = 64,
                         TextColor = Color.White,
+                        HorizontalTextAlignment = TextAlignment.Center,
+                        FontFamily = "font/montserrat/MontserratAlternates-Bold.otf#MontserratAlternates-Bold"
+                    }
+                    );
+                NumberPickerLabelMinuteContent.Children.Add(
+                    new Label
+                    {
+                        Text = val.ToString(),
+                        FontSize = 64,
+                        TextColor = Color.White,
+                        HorizontalTextAlignment = TextAlignment.Center,
                         FontFamily = "font/montserrat/MontserratAlternates-Bold.otf#MontserratAlternates-Bold"
                     }
                     );
             }
-
+            
         }
 
         public View GetContentView()
