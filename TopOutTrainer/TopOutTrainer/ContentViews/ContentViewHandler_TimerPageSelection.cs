@@ -10,30 +10,44 @@ namespace TopOutTrainer.ContentViews
     {
 
         // Parameters
-        private Color BACKGROUND_COLOR = Color.FromHex("#303030");
-        private Color SELECTED_COLOR = Color.FromHex("#636363");
+        private readonly Color BACKGROUND_COLOR = Color.FromHex("#303030");
+        private readonly Color SELECTED_COLOR = Color.FromHex("#636363");
 
+        // Parent container
         public StackLayout MainContainer;
-        public StackLayout NumberPickerContainer_Hang;
-        private StackLayout NumberPickerLabelSecondContent_Hang;
-        private StackLayout NumberPickerLabelMinuteContent_Hang;
-        private ScrollView myScrollViewSecond_Hang;
-        private ScrollView myScrollViewMinute_Hang;
-        public StackLayout NumberPickerContainer_Rest;
-        private StackLayout NumberPickerLabelSecondContent_Rest;
-        private StackLayout NumberPickerLabelMinuteContent_Rest;
-        private ScrollView myScrollViewSecond_Rest;
-        private ScrollView myScrollViewMinute_Rest;
-        private View Content;
 
-        public Button buttonStart;
+        // Child containers for each Number picker
+        public StackLayout NumberPickerContainer_Minute;
+        public StackLayout NumberPickerContainer_Second;
         private StackLayout buttonStartStackLayout;
 
+        // ScrollView for each number picker
+        private ScrollView myScrollViewSecond_Hang;
+        private ScrollView myScrollViewMinute_Hang;
+        private ScrollView myScrollViewSecond_Rest;
+        private ScrollView myScrollViewMinute_Rest;
+        private ScrollView myScrollView_IntervalCount;
+
+        private View Content;
+        INavigation myNavigation;
+
+        // Each of the scroll view containers and tracking of each scrollview number selection
         private int focusedSecondScrollViewContent_Hang = 0;
         private int focusedMinuteScrollViewContent_Hang = 0;
         private int focusedSecondScrollViewContent_Rest = 0;
         private int focusedMinuteScrollViewContent_Rest = 0;
+        private int focusedIntervalCount = 0;
+        private StackLayout NumberPickerLabelSecondContent_Hang;
+        private StackLayout NumberPickerLabelMinuteContent_Hang;
+        private StackLayout NumberPickerLabelSecondContent_Rest;
+        private StackLayout NumberPickerLabelMinuteContent_Rest;
+        private StackLayout NumberPickerLabel_IntervalCount;
 
+        // Begin button to go to TimerPage countdown
+        public Button buttonStart;
+
+        // Scrollview number range containers
+        private const int DIGIT_CONTAINER_SIZE = 60;
         private readonly int[] DIGIT_CONTAINER = 
             {
             0,1,2,3,4,5,6,7,8,9,
@@ -43,18 +57,22 @@ namespace TopOutTrainer.ContentViews
             40,41,42,43,44,45,46,47,48,49,
             50,51,52,53,54,55,56,57,58,59,
             };
-        private const int DIGIT_CONTAINER_SIZE = 60;
+
+        /// <summary>
+        /// //////////////////////////////
+        /// </summary>
 
         private void Create_SecondMinuteSelection_Rest()
         {
 
             // Number picker stacklayout container
-            NumberPickerContainer_Rest = new StackLayout
+            NumberPickerContainer_Minute = new StackLayout
             {
-                VerticalOptions = LayoutOptions.FillAndExpand,
+                VerticalOptions = LayoutOptions.Start,
                 HorizontalOptions = LayoutOptions.FillAndExpand,
                 BackgroundColor = BACKGROUND_COLOR,
-                Orientation = StackOrientation.Horizontal,
+                Orientation = StackOrientation.Vertical,
+                
             };
 
 
@@ -93,23 +111,18 @@ namespace TopOutTrainer.ContentViews
             myScrollViewSecond_Rest.Scrolled += (sender, e) => NumberPickerScrolledSecond_Rest(this, e);
             myScrollViewMinute_Rest.Scrolled += (sender, e) => NumberPickerScrolledMinute_Rest(this, e);
 
-            // Add to containers and maincontainer
-            NumberPickerContainer_Rest.Children.Add(myScrollViewSecond_Rest);
-            NumberPickerContainer_Rest.Children.Add(myScrollViewMinute_Rest);
-            MainContainer.Children.Add(NumberPickerContainer_Rest);
-
         }
 
         private void Create_SecondMinuteSelection_Hang()
         {
 
             // Number picker stacklayout container
-            NumberPickerContainer_Hang = new StackLayout
+            NumberPickerContainer_Second = new StackLayout
             {
-                VerticalOptions = LayoutOptions.FillAndExpand,
+                VerticalOptions = LayoutOptions.Start,
                 HorizontalOptions = LayoutOptions.FillAndExpand,
                 BackgroundColor = BACKGROUND_COLOR,
-                Orientation = StackOrientation.Horizontal,
+                Orientation = StackOrientation.Vertical,
             };
 
 
@@ -147,11 +160,32 @@ namespace TopOutTrainer.ContentViews
             // Scrolled Events
             myScrollViewSecond_Hang.Scrolled += (sender,e) => NumberPickerScrolledSecond_Hang(this, e);
             myScrollViewMinute_Hang.Scrolled += (sender, e) => NumberPickerScrolledMinute_Hang(this, e);
+            
+        }
 
-            // Add to containers and maincontainer
-            NumberPickerContainer_Hang.Children.Add(myScrollViewSecond_Hang);
-            NumberPickerContainer_Hang.Children.Add(myScrollViewMinute_Hang);
-            MainContainer.Children.Add(NumberPickerContainer_Hang);
+        private void Create_IntervalCountSelection()
+        {
+
+            // Build both number picker scroll views and place into stacklayout
+            myScrollView_IntervalCount = new ScrollView
+            {
+                Content = NumberPickerLabel_IntervalCount,
+                BackgroundColor = BACKGROUND_COLOR,
+                WidthRequest = 120,
+                HeightRequest = 120,
+                VerticalOptions = LayoutOptions.CenterAndExpand,
+                HorizontalOptions = LayoutOptions.CenterAndExpand,
+                Orientation = ScrollOrientation.Vertical,
+                HorizontalScrollBarVisibility = ScrollBarVisibility.Never,
+                VerticalScrollBarVisibility = ScrollBarVisibility.Never
+            };
+
+            // Default set 0 label with selected color
+            NumberPickerLabel_IntervalCount.Children[0].BackgroundColor = SELECTED_COLOR;
+
+            // Scrolled Events
+            myScrollView_IntervalCount.Scrolled += (sender, e) => NumberPickerScrolled_IntervalCount(this, e);
+
         }
 
         private void Create_BeginButton()
@@ -171,42 +205,98 @@ namespace TopOutTrainer.ContentViews
 
             buttonStartStackLayout = new StackLayout
             {
-                VerticalOptions = LayoutOptions.FillAndExpand,
+                VerticalOptions = LayoutOptions.Start,
                 HorizontalOptions = LayoutOptions.FillAndExpand,
                 Margin = new Thickness(10),
                 BackgroundColor = Color.FromHex("#303030"),
-                Orientation = StackOrientation.Horizontal,
+                Orientation = StackOrientation.Vertical,
             };
+            buttonStart.Clicked += async (sender, args) =>
+            {
+                await myNavigation.PushAsync(new ContentViews.TimerPage(focusedMinuteScrollViewContent_Hang, focusedSecondScrollViewContent_Hang, focusedMinuteScrollViewContent_Rest, focusedSecondScrollViewContent_Rest, focusedIntervalCount));
+            };
+
 
             buttonStartStackLayout.Children.Add(buttonStart);
             MainContainer.Children.Add(buttonStartStackLayout);
         }
 
-        public ContentViewHandler_TimerPageSelection()
+
+        private Label hangMinuteLabel;
+        private Label hangSecondLabel;
+        private Label restMinuteLabel;
+        private Label restSecondLabel;
+        private Label intervalLabel;
+        private void CreateDescriptionLabels()
         {
+
+            hangMinuteLabel = new Label
+            {
+                Text = "Minute",
+                FontSize = 16,
+                TextColor = Color.White,
+                HorizontalTextAlignment = TextAlignment.Center,
+                FontFamily = "font/montserrat/MontserratAlternates-Bold.otf#MontserratAlternates-Bold",
+            };
+
+            hangSecondLabel = new Label
+            {
+                Text = "Second",
+                FontSize = 16,
+                TextColor = Color.White,
+                HorizontalTextAlignment = TextAlignment.Center,
+                FontFamily = "font/montserrat/MontserratAlternates-Bold.otf#MontserratAlternates-Bold"
+            };
+
+            restMinuteLabel = new Label
+            {
+                Text = "Minute",
+                FontSize = 16,
+                TextColor = Color.White,
+                HorizontalTextAlignment = TextAlignment.Center,
+                FontFamily = "font/montserrat/MontserratAlternates-Bold.otf#MontserratAlternates-Bold"
+            };
+
+            restSecondLabel = new Label
+            {
+                Text = "Second",
+                FontSize = 16,
+                TextColor = Color.White,
+                HorizontalTextAlignment = TextAlignment.Center,
+                FontFamily = "font/montserrat/MontserratAlternates-Bold.otf#MontserratAlternates-Bold"
+            };
+
+            intervalLabel = new Label
+            {
+                Text = "Count",
+                FontSize = 16,
+                TextColor = Color.White,
+                HorizontalTextAlignment = TextAlignment.Center,
+                FontFamily = "font/montserrat/MontserratAlternates-Bold.otf#MontserratAlternates-Bold"
+            };
+
+        }
+        
+        public ContentViewHandler_TimerPageSelection(INavigation navigation)
+        {
+
+            myNavigation = navigation;
 
             MainContainer = new StackLayout
             {
+                HorizontalOptions = LayoutOptions.FillAndExpand,
                 VerticalOptions = LayoutOptions.FillAndExpand,
+                Orientation = StackOrientation.Horizontal,
+
+
             };
 
             // Fill with label values
-            NumberPickerLabelSecondContent_Hang = new StackLayout
-            {
-                
-            };
-            NumberPickerLabelMinuteContent_Hang = new StackLayout
-            {
-                
-            };
-            NumberPickerLabelSecondContent_Rest = new StackLayout
-            {
-
-            };
-            NumberPickerLabelMinuteContent_Rest = new StackLayout
-            {
-
-            };
+            NumberPickerLabelSecondContent_Hang = new StackLayout();
+            NumberPickerLabelMinuteContent_Hang = new StackLayout();
+            NumberPickerLabelSecondContent_Rest = new StackLayout();
+            NumberPickerLabelMinuteContent_Rest = new StackLayout();
+            NumberPickerLabel_IntervalCount = new StackLayout();
             foreach (int val in DIGIT_CONTAINER)
             {
                 NumberPickerLabelSecondContent_Hang.Children.Add(
@@ -249,12 +339,49 @@ namespace TopOutTrainer.ContentViews
                         FontFamily = "font/montserrat/MontserratAlternates-Bold.otf#MontserratAlternates-Bold"
                     }
                     );
+                NumberPickerLabel_IntervalCount.Children.Add(
+                    new Label
+                    {
+                        Text = val.ToString(),
+                        FontSize = 64,
+                        TextColor = Color.White,
+                        HorizontalTextAlignment = TextAlignment.Center,
+                        FontFamily = "font/montserrat/MontserratAlternates-Bold.otf#MontserratAlternates-Bold"
+                    }
+                    );
             }
-            
+
+
+
+        }
+
+        private void AddContainersToMain()
+        {
+
+            NumberPickerContainer_Second.Children.Add(myScrollViewSecond_Hang);
+            NumberPickerContainer_Second.Children.Add(hangSecondLabel);
+
+            NumberPickerContainer_Second.Children.Add(myScrollViewSecond_Rest);
+            NumberPickerContainer_Second.Children.Add(restSecondLabel);
+
+            NumberPickerContainer_Minute.Children.Add(myScrollViewMinute_Hang);
+            NumberPickerContainer_Minute.Children.Add(hangMinuteLabel);
+
+            NumberPickerContainer_Minute.Children.Add(myScrollViewMinute_Rest);
+            NumberPickerContainer_Minute.Children.Add(restMinuteLabel);
+
+            NumberPickerContainer_Minute.Children.Add(myScrollView_IntervalCount);
+            NumberPickerContainer_Minute.Children.Add(intervalLabel);
+
+            MainContainer.Children.Add(NumberPickerContainer_Minute);
+            MainContainer.Children.Add(NumberPickerContainer_Second);
+
         }
 
         public View GetContentView()
         {
+            // Create all the labels that will be added to picker containers
+            CreateDescriptionLabels();
 
             // Create both number pickers for hang
             Create_SecondMinuteSelection_Hang();
@@ -262,11 +389,38 @@ namespace TopOutTrainer.ContentViews
             // Create both number pickers for rest
             Create_SecondMinuteSelection_Rest();
 
+            // Create Interval Count
+            Create_IntervalCountSelection();
+
             // Create button holder and buttons
-            Create_BeginButton();
+            //Create_BeginButton();
+
+            AddContainersToMain();
 
             return Content = MainContainer;
 
+        }
+
+        // INTERVAL EVENT
+        private void NumberPickerScrolled_IntervalCount(object sender, EventArgs args)
+        {
+
+            // Using the new yPosition determine the label that is being focused and highlight it
+            Size contentSize = this.myScrollView_IntervalCount.ContentSize;
+
+            // Select the content closest to the center
+            int position = (int)((myScrollView_IntervalCount.ScrollY + (contentSize.Height / DIGIT_CONTAINER_SIZE / 2)) / (contentSize.Height / DIGIT_CONTAINER_SIZE));
+
+            if (position >= 0 && position <= DIGIT_CONTAINER_SIZE)
+            {
+                NumberPickerLabel_IntervalCount.Children[position].BackgroundColor = SELECTED_COLOR;
+
+                if (focusedIntervalCount != position)
+                {
+                    NumberPickerLabel_IntervalCount.Children[focusedIntervalCount].BackgroundColor = BACKGROUND_COLOR;
+                    focusedIntervalCount = position;
+                }
+            }
         }
 
         // HANG EVENTS
@@ -354,13 +508,6 @@ namespace TopOutTrainer.ContentViews
                 }
             }
         }
-
-        // BUTTON EVENTS
-        private void StartButtonClicked(object sender, EventArgs args)
-        {
-            
-        }
-
         
 }
 }

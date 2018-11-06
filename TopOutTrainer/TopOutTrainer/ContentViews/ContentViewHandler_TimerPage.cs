@@ -19,7 +19,9 @@ namespace TopOutTrainer
         public Button buttonReset;
         public View Content;
         public String totalTime = "00:00";
-        private const int GraphicThickness = 80;
+
+        // Circle Graphic Thickness
+        private const int GraphicThickness = 100;
 
         public Color TextColor
         {

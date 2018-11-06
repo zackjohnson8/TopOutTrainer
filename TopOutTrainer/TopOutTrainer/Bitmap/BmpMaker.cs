@@ -231,11 +231,11 @@ namespace TopOutTrainer
                             // Was using the draw a line but it misses pixels. Gonna use the equation of a circle instead
                             //x = center + (radius - index0) * Math.Cos((index) * Math.PI / 180);
                             //y = center + (radius - index0) * Math.Sin((index) * Math.PI / 180);
-                            //if(checkPoint(radiusOuter, x, y, centerX, centerY, 12, 90))
+                            //if(CheckPoint(radiusOuter, x, y, centerX, centerY, 12, 90))
                             //{
                             //    SetPixel(x, y, Color.Blue);
                             //}
-                            angle = getAngleOfPoint(x, y, centerX, centerY);
+                            angle = GetAngleOfPoint(x, y, centerX, centerY);
                             if (angle > 0 && angle < 60)
                             {
                                 SetPixel(x, y, Color.Blue);
@@ -277,7 +277,7 @@ namespace TopOutTrainer
             }
         }
 
-        private float getAngleOfPoint(int x, int y, int centerX, int centerY)
+        private float GetAngleOfPoint(int x, int y, int centerX, int centerY)
         {
 
 
@@ -293,7 +293,7 @@ namespace TopOutTrainer
             return angle + 180;
         }
 
-        private Boolean checkPoint(int radius, int x, int y, int centerX, int centerY,
+        private Boolean CheckPoint(int radius, int x, int y, int centerX, int centerY,
                     float percent, float startAngle)
         {
 

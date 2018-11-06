@@ -15,7 +15,7 @@ namespace TopOutTrainer.ContentViews
         private Color myBackgroundColor = Color.FromHex("#303030");
         private ContentViewHandler_TimerPage myTimerView;
 
-        public TimerPage ()
+        public TimerPage (int hangTime_min, int hangTime_sec, int restTime_min, int restTime_sec, int hangInterval_count)
 		{
             myTimerView = new ContentViewHandler_TimerPage();
             
