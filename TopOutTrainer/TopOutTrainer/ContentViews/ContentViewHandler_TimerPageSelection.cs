@@ -14,12 +14,7 @@ namespace TopOutTrainer.ContentViews
         private readonly Color SELECTED_COLOR = Color.FromHex("#636363");
 
         // Parent container
-        public StackLayout MainContainer;
-
-        // Child containers for each Number picker
-        public StackLayout NumberPickerContainer_Minute;
-        public StackLayout NumberPickerContainer_Second;
-        private StackLayout buttonStartStackLayout;
+        public Grid MainContainer;
 
         // ScrollView for each number picker
         private ScrollView myScrollViewSecond_Hang;
@@ -27,6 +22,13 @@ namespace TopOutTrainer.ContentViews
         private ScrollView myScrollViewSecond_Rest;
         private ScrollView myScrollViewMinute_Rest;
         private ScrollView myScrollView_IntervalCount;
+
+        // Labels for all the scrollviews
+        private Label hangMinuteLabel;
+        private Label hangSecondLabel;
+        private Label restMinuteLabel;
+        private Label restSecondLabel;
+        private Label intervalLabel;
 
         private View Content;
         INavigation myNavigation;
@@ -64,17 +66,6 @@ namespace TopOutTrainer.ContentViews
 
         private void Create_SecondMinuteSelection_Rest()
         {
-
-            // Number picker stacklayout container
-            NumberPickerContainer_Minute = new StackLayout
-            {
-                VerticalOptions = LayoutOptions.Start,
-                HorizontalOptions = LayoutOptions.FillAndExpand,
-                BackgroundColor = BACKGROUND_COLOR,
-                Orientation = StackOrientation.Vertical,
-                
-            };
-
 
             // Build both number picker scroll views and place into stacklayout
             myScrollViewSecond_Rest = new ScrollView
@@ -115,16 +106,6 @@ namespace TopOutTrainer.ContentViews
 
         private void Create_SecondMinuteSelection_Hang()
         {
-
-            // Number picker stacklayout container
-            NumberPickerContainer_Second = new StackLayout
-            {
-                VerticalOptions = LayoutOptions.Start,
-                HorizontalOptions = LayoutOptions.FillAndExpand,
-                BackgroundColor = BACKGROUND_COLOR,
-                Orientation = StackOrientation.Vertical,
-            };
-
 
             // Build both number picker scroll views and place into stacklayout
             myScrollViewSecond_Hang = new ScrollView
@@ -190,7 +171,6 @@ namespace TopOutTrainer.ContentViews
 
         private void Create_BeginButton()
         {
-
             buttonStart = new Button
             {
                 Text = "Start",
@@ -203,30 +183,12 @@ namespace TopOutTrainer.ContentViews
                 CornerRadius = 2,
             };
 
-            buttonStartStackLayout = new StackLayout
-            {
-                VerticalOptions = LayoutOptions.Start,
-                HorizontalOptions = LayoutOptions.FillAndExpand,
-                Margin = new Thickness(10),
-                BackgroundColor = Color.FromHex("#303030"),
-                Orientation = StackOrientation.Vertical,
-            };
             buttonStart.Clicked += async (sender, args) =>
             {
                 await myNavigation.PushAsync(new ContentViews.TimerPage(focusedMinuteScrollViewContent_Hang, focusedSecondScrollViewContent_Hang, focusedMinuteScrollViewContent_Rest, focusedSecondScrollViewContent_Rest, focusedIntervalCount));
             };
-
-
-            buttonStartStackLayout.Children.Add(buttonStart);
-            MainContainer.Children.Add(buttonStartStackLayout);
         }
 
-
-        private Label hangMinuteLabel;
-        private Label hangSecondLabel;
-        private Label restMinuteLabel;
-        private Label restSecondLabel;
-        private Label intervalLabel;
         private void CreateDescriptionLabels()
         {
 
@@ -282,14 +244,25 @@ namespace TopOutTrainer.ContentViews
 
             myNavigation = navigation;
 
-            MainContainer = new StackLayout
+            MainContainer = new Grid
             {
-                HorizontalOptions = LayoutOptions.FillAndExpand,
-                VerticalOptions = LayoutOptions.FillAndExpand,
-                Orientation = StackOrientation.Horizontal,
 
 
             };
+
+            //Height = new GridLength(1, GridUnitType.Star)
+            MainContainer.RowDefinitions.Add(new RowDefinition {}); // Hang Selection Row
+            MainContainer.RowDefinitions.Add(new RowDefinition {}); // Hang Labels Row
+            MainContainer.RowDefinitions.Add(new RowDefinition {}); // Rest Selection Row
+            MainContainer.RowDefinitions.Add(new RowDefinition {}); // Rest Labels Row
+            MainContainer.RowDefinitions.Add(new RowDefinition {}); // Interval Selection Row
+            MainContainer.RowDefinitions.Add(new RowDefinition {}); // Button Row
+
+
+            //Width = new GridLength(1, GridUnitType.Star) 
+            MainContainer.ColumnDefinitions.Add(new ColumnDefinition {}); // Label Column
+            MainContainer.ColumnDefinitions.Add(new ColumnDefinition {}); // Minute Column
+            MainContainer.ColumnDefinitions.Add(new ColumnDefinition {}); // Second Column
 
             // Fill with label values
             NumberPickerLabelSecondContent_Hang = new StackLayout();
@@ -358,23 +331,33 @@ namespace TopOutTrainer.ContentViews
         private void AddContainersToMain()
         {
 
-            NumberPickerContainer_Second.Children.Add(myScrollViewSecond_Hang);
-            NumberPickerContainer_Second.Children.Add(hangSecondLabel);
+            //NumberPickerContainer_Second.Children.Add(myScrollViewSecond_Hang);
+            //NumberPickerContainer_Second.Children.Add(hangSecondLabel);
+            MainContainer.Children.Add(myScrollViewSecond_Hang, 2, 0);
+            MainContainer.Children.Add(hangSecondLabel, 2, 1);
 
-            NumberPickerContainer_Second.Children.Add(myScrollViewSecond_Rest);
-            NumberPickerContainer_Second.Children.Add(restSecondLabel);
+            //NumberPickerContainer_Minute.Children.Add(myScrollViewMinute_Hang);
+            //NumberPickerContainer_Minute.Children.Add(hangMinuteLabel);
+            MainContainer.Children.Add(myScrollViewMinute_Hang, 1, 0);
+            MainContainer.Children.Add(hangMinuteLabel, 1, 1);
 
-            NumberPickerContainer_Minute.Children.Add(myScrollViewMinute_Hang);
-            NumberPickerContainer_Minute.Children.Add(hangMinuteLabel);
 
-            NumberPickerContainer_Minute.Children.Add(myScrollViewMinute_Rest);
-            NumberPickerContainer_Minute.Children.Add(restMinuteLabel);
+            //NumberPickerContainer_Second.Children.Add(myScrollViewSecond_Rest);
+            //NumberPickerContainer_Second.Children.Add(restSecondLabel);
+            MainContainer.Children.Add(myScrollViewSecond_Rest, 2, 2);
+            MainContainer.Children.Add(restSecondLabel, 2, 3);
 
-            NumberPickerContainer_Minute.Children.Add(myScrollView_IntervalCount);
-            NumberPickerContainer_Minute.Children.Add(intervalLabel);
+            
+            MainContainer.Children.Add(myScrollViewMinute_Rest, 1, 2);
+            MainContainer.Children.Add(restMinuteLabel, 1, 3);
 
-            MainContainer.Children.Add(NumberPickerContainer_Minute);
-            MainContainer.Children.Add(NumberPickerContainer_Second);
+            // Need spacer
+
+            MainContainer.Children.Add(myScrollView_IntervalCount, 1, 4);
+            MainContainer.Children.Add(intervalLabel, 1, 5);
+
+            //MainContainer.Children.Add(NumberPickerContainer_Minute);
+            //MainContainer.Children.Add(NumberPickerContainer_Second);
 
         }
 
