@@ -177,7 +177,7 @@ namespace TopOutTrainer
         }
 
         // CONSTRUCTOR
-        public ContentViewHandler_TimerPage()
+        public ContentViewHandler_TimerPage(int hangTime_min, int hangTime_sec, int restTime_min, int restTime_sec, int hangInterval_count)
         {
             
         }

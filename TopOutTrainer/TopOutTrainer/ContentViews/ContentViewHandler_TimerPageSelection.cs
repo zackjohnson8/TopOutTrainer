@@ -29,6 +29,9 @@ namespace TopOutTrainer.ContentViews
         private Label restMinuteLabel;
         private Label restSecondLabel;
         private Label intervalLabel;
+        private Label hangDescriptionLabel;
+        private Label restDescriptionLabel;
+        private Label intervalDescriptionLabel;
 
         private View Content;
         INavigation myNavigation;
@@ -237,6 +240,36 @@ namespace TopOutTrainer.ContentViews
                 FontFamily = "font/montserrat/MontserratAlternates-Bold.otf#MontserratAlternates-Bold"
             };
 
+            hangDescriptionLabel = new Label
+            {
+                Text = "Hang time:",
+                FontSize = 16,
+                TextColor = Color.White,
+                VerticalTextAlignment = TextAlignment.Center,
+                HorizontalTextAlignment = TextAlignment.Center,
+                FontFamily = "font/montserrat/MontserratAlternates-Bold.otf#MontserratAlternates-Bold"
+            };
+
+            restDescriptionLabel = new Label
+            {
+                Text = "Rest time:",
+                FontSize = 16,
+                TextColor = Color.White,
+                VerticalTextAlignment = TextAlignment.Center,
+                HorizontalTextAlignment = TextAlignment.Center,
+                FontFamily = "font/montserrat/MontserratAlternates-Bold.otf#MontserratAlternates-Bold"
+            };
+
+            intervalDescriptionLabel = new Label
+            {
+                Text = "Intervals:",
+                FontSize = 16,
+                TextColor = Color.White,
+                VerticalTextAlignment = TextAlignment.Center,
+                HorizontalTextAlignment = TextAlignment.Center,
+                FontFamily = "font/montserrat/MontserratAlternates-Bold.otf#MontserratAlternates-Bold"
+            };
+
         }
         
         public ContentViewHandler_TimerPageSelection(INavigation navigation)
@@ -351,13 +384,15 @@ namespace TopOutTrainer.ContentViews
             MainContainer.Children.Add(myScrollViewMinute_Rest, 1, 2);
             MainContainer.Children.Add(restMinuteLabel, 1, 3);
 
-            // Need spacer
 
             MainContainer.Children.Add(myScrollView_IntervalCount, 1, 4);
             MainContainer.Children.Add(intervalLabel, 1, 5);
 
-            //MainContainer.Children.Add(NumberPickerContainer_Minute);
-            //MainContainer.Children.Add(NumberPickerContainer_Second);
+            MainContainer.Children.Add(hangDescriptionLabel, 0, 0);
+            MainContainer.Children.Add(restDescriptionLabel, 0, 2);
+            MainContainer.Children.Add(intervalDescriptionLabel, 0, 4);
+
+            MainContainer.Children.Add(buttonStart, 1, 6);
 
         }
 
@@ -376,7 +411,7 @@ namespace TopOutTrainer.ContentViews
             Create_IntervalCountSelection();
 
             // Create button holder and buttons
-            //Create_BeginButton();
+            Create_BeginButton();
 
             AddContainersToMain();
 

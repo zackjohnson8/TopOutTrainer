@@ -17,7 +17,7 @@ namespace TopOutTrainer.ContentViews
 
         public TimerPage (int hangTime_min, int hangTime_sec, int restTime_min, int restTime_sec, int hangInterval_count)
 		{
-            myTimerView = new ContentViewHandler_TimerPage();
+            myTimerView = new ContentViewHandler_TimerPage(hangTime_min, hangTime_sec, restTime_min, restTime_sec, hangInterval_count);
             
             // TODO: what is initializecomponent
             //InitializeComponent ();
