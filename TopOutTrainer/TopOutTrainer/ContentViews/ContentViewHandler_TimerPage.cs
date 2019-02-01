@@ -20,6 +20,12 @@ namespace TopOutTrainer
         public View Content;
         public String totalTime = "00:00";
 
+        private int myHangTime_Min;
+        private int myHangTime_Sec;
+        private int myRestTime_Min;
+        private int myRestTime_Sec;
+        private int myHangInterval_Count;
+
         // Circle Graphic Thickness
         private const int GraphicThickness = 100;
 
@@ -99,8 +105,11 @@ namespace TopOutTrainer
             int cols = 800;
             BmpMaker bmpMaker = new BmpMaker(cols, rows);
 
-            // Draw images to the bitmap
-            bmpMaker.DrawCircle(rows, cols, GraphicThickness, 7, 30, 3); // TODO remove hardcode
+
+            // Convert hang & rest into seconds then draw images to the bitmap
+            int hangSeconds = (myHangTime_Min * 60) + myHangTime_Sec;
+            int restSeconds = (myRestTime_Min * 60) + myRestTime_Sec;
+            bmpMaker.DrawCircle(rows, cols, GraphicThickness, hangSeconds, restSeconds, myHangInterval_Count); // TODO remove hardcode
 
             ImageSource imageSource = bmpMaker.Generate();
 
@@ -179,7 +188,14 @@ namespace TopOutTrainer
         // CONSTRUCTOR
         public ContentViewHandler_TimerPage(int hangTime_min, int hangTime_sec, int restTime_min, int restTime_sec, int hangInterval_count)
         {
-            
+
+            // Take the passed in values and build the image using these
+            myHangTime_Min = hangTime_min;
+            myHangTime_Sec = hangTime_sec;
+            myRestTime_Min = restTime_min;
+            myRestTime_Sec = restTime_sec;
+            myHangInterval_Count = hangInterval_count;
+
         }
 
         public View GetContentView()

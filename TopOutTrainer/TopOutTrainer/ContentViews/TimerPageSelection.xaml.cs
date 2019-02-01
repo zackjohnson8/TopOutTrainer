@@ -18,6 +18,7 @@ namespace TopOutTrainer.ContentViews
         public TimerPageSelection()
         {
 
+            // 
             myTimerView = new ContentViewHandler_TimerPageSelection(Navigation);
 
             InitializeComponent();
