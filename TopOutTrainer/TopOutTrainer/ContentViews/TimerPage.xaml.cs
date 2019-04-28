@@ -17,7 +17,7 @@ namespace TopOutTrainer.ContentViews
         private Color mainColor = Color.FromHex("#303030");
         private Color textColor = Color.White;
         private Grid mainG;
-        private Button optionB;
+        private ImageButton optionB;
         private Label intervalL;
         private Label repsL;
         private Label setsL;
@@ -31,10 +31,10 @@ namespace TopOutTrainer.ContentViews
         private BmpMaker bmpMaker;
 
         // TODO default button names until determined
-        private Button button1;
-        private Button button2;
-        private Button button3;
-        private Button button4;
+        private ImageButton button1;
+        private ImageButton button2;
+        private ImageButton button3;
+        private ImageButton button4;
 
         private double screenWidth;
         private double screenHeight;
@@ -66,7 +66,7 @@ namespace TopOutTrainer.ContentViews
             {
                 Padding = new Thickness(0),
                 Margin = new Thickness(0),
-                BackgroundColor = textColor,
+                BackgroundColor = mainColor,
                 RowDefinitions =
                 {
                     // 5 Rows
@@ -122,13 +122,17 @@ namespace TopOutTrainer.ContentViews
         {
 
             // Row 0 right (0, 4) settings button
-            optionB = new Button
+            optionB = new ImageButton
             {
                 WidthRequest = 50,
                 HeightRequest = 50,
                 Margin = 0,
                 CornerRadius = 0,
-                BackgroundColor = mainColor
+                BackgroundColor = mainColor,
+                Source = "options_gimp.png",
+                //HorizontalOptions = LayoutOptions.CenterAndExpand,
+                //VerticalOptions = LayoutOptions.CenterAndExpand,
+                Aspect = Aspect.Fill
 
             };
             optionB.Clicked += OptionButtonClicked;
@@ -229,7 +233,7 @@ namespace TopOutTrainer.ContentViews
 
             // Row 5 tab bar buttons
             // (4,0)
-            button1 = new Button
+            button1 = new ImageButton
             {
                 WidthRequest = 50,
                 HeightRequest = 50,
@@ -239,7 +243,7 @@ namespace TopOutTrainer.ContentViews
 
             };
             // (4,1)
-            button2 = new Button
+            button2 = new ImageButton
             {
                 WidthRequest = 50,
                 HeightRequest = 50,
@@ -249,7 +253,7 @@ namespace TopOutTrainer.ContentViews
 
             };
             // (4,2)
-            button3 = new Button
+            button3 = new ImageButton
             {
                 WidthRequest = 50,
                 HeightRequest = 50,
@@ -259,14 +263,13 @@ namespace TopOutTrainer.ContentViews
 
             };
             // (4,3)
-            button4 = new Button
+            button4 = new ImageButton
             {
                 WidthRequest = 50,
                 HeightRequest = 50,
                 BackgroundColor = mainColor,
                 Margin = 0,
-                CornerRadius = 0,
-                //Image = "options.png"
+                CornerRadius = 0
 
             };
         }
