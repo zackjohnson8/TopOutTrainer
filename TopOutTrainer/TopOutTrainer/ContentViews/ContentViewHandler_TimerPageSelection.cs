@@ -63,6 +63,8 @@ namespace TopOutTrainer.ContentViews
             50,51,52,53,54,55,56,57,58,59,
             };
 
+
+        //private const double SCREEN_WIDTH = Application.Current.MainPage.Width;
         /// <summary>
         /// //////////////////////////////
         /// </summary>
@@ -179,8 +181,8 @@ namespace TopOutTrainer.ContentViews
                 Text = "Start",
                 VerticalOptions = LayoutOptions.CenterAndExpand,
                 HorizontalOptions = LayoutOptions.CenterAndExpand,
-                WidthRequest = 120,
-                HeightRequest = 40,
+                WidthRequest = Application.Current.MainPage.Height / 2,
+                HeightRequest = Application.Current.MainPage.Height / 8,
                 BorderColor = Color.FromHex("#66ffff"),
                 BorderWidth = 3,
                 CornerRadius = 2,
@@ -188,7 +190,7 @@ namespace TopOutTrainer.ContentViews
 
             buttonStart.Clicked += async (sender, args) =>
             {
-                await myNavigation.PushAsync(new ContentViews.TimerPage(focusedMinuteScrollViewContent_Hang, focusedSecondScrollViewContent_Hang, focusedMinuteScrollViewContent_Rest, focusedSecondScrollViewContent_Rest, focusedIntervalCount));
+              //  await myNavigation.PushAsync(new ContentViews.TimerPage(focusedMinuteScrollViewContent_Hang, focusedSecondScrollViewContent_Hang, focusedMinuteScrollViewContent_Rest, focusedSecondScrollViewContent_Rest, focusedIntervalCount));
             };
         }
 

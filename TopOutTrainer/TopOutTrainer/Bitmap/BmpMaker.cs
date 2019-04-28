@@ -48,6 +48,19 @@ namespace TopOutTrainer
             
         }
 
+        public ImageSource Generate()
+        {
+            // Create MemoryStream from buffer with bitmap.
+            MemoryStream memoryStream = new MemoryStream(buffer);
+
+            // Convert to StreamImageSource.
+            ImageSource imageSource = ImageSource.FromStream(() =>
+            {
+                return memoryStream;
+            });
+            return imageSource;
+        }
+
         public int Width
         {
             private set;
@@ -97,10 +110,6 @@ namespace TopOutTrainer
             {
                 for(int y = 0; y < col; y++)
                 {
-
-                    // Was using the draw a line but it misses pixels. Gonna use the equation of a circle instead
-                    //x = center + (radius - index0) * Math.Cos((index) * Math.PI / 180);
-                    //y = center + (radius - index0) * Math.Sin((index) * Math.PI / 180);
                     
                     // Each cordinate (x,y) has a position inside or outside a circle. Equation of a circle is (x – h)2 + (y – k)2 = r2 where the center (h,k)
                     xSqrd = (x - centerX) * (x - centerX);
@@ -116,7 +125,7 @@ namespace TopOutTrainer
 
             }
 
-            // Outside of outer circle
+             //Outside of outer circle
             for (int x = 0; x < row; x++)
             {
                 for (int y = 0; y < col; y++)
@@ -191,7 +200,7 @@ namespace TopOutTrainer
 
             // So basically everything between the 60 degree angle and between the outer and
             // inner circle should paint correctly... technically... -.-
-            FillCircleAnimation(row, col, thickness, hangTime, restTime, hangIntervals);
+            //FillCircleAnimation(row, col, thickness, hangTime, restTime, hangIntervals);
 
 
         }
@@ -315,17 +324,16 @@ namespace TopOutTrainer
                 return false;
         }
 
-        public ImageSource Generate()
-        {
-            // Create MemoryStream from buffer with bitmap.
-            MemoryStream memoryStream = new MemoryStream(buffer);
 
-            // Convert to StreamImageSource.
-            ImageSource imageSource = ImageSource.FromStream(() =>
-            {
-                return memoryStream;
-            });
-            return imageSource;
-        }
     }
 }
+
+/* BITMAKER
+ * Using the bitmaker create a circle to display time. The pixels in the inner circle should
+ * trigger an event to begin and stop timer. Ignore reset, could use a pop up menu to handle
+ * any changes that need to be made.
+ * 
+ * 
+ * 
+ * 
+ */

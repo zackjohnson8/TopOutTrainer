@@ -2,6 +2,8 @@
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
 
+
+// APPLICATION START POINT
 [assembly: XamlCompilation(XamlCompilationOptions.Compile)]
 namespace TopOutTrainer
 {
@@ -14,8 +16,10 @@ namespace TopOutTrainer
         {
             InitializeComponent();
 
-            MainPage = new NavigationPage(new MainPage());
+            // Start with timer page
+            MainPage = new NavigationPage(new TopOutTrainer.ContentViews.TimerPage());
             MainPage.SetValue(NavigationPage.BarBackgroundColorProperty, Color.FromHex(bannerBackgroundColor));
+
         }
 
         protected override void OnStart()
