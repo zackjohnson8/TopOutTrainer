@@ -5,14 +5,13 @@ using System.Text;
 using System.Threading.Tasks;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
-using TopOutTrainer.CustomOption;
 
 namespace TopOutTrainer.ContentViews
 {
-	//[XamlCompilation(XamlCompilationOptions.Compile)]
+	[XamlCompilation(XamlCompilationOptions.Compile)]
 	public partial class TimerPage : ContentPage
 	{
-        private TimerOption myTimerOption;
+        //private TopOutTrainer.ContentViews.TimerPageSettings myTimerSettings;
 
         private Color mainColor = Color.FromHex("#303030");
         private Color textColor = Color.White;
@@ -26,9 +25,9 @@ namespace TopOutTrainer.ContentViews
         private Label repsNumL;
         private Label setsNumL;
 
-        private Image bitmapI;
-        private StackLayout bitmapContainer;
-        private BmpMaker bmpMaker;
+        //private Image bitmapI;
+        //private StackLayout bitmapContainer;
+        //private BmpMaker bmpMaker;
 
         // TODO default button names until determined
         private ImageButton button1;
@@ -37,14 +36,12 @@ namespace TopOutTrainer.ContentViews
         private ImageButton button4;
         private ImageButton startbutton;
 
-        private double screenWidth;
-        private double screenHeight;
 
         public TimerPage()
         {
 
             NavigationPage.SetHasNavigationBar(this, false);
-            myTimerOption = new TimerOption();
+            //myTimerSettings = new TopOutTrainer.ContentViews.TimerPageSettings(); // All timer settings
             GridChildrenInitialize();
             MainGridInitialize();
             StopWatch.AddLabelToDraw(timerNumL);
@@ -52,33 +49,6 @@ namespace TopOutTrainer.ContentViews
             Content = mainG;
 
         }
-
-
-        void OnSizeChanged(object sender, EventArgs e)
-        {
-            // Handle sizing of labels based on screen size
-            if (this.Width > 0)
-            {
-                // Numbers
-                timerNumL.FontSize = this.Width / 8;
-                repsNumL.FontSize = this.Width / 8;
-                setsNumL.FontSize = this.Width / 8;
-
-                // 
-                intervalL.FontSize = this.Width / 12;
-                repsL.FontSize = this.Width / 14;
-                setsL.FontSize = this.Width / 14;
-                totalTimeL.FontSize = this.Width / 14;
-            }
-            //Create_BitMap();
-        }
-
-        //SizeChanged += (object sender, EventArgs args) =>
-        //{
-        //            // Scale the font size to the page width
-        //            //      (based on 11 characters in the displayed string).
-
-        //};
 
         private void MainGridInitialize()
         {
@@ -202,22 +172,26 @@ namespace TopOutTrainer.ContentViews
                 BackgroundColor = mainColor,
                 Text = "00:00"
             };
+
             setsNumL = new Label
             {
                 HorizontalTextAlignment = TextAlignment.Center,
                 VerticalTextAlignment = TextAlignment.Center,
                 TextColor = textColor,
                 BackgroundColor = mainColor,
-                Text = "0",
-            };
+                Text = StaticFiles.TimerPageUISettings.Sets.ToString()
+
+        };
+
+
             repsNumL = new Label
             {
                 HorizontalTextAlignment = TextAlignment.Center,
                 VerticalTextAlignment = TextAlignment.Center,
                 TextColor = textColor,
                 BackgroundColor = mainColor,
-                Text = "0",
-            };
+                Text = StaticFiles.TimerPageUISettings.Reps.ToString()
+        };
 
             // Row 2 sets label
             setsL = new Label
@@ -254,13 +228,13 @@ namespace TopOutTrainer.ContentViews
 
 
             // Row 3,4 BITMAP
-            bitmapContainer = new StackLayout
-            {
-                VerticalOptions = LayoutOptions.FillAndExpand,
-                HorizontalOptions = LayoutOptions.FillAndExpand,
-                BackgroundColor = mainColor,
-                Orientation = StackOrientation.Horizontal,
-            };
+            //bitmapContainer = new StackLayout
+            //{
+            //    VerticalOptions = LayoutOptions.FillAndExpand,
+            //    HorizontalOptions = LayoutOptions.FillAndExpand,
+            //    BackgroundColor = mainColor,
+            //    Orientation = StackOrientation.Horizontal,
+            //};
 
             startbutton = new ImageButton
             {
@@ -286,11 +260,12 @@ namespace TopOutTrainer.ContentViews
             // (4,1)
             button2 = new ImageButton
             {
-                WidthRequest = 50,
-                HeightRequest = 50,
                 BackgroundColor = mainColor,
                 Margin = 0,
-                CornerRadius = 0
+                CornerRadius = 0,
+                Source = "graph_white.png",
+                Aspect = Aspect.AspectFit
+
 
             };
             // (4,2)
@@ -317,10 +292,27 @@ namespace TopOutTrainer.ContentViews
 
         private void OptionButtonClicked(object sender, EventArgs args)
         {
-            //MainPage = new NavigationPage(new TopOutTrainer.ContentViews.TimerPage());
-            //MainPage.SetValue(NavigationPage.BarBackgroundColorProperty, Color.FromHex(bannerBackgroundColor));
+            Navigation.PushAsync(new TimerPageSettings());
         }
 
+        private void OnSizeChanged(object sender, EventArgs e)
+        {
+            // Handle sizing of labels based on screen size
+            if (this.Width > 0)
+            {
+                // Numbers
+                timerNumL.FontSize = this.Width / 8;
+                repsNumL.FontSize = this.Width / 8;
+                setsNumL.FontSize = this.Width / 8;
+
+                // 
+                intervalL.FontSize = this.Width / 12;
+                repsL.FontSize = this.Width / 14;
+                setsL.FontSize = this.Width / 14;
+                totalTimeL.FontSize = this.Width / 14;
+            }
+            //Create_BitMap();
+        }
 
     }
 }
