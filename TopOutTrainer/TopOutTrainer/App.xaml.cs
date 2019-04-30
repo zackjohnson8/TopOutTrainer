@@ -17,7 +17,7 @@ namespace TopOutTrainer
             InitializeComponent();
 
             // Start with timer page
-            MainPage = new NavigationPage(new TopOutTrainer.ContentViews.TimerPage_ContentPage());
+            MainPage = new NavigationPage(new TopOutTrainer.ContentViews.TimerPage());
             MainPage.SetValue(NavigationPage.BarBackgroundColorProperty, Color.FromHex(bannerBackgroundColor));
 
         }

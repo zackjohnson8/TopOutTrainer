@@ -15,6 +15,8 @@
 
   <ItemGroup>
     <EmbeddedResource Remove="CustomOption\MyPage.xaml" />
+    <EmbeddedResource Remove="ContentViews\MainPage.xaml" />
+    <EmbeddedResource Remove="CustomOption\TimerOption_ContentPage.xaml" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Update="ContentViews\TimerPage.xaml">
@@ -27,13 +29,11 @@
   <ItemGroup>
     <Compile Remove="CustomOption\MyPage.cs" />
     <Compile Remove="CustomOption\MyPage.xaml.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <Compile Condition=" '$(EnableDefaultCompileItems)' == 'true' " Update="ContentViews\MainPage.xaml.cs">
-      <LogicalName>options.png</LogicalName>
-    </Compile>
-  </ItemGroup>
-  <ItemGroup>
-    <Folder Include="CustomOption\" />
+    <Compile Remove="ContentViews\ContentViewHandler_TimerPage.cs" />
+    <Compile Remove="ContentViews\ContentViewHandler_TimerPageSelection.cs" />
+    <Compile Remove="ContentViews\ContentViewHandler_TimerPage.cs" />
+    <Compile Remove="ContentViews\MainPage.xaml.cs" />
+    <Compile Remove="CustomOption\TimerOption.cs" />
+    <Compile Remove="CustomOption\TimerOption_ContentPage.xaml.cs" />
   </ItemGroup>
 </Project>
