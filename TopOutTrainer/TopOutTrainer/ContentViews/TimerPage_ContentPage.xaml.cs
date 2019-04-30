@@ -10,14 +10,14 @@ using TopOutTrainer.CustomOption;
 namespace TopOutTrainer.ContentViews
 {
 	//[XamlCompilation(XamlCompilationOptions.Compile)]
-	public partial class TimerPage : ContentPage
+	public partial class TimerPage_ContentPage : ContentPage
 	{
         private TimerOption myTimerOption;
 
         private Color mainColor = Color.FromHex("#303030");
         private Color textColor = Color.White;
         private Grid mainG;
-        private Button optionB;
+        private ImageButton optionB;
         private Label intervalL;
         private Label repsL;
         private Label setsL;
@@ -31,15 +31,16 @@ namespace TopOutTrainer.ContentViews
         private BmpMaker bmpMaker;
 
         // TODO default button names until determined
-        private Button button1;
-        private Button button2;
-        private Button button3;
-        private Button button4;
+        private ImageButton button1;
+        private ImageButton button2;
+        private ImageButton button3;
+        private ImageButton button4;
+        private ImageButton startbutton;
 
         private double screenWidth;
         private double screenHeight;
 
-        public TimerPage()
+        public TimerPage_ContentPage()
         {
 
             NavigationPage.SetHasNavigationBar(this, false);
@@ -55,10 +56,29 @@ namespace TopOutTrainer.ContentViews
 
         void OnSizeChanged(object sender, EventArgs e)
         {
-            screenWidth = mainG.Width;
-            screenHeight = mainG.Height;
+            // Handle sizing of labels based on screen size
+            if (this.Width > 0)
+            {
+                // Numbers
+                timerNumL.FontSize = this.Width / 8;
+                repsNumL.FontSize = this.Width / 8;
+                setsNumL.FontSize = this.Width / 8;
+
+                // 
+                intervalL.FontSize = this.Width / 12;
+                repsL.FontSize = this.Width / 14;
+                setsL.FontSize = this.Width / 14;
+                totalTimeL.FontSize = this.Width / 14;
+            }
             //Create_BitMap();
         }
+
+        //SizeChanged += (object sender, EventArgs args) =>
+        //{
+        //            // Scale the font size to the page width
+        //            //      (based on 11 characters in the displayed string).
+
+        //};
 
         private void MainGridInitialize()
         {
@@ -66,7 +86,7 @@ namespace TopOutTrainer.ContentViews
             {
                 Padding = new Thickness(0),
                 Margin = new Thickness(0),
-                BackgroundColor = textColor,
+                BackgroundColor = mainColor,
                 RowDefinitions =
                 {
                     // 5 Rows
@@ -106,8 +126,13 @@ namespace TopOutTrainer.ContentViews
             Grid.SetColumnSpan(totalTimeL, 2);
             mainG.Children.Add(setsL, 3, 2);
 
-            mainG.Children.Add(bitmapContainer, 0, 4);
-            Grid.SetColumnSpan(bitmapContainer, 4);
+            mainG.Children.Add(repsNumL, 0, 3);
+            mainG.Children.Add(timerNumL, 1, 3);
+            Grid.SetColumnSpan(timerNumL, 2);
+            mainG.Children.Add(setsNumL, 3, 3);
+
+            mainG.Children.Add(startbutton, 0, 4);
+            Grid.SetColumnSpan(startbutton, 4);
 
             mainG.Children.Add(button1, 0, 5);
             mainG.Children.Add(button2, 1, 5);
@@ -122,13 +147,17 @@ namespace TopOutTrainer.ContentViews
         {
 
             // Row 0 right (0, 4) settings button
-            optionB = new Button
+            optionB = new ImageButton
             {
                 WidthRequest = 50,
                 HeightRequest = 50,
                 Margin = 0,
                 CornerRadius = 0,
-                BackgroundColor = mainColor
+                BackgroundColor = mainColor,
+                Source = "options_gimp_white.png",
+                //HorizontalOptions = LayoutOptions.CenterAndExpand,
+                //VerticalOptions = LayoutOptions.CenterAndExpand,
+                Aspect = Aspect.AspectFill
 
             };
             optionB.Clicked += OptionButtonClicked;
@@ -139,16 +168,17 @@ namespace TopOutTrainer.ContentViews
             intervalL = new Label
             {
                 HorizontalTextAlignment = TextAlignment.Center,
+                VerticalTextAlignment = TextAlignment.Center,
                 TextColor = textColor,
                 Text = "Interval Training",
                 BackgroundColor = mainColor,
-                FontSize = 20
             };
 
             // Row 2 reps label
             repsL = new Label
             {
                 HorizontalTextAlignment = TextAlignment.Center,
+                VerticalTextAlignment = TextAlignment.Center,
                 TextColor = textColor,
                 BackgroundColor = mainColor,
                 Text = "Reps"
@@ -158,6 +188,7 @@ namespace TopOutTrainer.ContentViews
             totalTimeL = new Label
             {
                 HorizontalTextAlignment = TextAlignment.Center,
+                VerticalTextAlignment = TextAlignment.Center,
                 TextColor = textColor,
                 BackgroundColor = mainColor,
                 Text = "Total Time"
@@ -166,13 +197,15 @@ namespace TopOutTrainer.ContentViews
             timerNumL = new Label
             {
                 HorizontalTextAlignment = TextAlignment.Center,
+                VerticalTextAlignment = TextAlignment.Center,
                 TextColor = textColor,
                 BackgroundColor = mainColor,
-                Text = "00:00",
+                Text = "00:00"
             };
             setsNumL = new Label
             {
                 HorizontalTextAlignment = TextAlignment.Center,
+                VerticalTextAlignment = TextAlignment.Center,
                 TextColor = textColor,
                 BackgroundColor = mainColor,
                 Text = "0",
@@ -180,7 +213,8 @@ namespace TopOutTrainer.ContentViews
             repsNumL = new Label
             {
                 HorizontalTextAlignment = TextAlignment.Center,
-                TextColor = Color.Brown,
+                VerticalTextAlignment = TextAlignment.Center,
+                TextColor = textColor,
                 BackgroundColor = mainColor,
                 Text = "0",
             };
@@ -223,23 +257,33 @@ namespace TopOutTrainer.ContentViews
             {
                 VerticalOptions = LayoutOptions.FillAndExpand,
                 HorizontalOptions = LayoutOptions.FillAndExpand,
-                BackgroundColor = Color.Blue,
+                BackgroundColor = mainColor,
                 Orientation = StackOrientation.Horizontal,
+            };
+
+            startbutton = new ImageButton
+            {
+                BackgroundColor = mainColor,
+                Margin = 0,
+                CornerRadius = 200,
+                Source = "start.png",
+                Aspect = Aspect.AspectFit
             };
 
             // Row 5 tab bar buttons
             // (4,0)
-            button1 = new Button
+            button1 = new ImageButton
             {
-                WidthRequest = 50,
-                HeightRequest = 50,
-                BackgroundColor = mainColor,
+
+                BackgroundColor = Color.FromHex("#D3EFFC"),
                 Margin = 0,
-                CornerRadius = 0
+                CornerRadius = 0,
+                Source = "stopwatch_white_trans.png",
+                Aspect = Aspect.AspectFit
 
             };
             // (4,1)
-            button2 = new Button
+            button2 = new ImageButton
             {
                 WidthRequest = 50,
                 HeightRequest = 50,
@@ -249,7 +293,7 @@ namespace TopOutTrainer.ContentViews
 
             };
             // (4,2)
-            button3 = new Button
+            button3 = new ImageButton
             {
                 WidthRequest = 50,
                 HeightRequest = 50,
@@ -259,14 +303,13 @@ namespace TopOutTrainer.ContentViews
 
             };
             // (4,3)
-            button4 = new Button
+            button4 = new ImageButton
             {
                 WidthRequest = 50,
                 HeightRequest = 50,
                 BackgroundColor = mainColor,
                 Margin = 0,
-                CornerRadius = 0,
-                //Image = "options.png"
+                CornerRadius = 0
 
             };
         }
@@ -300,11 +343,11 @@ namespace TopOutTrainer.ContentViews
 
         private void OptionButtonClicked(object sender, EventArgs args)
         {
-            // Navigate to option page for option selection customization.
-            // Might need a database but would rather use dynamic pages saved on hardware.
-            // TODO(zack): Option Page
-
+            //MainPage = new NavigationPage(new TopOutTrainer.ContentViews.TimerPage_ContentPage());
+            //MainPage.SetValue(NavigationPage.BarBackgroundColorProperty, Color.FromHex(bannerBackgroundColor));
         }
+
+
     }
 }
 

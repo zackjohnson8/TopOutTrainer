@@ -124,6 +124,13 @@
     <AndroidResource Include="Resources\mipmap-xxhdpi\launcher_foreground.png" />
     <AndroidResource Include="Resources\mipmap-xxxhdpi\Icon.png" />
     <AndroidResource Include="Resources\mipmap-xxxhdpi\launcher_foreground.png" />
+    <AndroidResource Include="Resources\drawable\options.png" />
+    <AndroidResource Include="Resources\drawable\options_gimp.png" />
+    <AndroidResource Include="Resources\drawable\options_gimp_white.png" />
+    <AndroidResource Include="Resources\drawable\stopwatch_black.png" />
+    <AndroidResource Include="Resources\drawable\stopwatch_black_trans.png" />
+    <AndroidResource Include="Resources\drawable\stopwatch_white_trans.png" />
+    <AndroidResource Include="Resources\drawable\start.png" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Resources\drawable-hdpi\" />
@@ -139,9 +146,6 @@
   </ItemGroup>
   <ItemGroup>
     <AndroidResource Include="Resources\drawable\Timer.PNG" />
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="Resources\drawable\options.png" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\Android\Xamarin.Android.CSharp.targets" />
 </Project>
