@@ -36,4 +36,7 @@
     <Compile Remove="CustomOption\TimerOption.cs" />
     <Compile Remove="CustomOption\TimerOption_ContentPage.xaml.cs" />
   </ItemGroup>
+  <ItemGroup>
+    <Folder Include="StaticFiles\" />
+  </ItemGroup>
 </Project>
