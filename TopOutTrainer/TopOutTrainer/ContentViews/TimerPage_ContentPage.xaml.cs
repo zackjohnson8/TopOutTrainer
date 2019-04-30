@@ -10,7 +10,7 @@ using TopOutTrainer.CustomOption;
 namespace TopOutTrainer.ContentViews
 {
 	//[XamlCompilation(XamlCompilationOptions.Compile)]
-	public partial class TimerPage : ContentPage
+	public partial class TimerPage_ContentPage : ContentPage
 	{
         private TimerOption myTimerOption;
 
@@ -39,7 +39,7 @@ namespace TopOutTrainer.ContentViews
         private double screenWidth;
         private double screenHeight;
 
-        public TimerPage()
+        public TimerPage_ContentPage()
         {
 
             NavigationPage.SetHasNavigationBar(this, false);
@@ -129,10 +129,10 @@ namespace TopOutTrainer.ContentViews
                 Margin = 0,
                 CornerRadius = 0,
                 BackgroundColor = mainColor,
-                Source = "options_gimp.png",
+                Source = "options_gimp_white.png",
                 //HorizontalOptions = LayoutOptions.CenterAndExpand,
                 //VerticalOptions = LayoutOptions.CenterAndExpand,
-                Aspect = Aspect.Fill
+                Aspect = Aspect.AspectFill
 
             };
             optionB.Clicked += OptionButtonClicked;
@@ -227,7 +227,7 @@ namespace TopOutTrainer.ContentViews
             {
                 VerticalOptions = LayoutOptions.FillAndExpand,
                 HorizontalOptions = LayoutOptions.FillAndExpand,
-                BackgroundColor = Color.Blue,
+                BackgroundColor = mainColor,
                 Orientation = StackOrientation.Horizontal,
             };
 
@@ -237,9 +237,11 @@ namespace TopOutTrainer.ContentViews
             {
                 WidthRequest = 50,
                 HeightRequest = 50,
-                BackgroundColor = mainColor,
+                BackgroundColor = Color.FromHex("#0183FD"),
                 Margin = 0,
-                CornerRadius = 0
+                CornerRadius = 0,
+                Source = "stopwatch_white_trans.png",
+                Aspect = Aspect.AspectFit
 
             };
             // (4,1)
@@ -303,10 +305,8 @@ namespace TopOutTrainer.ContentViews
 
         private void OptionButtonClicked(object sender, EventArgs args)
         {
-            // Navigate to option page for option selection customization.
-            // Might need a database but would rather use dynamic pages saved on hardware.
-            // TODO(zack): Option Page
-
+            //MainPage = new NavigationPage(new TopOutTrainer.ContentViews.TimerPage_ContentPage());
+            //MainPage.SetValue(NavigationPage.BarBackgroundColorProperty, Color.FromHex(bannerBackgroundColor));
         }
     }
 }

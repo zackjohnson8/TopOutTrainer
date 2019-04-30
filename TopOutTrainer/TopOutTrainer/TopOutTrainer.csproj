@@ -14,12 +14,19 @@
   </ItemGroup>
 
   <ItemGroup>
+    <EmbeddedResource Remove="CustomOption\MyPage.xaml" />
+  </ItemGroup>
+  <ItemGroup>
     <EmbeddedResource Update="ContentViews\TimerPage.xaml">
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
     <EmbeddedResource Update="ContentViews\TimerPageSelection.xaml">
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Remove="CustomOption\MyPage.cs" />
+    <Compile Remove="CustomOption\MyPage.xaml.cs" />
   </ItemGroup>
   <ItemGroup>
     <Compile Condition=" '$(EnableDefaultCompileItems)' == 'true' " Update="ContentViews\MainPage.xaml.cs">
