@@ -223,6 +223,7 @@ namespace TopOutTrainer.ContentViews
             setsL = new Label
             {
                 HorizontalTextAlignment = TextAlignment.Center,
+                VerticalTextAlignment = TextAlignment.Center,
                 TextColor = textColor,
                 BackgroundColor = mainColor,
                 Text = "Sets"
