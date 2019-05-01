@@ -5,12 +5,11 @@ using Xamarin.Forms;
 
 namespace TopOutTrainer.ContentViews
 {
-    public partial class PlannerPage : ContentPage
+    public partial class GraphPage : ContentPage
     {
-
         private Color mainColor = Color.FromHex("#303030");
 
-        public PlannerPage()
+        public GraphPage()
         {
             InitializeComponent();
             NavigationPage.SetHasNavigationBar(this, false);
@@ -37,18 +36,20 @@ namespace TopOutTrainer.ContentViews
                 ColumnSpacing = 0,
             };
 
-            StackLayout aStack = new StackLayout {
+            StackLayout aStack = new StackLayout
+            {
                 HorizontalOptions = LayoutOptions.Center,
                 VerticalOptions = LayoutOptions.Center,
                 BackgroundColor = Color.FromHex("#FFFFFF")
             };
 
-            aStack.Children.Add(new Image {
+            aStack.Children.Add(new Image
+            {
                 BackgroundColor = Color.FromHex("#FFFFFF"),
                 Margin = 0,
-                Source = "construction.png", 
-                Aspect = Aspect.AspectFit 
-                });
+                Source = "construction.png",
+                Aspect = Aspect.AspectFit
+            });
 
             mainG.Children.Add(aStack, 0, 0);
             Grid.SetColumnSpan(aStack, 4);
@@ -67,7 +68,7 @@ namespace TopOutTrainer.ContentViews
             // (4,1)
             ImageButton button2 = new ImageButton
             {
-                BackgroundColor = Color.FromHex("#D3EFFC"),
+                BackgroundColor = mainColor,
                 Margin = 0,
                 CornerRadius = 0,
                 Source = "calendar.png",
@@ -75,18 +76,19 @@ namespace TopOutTrainer.ContentViews
 
 
             };
+            button2.Clicked += PlannerButtonClicked;
 
             // (4,2)
             ImageButton button3 = new ImageButton
             {
-                BackgroundColor = mainColor,
+                BackgroundColor = Color.FromHex("#D3EFFC"),
                 Margin = 0,
                 CornerRadius = 0,
                 Source = "graph_white.png",
                 Aspect = Aspect.AspectFit
 
             };
-            button3.Clicked += GraphButtonClicked;
+
             // (4,3)
             ImageButton button4 = new ImageButton
             {
@@ -107,9 +109,10 @@ namespace TopOutTrainer.ContentViews
             Content.BackgroundColor = Color.FromHex("#FFFFFF");
         }
 
-        private void GraphButtonClicked(object sender, EventArgs args)
+
+        private void PlannerButtonClicked(object sender, EventArgs args)
         {
-            Navigation.PushAsync(new GraphPage());
+            Navigation.PushAsync(new PlannerPage());
         }
 
         private void TimerButtonClicked(object sender, EventArgs args)
