@@ -7,9 +7,35 @@ namespace TopOutTrainer.ContentViews
 {
     public partial class PlannerPage : ContentPage
     {
+
+        private Color mainColor = Color.FromHex("#303030");
+
         public PlannerPage()
         {
             InitializeComponent();
+            NavigationPage.SetHasNavigationBar(this, false);
+
+            Grid mainG = new Grid
+            {
+                Padding = new Thickness(0),
+                Margin = new Thickness(0),
+                BackgroundColor = Color.FromHex("#303030"),
+                RowDefinitions =
+                {
+                    // 5 Rows
+                    new RowDefinition { Height = new GridLength(10, GridUnitType.Star) },
+                    new RowDefinition { Height = new GridLength(1, GridUnitType.Star) },
+                },
+                ColumnDefinitions =
+                {
+                    new ColumnDefinition { Width = new GridLength(1, GridUnitType.Star) },
+                    new ColumnDefinition { Width = new GridLength(1, GridUnitType.Star) },
+                    new ColumnDefinition { Width = new GridLength(1, GridUnitType.Star) },
+                    new ColumnDefinition { Width = new GridLength(1, GridUnitType.Star) },
+                },
+                RowSpacing = 0,
+                ColumnSpacing = 0,
+            };
 
             StackLayout aStack = new StackLayout {
                 HorizontalOptions = LayoutOptions.Center,
@@ -23,8 +49,77 @@ namespace TopOutTrainer.ContentViews
                 Source = "construction.png", 
                 Aspect = Aspect.AspectFit 
                 });
-            Content = aStack;
+
+            mainG.Children.Add(aStack, 0, 0);
+            Grid.SetColumnSpan(aStack, 4);
+
+            ImageButton button1 = new ImageButton
+            {
+
+                BackgroundColor = mainColor,
+                Margin = 0,
+                CornerRadius = 0,
+                Source = "stopwatch_white_trans.png",
+                Aspect = Aspect.AspectFit
+
+            };
+            button1.Clicked += TimerButtonClicked;
+            // (4,1)
+            ImageButton button2 = new ImageButton
+            {
+                BackgroundColor = Color.FromHex("#D3EFFC"),
+                Margin = 0,
+                CornerRadius = 0,
+                Source = "calendar.png",
+                Aspect = Aspect.AspectFit
+
+
+            };
+
+            // (4,2)
+            ImageButton button3 = new ImageButton
+            {
+                BackgroundColor = mainColor,
+                Margin = 0,
+                CornerRadius = 0,
+                Source = "graph_white.png",
+                Aspect = Aspect.AspectFit
+
+            };
+            button3.Clicked += GraphButtonClicked;
+            // (4,3)
+            ImageButton button4 = new ImageButton
+            {
+                WidthRequest = 50,
+                HeightRequest = 50,
+                BackgroundColor = mainColor,
+                Margin = 0,
+                CornerRadius = 0
+
+            };
+            mainG.Children.Add(button1, 0, 1);
+            mainG.Children.Add(button2, 1, 1);
+            mainG.Children.Add(button3, 2, 1);
+            mainG.Children.Add(button4, 3, 1);
+
+
+            Content = mainG;
             Content.BackgroundColor = Color.FromHex("#FFFFFF");
+        }
+
+        private void OptionButtonClicked(object sender, EventArgs args)
+        {
+            Navigation.PushAsync(new TimerPageSettings());
+        }
+
+        private void GraphButtonClicked(object sender, EventArgs args)
+        {
+
+        }
+
+        private void TimerButtonClicked(object sender, EventArgs args)
+        {
+            Navigation.PushAsync(new TimerPage());
         }
     }
 }
