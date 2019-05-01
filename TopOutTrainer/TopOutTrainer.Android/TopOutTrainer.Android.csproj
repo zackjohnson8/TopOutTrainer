@@ -132,6 +132,8 @@
     <AndroidResource Include="Resources\drawable\stopwatch_white_trans.png" />
     <AndroidResource Include="Resources\drawable\start.png" />
     <AndroidResource Include="Resources\drawable\graph_white.png" />
+    <AndroidResource Include="Resources\drawable\calendar.png" />
+    <AndroidResource Include="Resources\drawable\construction.png" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Resources\drawable-hdpi\" />

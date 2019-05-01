@@ -263,21 +263,23 @@ namespace TopOutTrainer.ContentViews
                 BackgroundColor = mainColor,
                 Margin = 0,
                 CornerRadius = 0,
-                Source = "graph_white.png",
+                Source = "calendar.png",
                 Aspect = Aspect.AspectFit
 
 
             };
+            button2.Clicked += PlannerButtonClicked;
             // (4,2)
             button3 = new ImageButton
             {
-                WidthRequest = 50,
-                HeightRequest = 50,
                 BackgroundColor = mainColor,
                 Margin = 0,
-                CornerRadius = 0
+                CornerRadius = 0,
+                Source = "graph_white.png",
+                Aspect = Aspect.AspectFit
 
             };
+            button3.Clicked += GraphButtonClicked;
             // (4,3)
             button4 = new ImageButton
             {
@@ -293,6 +295,16 @@ namespace TopOutTrainer.ContentViews
         private void OptionButtonClicked(object sender, EventArgs args)
         {
             Navigation.PushAsync(new TimerPageSettings());
+        }
+
+        private void GraphButtonClicked(object sender, EventArgs args)
+        {
+
+        }
+
+        private void PlannerButtonClicked(object sender, EventArgs args)
+        {
+            Navigation.PushAsync(new PlannerPage());
         }
 
         private void OnSizeChanged(object sender, EventArgs e)
