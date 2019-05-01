@@ -257,6 +257,7 @@ namespace TopOutTrainer.ContentViews
                 Aspect = Aspect.AspectFit
 
             };
+            
             // (4,1)
             button2 = new ImageButton
             {
@@ -299,7 +300,7 @@ namespace TopOutTrainer.ContentViews
 
         private void GraphButtonClicked(object sender, EventArgs args)
         {
-
+            Navigation.PushAsync(new GraphPage());
         }
 
         private void PlannerButtonClicked(object sender, EventArgs args)
