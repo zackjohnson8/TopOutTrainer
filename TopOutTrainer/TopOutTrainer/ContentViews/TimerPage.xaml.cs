@@ -181,7 +181,7 @@ namespace TopOutTrainer.ContentViews
                 BackgroundColor = mainColor,
                 Text = StaticFiles.TimerPageUISettings.Sets.ToString()
 
-        };
+            };
 
 
             repsNumL = new Label
@@ -191,7 +191,7 @@ namespace TopOutTrainer.ContentViews
                 TextColor = textColor,
                 BackgroundColor = mainColor,
                 Text = StaticFiles.TimerPageUISettings.Reps.ToString()
-        };
+            };
 
             // Row 2 sets label
             setsL = new Label
