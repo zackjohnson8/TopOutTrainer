@@ -5,6 +5,9 @@ using System.Text;
 using System.Threading.Tasks;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
+using PCLStorage;
+using System.Diagnostics;
+using Xamarin.Forms.Internals;
 
 namespace TopOutTrainer.ContentViews
 {
@@ -48,6 +51,21 @@ namespace TopOutTrainer.ContentViews
             SizeChanged += OnSizeChanged;
             Content = mainG;
 
+        }
+
+        protected override async void OnAppearing()
+        {
+            base.OnAppearing();
+
+            String folderName = "timerpage";
+            IFolder folder = FileSystem.Current.LocalStorage;
+            folder = await folder.CreateFolderAsync(folderName, CreationCollisionOption.OpenIfExists);
+
+            String fileName = "setting.txt";
+            IFile file = await folder.CreateFileAsync(fileName, CreationCollisionOption.OpenIfExists);
+
+            Debug.Write("here" + System.Environment.NewLine);
+            Debug.Write(await file.ReadAllTextAsync());
         }
 
         private void MainGridInitialize()
@@ -179,9 +197,9 @@ namespace TopOutTrainer.ContentViews
                 VerticalTextAlignment = TextAlignment.Center,
                 TextColor = textColor,
                 BackgroundColor = mainColor,
-                Text = StaticFiles.TimerPageUISettings.Sets.ToString()
+                Text = StaticFiles.TimerPageUISettings.sets.ToString()
 
-        };
+            };
 
 
             repsNumL = new Label
@@ -190,8 +208,8 @@ namespace TopOutTrainer.ContentViews
                 VerticalTextAlignment = TextAlignment.Center,
                 TextColor = textColor,
                 BackgroundColor = mainColor,
-                Text = StaticFiles.TimerPageUISettings.Reps.ToString()
-        };
+                Text = StaticFiles.TimerPageUISettings.reps.ToString()
+            };
 
             // Row 2 sets label
             setsL = new Label
