@@ -7,7 +7,10 @@ namespace TopOutTrainer.ViewObjects
     public class CustomPicker : Picker
     {
 
-
+        public int GetSelectedNumber()
+        {
+            return this.SelectedIndex;
+        }
 
         protected override void OnPropertyChanged(string propertyName = null)
         {
