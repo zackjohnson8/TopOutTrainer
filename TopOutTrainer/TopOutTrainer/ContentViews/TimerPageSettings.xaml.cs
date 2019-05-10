@@ -20,10 +20,22 @@ namespace TopOutTrainer.ContentViews
 
         public TimerPageSettings()
         {
-
-            //NavigationPage.SetHasNavigationBar(this, false);
+            
             SetView();
 
+        }
+
+        protected override void OnAppearing()
+        {
+            base.OnAppearing();
+
+            repsPicker.SelectedIndex = StaticFiles.TimerPageUISettings.reps;
+            setsPicker.SelectedIndex = StaticFiles.TimerPageUISettings.sets;
+
+            setsSecPicker.SelectedIndex = StaticFiles.TimerPageUISettings.setsRestTime % 60;
+            setsMinPicker.SelectedIndex = StaticFiles.TimerPageUISettings.setsRestTime / 60;
+            repsSecPicker.SelectedIndex = StaticFiles.TimerPageUISettings.repsRestTime % 60;
+            repsMinPicker.SelectedIndex = StaticFiles.TimerPageUISettings.repsRestTime / 60;
         }
 
         protected override async void OnDisappearing()
@@ -36,63 +48,64 @@ namespace TopOutTrainer.ContentViews
             folder = await folder.CreateFolderAsync(folderName, CreationCollisionOption.OpenIfExists);
 
             String fileName = "setting.txt";
-            IFile file = await folder.CreateFileAsync(fileName, CreationCollisionOption.OpenIfExists);
-
-            if(file)
-            {
-                String readFileData = await file.ReadAllTextAsync();
-                readFileData.IndexOf(':');
-            }else
-            {
-
-            }
-
-
-
-
+            IFile file = await folder.CreateFileAsync(fileName, CreationCollisionOption.ReplaceExisting);
 
 
             if ((int)repsPicker.SelectedIndex >= 0)
             {
                 StaticFiles.TimerPageUISettings.reps = (int)repsPicker.SelectedIndex;
-            }else
-            {
-
             }
 
             if ((int)setsPicker.SelectedIndex >= 0)
             {
                 StaticFiles.TimerPageUISettings.sets = (int)setsPicker.SelectedIndex;
-            }else
-            {
-
             }
 
             if ((int)repsSecPicker.SelectedIndex >= 0 || (int)repsMinPicker.SelectedIndex >= 0)
             {
-                int totalTimeInSeconds = (int)repsSecPicker.SelectedIndex + (int)(repsMinPicker.SelectedIndex * 60);
-                StaticFiles.TimerPageUISettings.repsRestTime = totalTimeInSeconds;
-            }else
-            {
+                if(repsSecPicker.SelectedIndex < 0)
+                {
+                    StaticFiles.TimerPageUISettings.repsRestTime = (int)(repsMinPicker.SelectedIndex * 60);
+                }else
+                if(repsMinPicker.SelectedIndex < 0)
+                {
+                    StaticFiles.TimerPageUISettings.repsRestTime = (int)repsSecPicker.SelectedIndex;
+                }else
+                {
+                    int totalTimeInSeconds = (int)repsSecPicker.SelectedIndex + (int)(repsMinPicker.SelectedIndex * 60);
+                    StaticFiles.TimerPageUISettings.repsRestTime = totalTimeInSeconds;
+                }
 
             }
 
             if((int)setsSecPicker.SelectedIndex >= 0 || (int)setsMinPicker.SelectedIndex >= 0)
             {
-                int totalTimeInSeconds = (int)setsSecPicker.SelectedIndex + (int)(setsMinPicker.SelectedIndex * 60);
-                StaticFiles.TimerPageUISettings.setsRestTime = totalTimeInSeconds;
-            }else
-            {
 
+                if (setsSecPicker.SelectedIndex < 0)
+                {
+                    StaticFiles.TimerPageUISettings.setsRestTime = (int)(setsMinPicker.SelectedIndex * 60);
+                }
+                else
+                if (repsMinPicker.SelectedIndex < 0)
+                {
+                    StaticFiles.TimerPageUISettings.setsRestTime = (int)setsSecPicker.SelectedIndex;
+                }
+                else
+                {
+                    int totalTimeInSeconds = (int)setsSecPicker.SelectedIndex + (int)(setsMinPicker.SelectedIndex * 60);
+                    StaticFiles.TimerPageUISettings.setsRestTime = totalTimeInSeconds;
+                }
             }
 
+            //file = await folder.CreateFileAsync(fileName, CreationCollisionOption.ReplaceExisting);
+
+            await file.WriteAllTextAsync("Reps:" + StaticFiles.TimerPageUISettings.reps.ToString() + ";" +
+                                         "Sets:" + StaticFiles.TimerPageUISettings.sets.ToString() + ";" +
+                                         "RepsTime:" + StaticFiles.TimerPageUISettings.repsRestTime.ToString() + ";" +
+                                         "SetsTime:" + StaticFiles.TimerPageUISettings.setsRestTime.ToString() + ";");
 
 
-            await file.WriteAllTextAsync("Reps: " + StaticFiles.TimerPageUISettings.reps.ToString() + System.Environment.NewLine +
-                                         "Sets: " + StaticFiles.TimerPageUISettings.sets.ToString() + System.Environment.NewLine +
-                                         "RepsTime: " + StaticFiles.TimerPageUISettings.repsRestTime.ToString() + System.Environment.NewLine +
-                                         "SetsTime: " + StaticFiles.TimerPageUISettings.setsRestTime.ToString() + System.Environment.NewLine);
-
+            await StaticFiles.TimerPageUISettings.SetFromFile();
         }
 
         // LIST OF SETTINGS
@@ -130,13 +143,6 @@ namespace TopOutTrainer.ContentViews
                 Root = new TableRoot
                 {
                     new TableSection{
-                        new ImageCell
-                        {
-                            ImageSource = "stopwatch_white_trans.png",
-                            TextColor = Color.Green,
-                            Text = "This is the text written to this option imagecell",
-
-                        },
                         new ViewObjects.PickerCell()
                         {
                             Label = "Number of Reps:",
