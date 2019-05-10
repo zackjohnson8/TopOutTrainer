@@ -1,6 +1,9 @@
 ﻿using System;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
+using Microsoft.AppCenter;
+using Microsoft.AppCenter.Analytics;
+using Microsoft.AppCenter.Crashes;
 
 
 // APPLICATION START POINT
@@ -25,6 +28,10 @@ namespace TopOutTrainer
         protected override void OnStart()
         {
             // Handle when your app starts
+            AppCenter.Start("android=4e385945-ec3d-4fc5-9c3a-12ec1f669da1;" +
+                  "uwp={Your UWP App secret here};" +
+                  "ios={Your iOS App secret here}",
+                  typeof(Analytics), typeof(Crashes));
         }
 
         protected override void OnSleep()

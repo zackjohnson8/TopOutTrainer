@@ -355,7 +355,12 @@ namespace TopOutTrainer.ContentViews
 
         private void StartButtonClicked(object sender, EventArgs args)
         {
+            // Remove previous content
             mainG.Children.Remove(startbutton);
+
+            // Add new content
+            // List: Get Ready, Start, Rep Break, Set Break or Final Break
+
         }
 
         private void OnSizeChanged(object sender, EventArgs e)
