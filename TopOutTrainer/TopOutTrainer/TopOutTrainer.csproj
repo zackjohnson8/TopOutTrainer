@@ -36,9 +36,15 @@
     <Compile Remove="ContentViews\MainPage.xaml.cs" />
     <Compile Remove="CustomOption\TimerOption.cs" />
     <Compile Remove="CustomOption\TimerOption_ContentPage.xaml.cs" />
+    <Compile Remove="ViewObjects\NumberPickerCustom.cs" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="StaticFiles\" />
     <Folder Include="PCLStorageFolder\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Reference Include="Mono.Android">
+      <HintPath>..\..\..\..\..\..\Library\Frameworks\Xamarin.Android.framework\Versions\9.2.3-0\lib\xamarin.android\xbuild-frameworks\MonoAndroid\v8.1\Mono.Android.dll</HintPath>
+    </Reference>
   </ItemGroup>
 </Project>

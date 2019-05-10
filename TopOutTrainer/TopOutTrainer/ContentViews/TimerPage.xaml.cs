@@ -43,6 +43,8 @@ namespace TopOutTrainer.ContentViews
         public TimerPage()
         {
 
+            //StaticFiles.TimerPageUISettings.SetFromFile();
+
             NavigationPage.SetHasNavigationBar(this, false);
             //myTimerSettings = new TopOutTrainer.ContentViews.TimerPageSettings(); // All timer settings
             GridChildrenInitialize();
@@ -57,15 +59,40 @@ namespace TopOutTrainer.ContentViews
         {
             base.OnAppearing();
 
-            String folderName = "timerpage";
-            IFolder folder = FileSystem.Current.LocalStorage;
-            folder = await folder.CreateFolderAsync(folderName, CreationCollisionOption.OpenIfExists);
+            await StaticFiles.TimerPageUISettings.SetFromFile();
 
-            String fileName = "setting.txt";
-            IFile file = await folder.CreateFileAsync(fileName, CreationCollisionOption.OpenIfExists);
+            repsNumL.Text = StaticFiles.TimerPageUISettings.reps.ToString();
+            setsNumL.Text = StaticFiles.TimerPageUISettings.sets.ToString();
 
-            Debug.Write("here" + System.Environment.NewLine);
-            Debug.Write(await file.ReadAllTextAsync());
+
+            int breakReps = StaticFiles.TimerPageUISettings.sets * (StaticFiles.TimerPageUISettings.reps - 1);
+            int breakSets = StaticFiles.TimerPageUISettings.sets;
+            int totalTime = (breakReps * StaticFiles.TimerPageUISettings.repsRestTime) + (breakSets * StaticFiles.TimerPageUISettings.setsRestTime);
+
+            int totalTimeMinutes = totalTime / 60;
+            int totalTimeSeconds = totalTime % 60;
+
+            string timeMin;
+            if(totalTimeMinutes <= 9)
+            {
+                timeMin = string.Concat('0' + totalTimeMinutes.ToString());
+            }else
+            {
+                timeMin = totalTimeMinutes.ToString();
+            }
+
+            string timeSec;
+            if(totalTimeSeconds <= 9)
+            {
+                timeSec = string.Concat('0' + totalTimeSeconds.ToString());
+            }else
+            {
+                timeSec = totalTimeSeconds.ToString();
+            }
+
+            //string totalTimeString ;
+            timerNumL.Text = string.Concat(timeMin + ':' + timeSec);
+
         }
 
         private void MainGridInitialize()
@@ -258,10 +285,10 @@ namespace TopOutTrainer.ContentViews
             {
                 BackgroundColor = mainColor,
                 Margin = 0,
-                CornerRadius = 200,
                 Source = "start.png",
                 Aspect = Aspect.AspectFit
             };
+            startbutton.Clicked += StartButtonClicked;
 
             // Row 5 tab bar buttons
             // (4,0)
@@ -313,7 +340,7 @@ namespace TopOutTrainer.ContentViews
 
         private void OptionButtonClicked(object sender, EventArgs args)
         {
-            Navigation.PushAsync(new TimerPageSettings());
+            Navigation.PushAsync(new TimerPageSettings() { Title = "Settings" });
         }
 
         private void GraphButtonClicked(object sender, EventArgs args)
@@ -326,8 +353,20 @@ namespace TopOutTrainer.ContentViews
             Navigation.PushAsync(new PlannerPage());
         }
 
+        private void StartButtonClicked(object sender, EventArgs args)
+        {
+            mainG.Children.Remove(startbutton);
+        }
+
         private void OnSizeChanged(object sender, EventArgs e)
         {
+
+            // Handle button sizing
+            startbutton.WidthRequest = startbutton.Height;
+            startbutton.HeightRequest = startbutton.Height;
+            startbutton.CornerRadius = (int)startbutton.Height / 2;
+
+
             // Handle sizing of labels based on screen size
             if (this.Width > 0)
             {
