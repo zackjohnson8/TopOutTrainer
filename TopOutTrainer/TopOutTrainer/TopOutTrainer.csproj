@@ -21,6 +21,7 @@
     <EmbeddedResource Remove="CustomOption\MyPage.xaml" />
     <EmbeddedResource Remove="ContentViews\MainPage.xaml" />
     <EmbeddedResource Remove="CustomOption\TimerOption_ContentPage.xaml" />
+    <EmbeddedResource Remove="ViewObjects\PickerCell.xaml" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Update="ContentViews\TimerPage.xaml">

@@ -6,45 +6,98 @@ using Xamarin.Forms;
 
 namespace TopOutTrainer
 {
-    public static class StopWatch
+    public class StopWatch
     {
 
+        public enum CountDirection
+        {
+            COUNTUP,
+            COUNTDOWN
+        }
+
         private const int elapsedMilliSec = 1000;
-        private static System.Timers.Timer aTimer = new System.Timers.Timer(elapsedMilliSec);
-        private static bool eventRunning = false;
+        private System.Timers.Timer aTimer = new System.Timers.Timer(elapsedMilliSec);
+        private bool eventRunning = false;
+        private CountDirection countChoice = CountDirection.COUNTUP;
+        private int timerDuration;
 
 
-        private static Label mainObjectLabel = null;
+        private Label mainObjectLabel = null;
 
-        public static int Minute
+        public int Minute
         {
             private set;
             get;
         } = 0;
 
-        public static int Second
+        public int Second
         {
             private set;
             get;
         } = 0;
 
-        public static int MilliSecond
+        public int MilliSecond
         {
             private set;
             get;
         } = 0;
 
-        public static void AddLabelToDraw(Label defaultObj)
+        public StopWatch(Label defaultObj, CountDirection choice, int duration)
+        {
+            mainObjectLabel = defaultObj;
+            countChoice = choice;
+            timerDuration = duration;
+
+            if(choice == CountDirection.COUNTDOWN)
+            {
+                Minute = duration / 60;
+                Second = duration % 60;
+
+                // Build string and set it to object
+                if (Second <= 9)
+                {
+                    secondString = String.Concat('0', Second);
+                }
+                else
+                {
+                    secondString = Second.ToString();
+                }
+
+                if (Minute <= 9)
+                {
+                    minuteString = String.Concat('0', Minute);
+                }
+                else
+                {
+                    minuteString = Minute.ToString();
+                }
+
+                if (mainObjectLabel != null)
+                {
+
+                    Device.BeginInvokeOnMainThread(() =>
+                    {
+                        SetText(String.Concat(minuteString, ':', secondString));
+                    });
+                }
+
+            }
+
+
+
+        }
+
+        public void AddLabelToDraw(Label defaultObj)
         {
             mainObjectLabel = defaultObj;
         }
 
-        public static void Stop()
+        public void Stop()
         {
             aTimer.Enabled = false;
         }
 
-        public static void Start()
+        public void Start()
         {
             // Hook up the Elapsed event for the timer. 
             if (!eventRunning)
@@ -56,7 +109,7 @@ namespace TopOutTrainer
             aTimer.Enabled = true;
         }
 
-        public static void Reset()
+        public void Reset()
         {
             MilliSecond = 0;
             Second = 0;
@@ -72,56 +125,102 @@ namespace TopOutTrainer
 
         }
         
-        private static void SetText(string myString)
+        private void SetText(string myString)
         {
             mainObjectLabel.Text = myString;
         }
 
-        private static string minuteString;
-        private static string secondString;
-        private static void OnTimedEvent(Object source, ElapsedEventArgs e)
+        private string minuteString;
+        private string secondString;
+        private void OnTimedEvent(Object source, ElapsedEventArgs e)
         {
-
-            MilliSecond += elapsedMilliSec;
-
-            if(MilliSecond >= 1000)
+            if (countChoice == CountDirection.COUNTUP)
             {
-                MilliSecond = 0;
-                Second += 1;
-            }
+                MilliSecond += elapsedMilliSec;
 
-            if(Second >= 60)
-            {
-                Second = 0;
-                Minute += 1;
-            }
+                if (MilliSecond >= 1000)
+                {
+                    MilliSecond = 0;
+                    Second += 1;
+                }
 
-            // Build string and set it to object
-            if (Second <= 9)
-            {
-                secondString = String.Concat('0', Second);
-            }
-            else
-            {
-                secondString = Second.ToString();
-            }
+                if (Second >= 60)
+                {
+                    Second = 0;
+                    Minute += 1;
+                }
 
-            if (Minute <= 9)
-            {
-                minuteString = String.Concat('0', Minute);
+                // Build string and set it to object
+                if (Second <= 9)
+                {
+                    secondString = String.Concat('0', Second);
+                }
+                else
+                {
+                    secondString = Second.ToString();
+                }
+
+                if (Minute <= 9)
+                {
+                    minuteString = String.Concat('0', Minute);
+                }
+                else
+                {
+                    minuteString = Minute.ToString();
+                }
+
+                if (mainObjectLabel != null)
+                {
+
+                    Device.BeginInvokeOnMainThread(() =>
+                    {
+                        SetText(String.Concat(minuteString, ':', secondString));
+                    });
+                }
             }else
             {
-                minuteString = Minute.ToString();
+                MilliSecond += elapsedMilliSec;
+
+                if (MilliSecond >= 1000)
+                {
+                    MilliSecond = 0;
+                    Second -= 1;
+                }
+
+                if (Second < 0)
+                {
+                    Second = 59;
+                    Minute -= 1;
+                }
+
+                // Build string and set it to object
+                if (Second <= 9)
+                {
+                    secondString = String.Concat('0', Second);
+                }
+                else
+                {
+                    secondString = Second.ToString();
+                }
+
+                if (Minute <= 9)
+                {
+                    minuteString = String.Concat('0', Minute);
+                }
+                else
+                {
+                    minuteString = Minute.ToString();
+                }
+
+                if (mainObjectLabel != null)
+                {
+
+                    Device.BeginInvokeOnMainThread(() =>
+                    {
+                        SetText(String.Concat(minuteString, ':', secondString));
+                    });
+                }
             }
-
-            if(mainObjectLabel != null)
-            {
-
-                Device.BeginInvokeOnMainThread(() => {
-                    SetText(String.Concat(minuteString, ':', secondString));
-                });
-            }
-
 
         }
 

@@ -2,6 +2,8 @@
 using System.Threading.Tasks;
 using PCLStorage;
 
+// TODO(zack): Modify class for all cases and add class calls instead
+
 namespace TopOutTrainer.PCLStorageFolder
 {
     public static class PCLStorageHandler
