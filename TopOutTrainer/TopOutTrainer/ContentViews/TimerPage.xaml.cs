@@ -31,7 +31,7 @@ namespace TopOutTrainer.ContentViews
         private Label getReadyL;
         private Label timerL;
 
-        private StopWatch countDownTimer;
+        private TimerPageStopWatch countDownTimer;
         private StopWatch totalTimeTimer;
 
         //private Image bitmapI;
@@ -423,7 +423,7 @@ namespace TopOutTrainer.ContentViews
             int totalTime = (breakReps * StaticFiles.TimerPageUISettings.repsRestTime) + (breakSets * StaticFiles.TimerPageUISettings.setsRestTime);
             totalTimeTimer = new StopWatch(timerNumL, StopWatch.CountDirection.COUNTDOWN, totalTime);
 
-            countDownTimer = new StopWatch(timerL, StopWatch.CountDirection.COUNTDOWN, 5);
+            countDownTimer = new TimerPageStopWatch(timerL, getReadyL);
             countDownTimer.Start();
             totalTimeTimer.Start();
 
