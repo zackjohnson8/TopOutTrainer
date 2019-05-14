@@ -21,6 +21,9 @@ namespace TopOutTrainer
         private CountDirection countChoice = CountDirection.COUNTUP;
         private int timerDuration;
 
+        private string minuteString;
+        private string secondString;
+
 
         private Label mainObjectLabel = null;
 
@@ -130,8 +133,7 @@ namespace TopOutTrainer
             mainObjectLabel.Text = myString;
         }
 
-        private string minuteString;
-        private string secondString;
+
         private void OnTimedEvent(Object source, ElapsedEventArgs e)
         {
             if (countChoice == CountDirection.COUNTUP)
