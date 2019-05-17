@@ -17,8 +17,8 @@ namespace TopOutTrainer
         private string minuteString;
         private string secondString;
 
-        private int getReadyTime = 7; // Get Ready : default time of 7 seconds to get ready
-        private int startTime = 15; // Start : give them 15 seconds to finish the set
+        private int getReadyTime = StaticFiles.TimerPageUISettings.getReadyTime; // Get Ready : default time of 7 seconds to get ready
+        private int startTime = StaticFiles.TimerPageUISettings.startTime; // Start : give them 15 seconds to finish the set
         private int repBreakTime = StaticFiles.TimerPageUISettings.repsRestTime; // Rep Break : Take from rep time option
         private int setBreakTime = StaticFiles.TimerPageUISettings.setsRestTime; // Set Break : Take from set time option
         private int repCount = StaticFiles.TimerPageUISettings.reps; // Rep Count : Take from rep count option
@@ -142,7 +142,10 @@ namespace TopOutTrainer
         private bool onGetReady = true;
         private bool onStart = false;
         private bool onRepBreak = false;
+        private bool onSetBreak = false;
+        private bool onEnd = false;
         private int repCountIndex = 0;
+        private int setBreakIndex = 0;
         private void OnTimedEvent(Object source, ElapsedEventArgs e)
         {
             MilliSecond += elapsedMilliSec;
@@ -265,11 +268,18 @@ namespace TopOutTrainer
                     }
                     else // Set break
                     {
-                        Minute = setBreakTime / 60;
-                        Second = setBreakTime % 60;
-                        //onSetBreak = true;
-                        this.Stop();
-                        repCountIndex = 0;
+
+                        setBreakIndex++;
+                        if(setBreakIndex < setCount)
+                        {
+                            Minute = setBreakTime / 60;
+                            Second = setBreakTime % 60;
+                            onSetBreak = true;
+                            repCountIndex = 0;
+                        }else
+                        {
+                            onEnd = true;
+                        }
 
                         if (timeLabel != null)
                         {
@@ -339,6 +349,63 @@ namespace TopOutTrainer
                         });
                     }
                 }
+            }
+
+            if (onSetBreak)
+            {
+                if (Minute < 0)
+                {
+                    // Breaks done so get ready again
+                    onSetBreak = false;
+                    onGetReady = true;
+                    Minute = getReadyTime / 60;
+                    Second = getReadyTime % 60;
+
+                    if (Second <= 9)
+                    {
+                        secondString = String.Concat('0', Second);
+                    }
+                    else
+                    {
+                        secondString = Second.ToString();
+                    }
+
+                    if (Minute <= 9)
+                    {
+                        minuteString = String.Concat('0', Minute);
+                    }
+                    else
+                    {
+                        minuteString = Minute.ToString();
+                    }
+
+                    if (timeLabel != null)
+                    {
+
+                        Device.BeginInvokeOnMainThread(() =>
+                        {
+                            SetText(String.Concat(minuteString, ':', secondString), "Get Ready");
+                        });
+                    }
+                }
+            }
+
+            if(onEnd)
+            {
+                // Breaks done so get ready again
+                setBreakIndex = 0;
+
+                if (timeLabel != null)
+                {
+
+                    Device.BeginInvokeOnMainThread(() =>
+                    {
+                        SetText("Finished!", "");
+                    });
+                }
+
+                this.Stop();
+                return;
             }
 
             if (timeLabel != null)

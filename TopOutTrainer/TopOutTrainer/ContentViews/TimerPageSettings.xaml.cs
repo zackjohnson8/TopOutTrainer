@@ -38,6 +38,7 @@ namespace TopOutTrainer.ContentViews
             repsMinPicker.SelectedIndex = StaticFiles.TimerPageUISettings.repsRestTime / 60;
         }
 
+
         protected override async void OnDisappearing()
         {
             base.OnDisappearing();
@@ -121,6 +122,7 @@ namespace TopOutTrainer.ContentViews
         private ViewObjects.CustomPicker setsMinPicker;
         private ViewObjects.CustomPicker setsSecPicker;
 
+
         private void SetView()
         {
 
@@ -150,7 +152,8 @@ namespace TopOutTrainer.ContentViews
                             {
                                 Title="Repetitions",
                                 ItemsSource = (System.Collections.IList)numberChoiceReps,
-                                HorizontalOptions = LayoutOptions.End
+                                HorizontalOptions = LayoutOptions.End,
+                                FontSize = Device.GetNamedSize(NamedSize.Medium, typeof(Picker))
 
                             }
                         },
@@ -161,7 +164,8 @@ namespace TopOutTrainer.ContentViews
                             {
                                 Title="Sets",
                                 ItemsSource = (System.Collections.IList)numberChoiceSets,
-                                HorizontalOptions = LayoutOptions.End
+                                HorizontalOptions = LayoutOptions.End,
+                                FontSize = Device.GetNamedSize(NamedSize.Medium, typeof(Picker))
 
                             }
                         },
@@ -172,14 +176,16 @@ namespace TopOutTrainer.ContentViews
                             {
                                 Title = "Minutes",
                                 ItemsSource = (System.Collections.IList)numberChoiceMinutes,
-                                HorizontalOptions = LayoutOptions.End
+                                HorizontalOptions = LayoutOptions.End,
+                                FontSize = Device.GetNamedSize(NamedSize.Medium, typeof(Picker))
 
                             },
                             Picker2 = repsSecPicker = new ViewObjects.CustomPicker()
                             {
                                 Title = "Seconds",
                                 ItemsSource = (System.Collections.IList)numberChoiceSeconds,
-                                HorizontalOptions = LayoutOptions.End
+                                HorizontalOptions = LayoutOptions.End,
+                                FontSize = Device.GetNamedSize(NamedSize.Medium, typeof(Picker))
 
                             }
 
@@ -191,14 +197,16 @@ namespace TopOutTrainer.ContentViews
                             {
                                 Title = "Minutes",
                                 ItemsSource = (System.Collections.IList)numberChoiceMinutes,
-                                HorizontalOptions = LayoutOptions.End
+                                HorizontalOptions = LayoutOptions.End,
+                                FontSize = Device.GetNamedSize(NamedSize.Medium, typeof(Picker))
 
                             },
                             Picker2 = setsSecPicker = new ViewObjects.CustomPicker()
                             {
                                 Title = "Seconds",
                                 ItemsSource = (System.Collections.IList)numberChoiceSeconds,
-                                HorizontalOptions = LayoutOptions.End
+                                HorizontalOptions = LayoutOptions.End,
+                                FontSize = Device.GetNamedSize(NamedSize.Medium, typeof(Picker))
 
                             }
 

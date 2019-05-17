@@ -73,7 +73,7 @@ namespace TopOutTrainer.ViewObjects
             {
                 VerticalOptions = LayoutOptions.CenterAndExpand,
                 HorizontalOptions = LayoutOptions.Start,
-                Font = Font.SystemFontOfSize(15)
+                FontSize = Device.GetNamedSize(NamedSize.Medium, typeof(Label))
             };
             _layout = new StackLayout()
             {

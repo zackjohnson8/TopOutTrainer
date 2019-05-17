@@ -258,7 +258,7 @@ namespace TopOutTrainer.ContentViews
             {
                 HorizontalTextAlignment = TextAlignment.Center,
                 VerticalTextAlignment = TextAlignment.Start,
-                TextColor = textColor,
+                TextColor = Color.FromHex("#FF6600"),
                 BackgroundColor = mainColor,
                 Text = "Get Ready"
             };
@@ -417,10 +417,10 @@ namespace TopOutTrainer.ContentViews
             mainG.Children.Add(getReadyG, 0, 4);
             Grid.SetColumnSpan(getReadyG, 4);
 
-
+            int getReadyAndStart = StaticFiles.TimerPageUISettings.reps * StaticFiles.TimerPageUISettings.sets *(StaticFiles.TimerPageUISettings.getReadyTime + StaticFiles.TimerPageUISettings.startTime);
             int breakReps = StaticFiles.TimerPageUISettings.sets * (StaticFiles.TimerPageUISettings.reps - 1);
             int breakSets = StaticFiles.TimerPageUISettings.sets;
-            int totalTime = (breakReps * StaticFiles.TimerPageUISettings.repsRestTime) + (breakSets * StaticFiles.TimerPageUISettings.setsRestTime);
+            int totalTime = getReadyAndStart + (breakReps * StaticFiles.TimerPageUISettings.repsRestTime) + (breakSets * StaticFiles.TimerPageUISettings.setsRestTime);
             totalTimeTimer = new StopWatch(timerNumL, StopWatch.CountDirection.COUNTDOWN, totalTime);
 
             countDownTimer = new TimerPageStopWatch(timerL, getReadyL);
@@ -448,7 +448,7 @@ namespace TopOutTrainer.ContentViews
 
                
                 getReadyL.FontSize = this.Width / 8;
-                timerL.FontSize = this.Width / 6;
+                timerL.FontSize = this.Width / 8;
              
 
                 // 
