@@ -12,6 +12,8 @@ namespace TopOutTrainer.StaticFiles
         public static int sets { get; set; } = 3;
         public static int setsRestTime { get; set; } = 180; // seconds
         public static int repsRestTime { get; set; } = 90; // seconds
+        public static int getReadyTime { get; set; } = 7;
+        public static int startTime { get; set; } = 10;
 
         public static async Task<bool> SetFromFile()
         {

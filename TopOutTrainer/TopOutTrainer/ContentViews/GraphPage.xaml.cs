@@ -22,8 +22,8 @@ namespace TopOutTrainer.ContentViews
                 RowDefinitions =
                 {
                     // 5 Rows
-                    new RowDefinition { Height = new GridLength(10, GridUnitType.Star) },
-                    new RowDefinition { Height = new GridLength(1, GridUnitType.Star) },
+                    new RowDefinition { Height = new GridLength(10.25, GridUnitType.Star) },
+                    new RowDefinition { Height = new GridLength(.75, GridUnitType.Star) },
                 },
                 ColumnDefinitions =
                 {

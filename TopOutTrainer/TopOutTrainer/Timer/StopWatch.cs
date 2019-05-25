@@ -195,6 +195,21 @@ namespace TopOutTrainer
                     Minute -= 1;
                 }
 
+                if (Minute < 0)
+                {
+
+                    if (mainObjectLabel != null)
+                    {
+
+                        Device.BeginInvokeOnMainThread(() =>
+                        {
+                            SetText("00:00");
+                        });
+                    }
+                    this.Stop();
+                    return;
+                }
+
                 // Build string and set it to object
                 if (Second <= 9)
                 {
