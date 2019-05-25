@@ -1,6 +1,7 @@
 ﻿using System;
 
 using Xamarin.Forms;
+using System.Diagnostics;
 
 namespace TopOutTrainer.ViewObjects
 {
@@ -9,6 +10,8 @@ namespace TopOutTrainer.ViewObjects
 
         public int GetSelectedNumber()
         {
+
+
             return this.SelectedIndex;
         }
 
@@ -21,6 +24,14 @@ namespace TopOutTrainer.ViewObjects
                 this.InvalidateMeasure();
             }
         }
+
+        protected override void OnTabIndexPropertyChanged(int oldValue, int newValue)
+        {
+            base.OnTabIndexPropertyChanged(oldValue, newValue);
+            Debug.Write("here");
+            SelectedIndex = newValue;
+        }
+        
     }
 }
 

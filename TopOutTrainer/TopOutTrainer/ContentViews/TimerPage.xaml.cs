@@ -39,65 +39,83 @@ namespace TopOutTrainer.ContentViews
         //private BmpMaker bmpMaker;
 
         // TODO default button names until determined
-        private ImageButton button1;
-        private ImageButton button2;
-        private ImageButton button3;
+        private ImageButton timerButton;
+        private ImageButton calendarButton;
+        private ImageButton graphButton;
         private ImageButton button4;
         private ImageButton startbutton;
 
 
         public TimerPage()
-        {
+        { 
 
-            //StaticFiles.TimerPageUISettings.SetFromFile();
-
+            // Hide nav bar and begin building of contentpage
             NavigationPage.SetHasNavigationBar(this, false);
-            //myTimerSettings = new TopOutTrainer.ContentViews.TimerPageSettings(); // All timer settings
             GridChildrenInitialize();
             MainGridInitialize();
-            //StopWatch.AddLabelToDraw(timerNumL);
+
+            // When size is determined have an event that fixes sizes based on phone of choice
             SizeChanged += OnSizeChanged;
+
+            // Load screen 
             Content = mainG;
 
         }
 
-        protected override async void OnAppearing()
+        private async Task<bool> GetSavedData()
         {
-            base.OnAppearing();
-
             await StaticFiles.TimerPageUISettings.SetFromFile();
+            return true;
+        }
 
+        private void RefreshContent()
+        {
+
+            // Set reps and sets for change
             repsNumL.Text = StaticFiles.TimerPageUISettings.reps.ToString();
             setsNumL.Text = StaticFiles.TimerPageUISettings.sets.ToString();
 
+            // Set timerNumL with new total minutes and seconds
+            // Each rep and set break follows with a get ready and start time
+            int getReadyAndStart = StaticFiles.TimerPageUISettings.reps * StaticFiles.TimerPageUISettings.sets * (StaticFiles.TimerPageUISettings.getReadyTime + StaticFiles.TimerPageUISettings.startTime);
 
-            int breakReps = StaticFiles.TimerPageUISettings.sets * (StaticFiles.TimerPageUISettings.reps - 1);
+            // Number of breaks we'll be taking both rep and set total time
+            int breakReps = StaticFiles.TimerPageUISettings.reps * (StaticFiles.TimerPageUISettings.reps - 1);
             int breakSets = StaticFiles.TimerPageUISettings.sets;
-            int totalTime = (breakReps * StaticFiles.TimerPageUISettings.repsRestTime) + (breakSets * StaticFiles.TimerPageUISettings.setsRestTime);
 
+            int totalTime = getReadyAndStart + (breakReps * StaticFiles.TimerPageUISettings.repsRestTime) + (breakSets * StaticFiles.TimerPageUISettings.setsRestTime);
             int totalTimeMinutes = totalTime / 60;
             int totalTimeSeconds = totalTime % 60;
 
             string timeMin;
-            if(totalTimeMinutes <= 9)
+            if (totalTimeMinutes <= 9)
             {
                 timeMin = string.Concat('0' + totalTimeMinutes.ToString());
-            }else
+            }
+            else
             {
                 timeMin = totalTimeMinutes.ToString();
             }
 
             string timeSec;
-            if(totalTimeSeconds <= 9)
+            if (totalTimeSeconds <= 9)
             {
                 timeSec = string.Concat('0' + totalTimeSeconds.ToString());
-            }else
+            }
+            else
             {
                 timeSec = totalTimeSeconds.ToString();
             }
-
-            //string totalTimeString ;
             timerNumL.Text = string.Concat(timeMin + ':' + timeSec);
+        }
+
+        protected override void OnAppearing()
+        {
+            base.OnAppearing();
+
+            // Refresh all content that exists with saved file when appeared
+            // This takes care of the case of coming back from TimerPageSetting contentpage
+            RefreshContent();
 
         }
 
@@ -115,8 +133,8 @@ namespace TopOutTrainer.ContentViews
                     new RowDefinition { Height = new GridLength(1, GridUnitType.Star) },
                     new RowDefinition { Height = new GridLength(1, GridUnitType.Star) },
                     new RowDefinition { Height = new GridLength(1.5, GridUnitType.Star) },
-                    new RowDefinition { Height = new GridLength(5.5, GridUnitType.Star) },
-                    new RowDefinition { Height = new GridLength(1, GridUnitType.Star) },
+                    new RowDefinition { Height = new GridLength(5.75, GridUnitType.Star) },
+                    new RowDefinition { Height = new GridLength(.75, GridUnitType.Star) },
                 },
                 ColumnDefinitions =
                 {
@@ -155,12 +173,10 @@ namespace TopOutTrainer.ContentViews
             mainG.Children.Add(startbutton, 0, 4);
             Grid.SetColumnSpan(startbutton, 4);
 
-            mainG.Children.Add(button1, 0, 5);
-            mainG.Children.Add(button2, 1, 5);
-            mainG.Children.Add(button3, 2, 5);
+            mainG.Children.Add(timerButton, 0, 5);
+            mainG.Children.Add(calendarButton, 1, 5);
+            mainG.Children.Add(graphButton, 2, 5);
             mainG.Children.Add(button4, 3, 5);
-
-
 
         }
 
@@ -320,7 +336,7 @@ namespace TopOutTrainer.ContentViews
 
             // Row 5 tab bar buttons
             // (4,0)
-            button1 = new ImageButton
+            timerButton = new ImageButton
             {
 
                 BackgroundColor = Color.FromHex("#D3EFFC"),
@@ -332,7 +348,7 @@ namespace TopOutTrainer.ContentViews
             };
             
             // (4,1)
-            button2 = new ImageButton
+            calendarButton = new ImageButton
             {
                 BackgroundColor = mainColor,
                 Margin = 0,
@@ -342,9 +358,9 @@ namespace TopOutTrainer.ContentViews
 
 
             };
-            button2.Clicked += PlannerButtonClicked;
+            calendarButton.Clicked += PlannerButtonClicked;
             // (4,2)
-            button3 = new ImageButton
+            graphButton = new ImageButton
             {
                 BackgroundColor = mainColor,
                 Margin = 0,
@@ -353,7 +369,7 @@ namespace TopOutTrainer.ContentViews
                 Aspect = Aspect.AspectFit
 
             };
-            button3.Clicked += GraphButtonClicked;
+            graphButton.Clicked += GraphButtonClicked;
             // (4,3)
             button4 = new ImageButton
             {
@@ -364,6 +380,8 @@ namespace TopOutTrainer.ContentViews
                 CornerRadius = 0
 
             };
+
+
         }
 
         private void OptionButtonClicked(object sender, EventArgs args)
@@ -418,7 +436,7 @@ namespace TopOutTrainer.ContentViews
             Grid.SetColumnSpan(getReadyG, 4);
 
             int getReadyAndStart = StaticFiles.TimerPageUISettings.reps * StaticFiles.TimerPageUISettings.sets *(StaticFiles.TimerPageUISettings.getReadyTime + StaticFiles.TimerPageUISettings.startTime);
-            int breakReps = StaticFiles.TimerPageUISettings.sets * (StaticFiles.TimerPageUISettings.reps - 1);
+            int breakReps = StaticFiles.TimerPageUISettings.reps * (StaticFiles.TimerPageUISettings.reps - 1);
             int breakSets = StaticFiles.TimerPageUISettings.sets;
             int totalTime = getReadyAndStart + (breakReps * StaticFiles.TimerPageUISettings.repsRestTime) + (breakSets * StaticFiles.TimerPageUISettings.setsRestTime);
             totalTimeTimer = new StopWatch(timerNumL, StopWatch.CountDirection.COUNTDOWN, totalTime);
@@ -429,8 +447,11 @@ namespace TopOutTrainer.ContentViews
 
         }
 
-        private void OnSizeChanged(object sender, EventArgs e)
+        private async void OnSizeChanged(object sender, EventArgs e)
         {
+
+            await GetSavedData();
+            RefreshContent();
 
             // Handle button sizing
             startbutton.WidthRequest = startbutton.Height;

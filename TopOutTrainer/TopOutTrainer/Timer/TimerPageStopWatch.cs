@@ -197,6 +197,7 @@ namespace TopOutTrainer
                     MilliSecond = 0;
                     if (timeLabel != null)
                     {
+
                         if (Second <= 9)
                         {
                             secondString = String.Concat('0', Second);
@@ -242,6 +243,7 @@ namespace TopOutTrainer
 
                         if (timeLabel != null)
                         {
+
                             if (Second <= 9)
                             {
                                 secondString = String.Concat('0', Second);
@@ -264,6 +266,7 @@ namespace TopOutTrainer
                             {
                                 SetText(String.Concat(minuteString, ':', secondString), "Rep Break");
                             });
+
                         }
                     }
                     else // Set break
@@ -283,6 +286,7 @@ namespace TopOutTrainer
 
                         if (timeLabel != null)
                         {
+
                             if (Second <= 9)
                             {
                                 secondString = String.Concat('0', Second);
@@ -305,6 +309,7 @@ namespace TopOutTrainer
                             {
                                 SetText(String.Concat(minuteString, ':', secondString), "Set Break");
                             });
+
                         }
                     }
 
@@ -322,6 +327,7 @@ namespace TopOutTrainer
                     Minute = getReadyTime / 60;
                     Second = getReadyTime % 60;
 
+
                     if (Second <= 9)
                     {
                         secondString = String.Concat('0', Second);
@@ -348,6 +354,7 @@ namespace TopOutTrainer
                             SetText(String.Concat(minuteString, ':', secondString), "Get Ready");
                         });
                     }
+
                 }
             }
 
@@ -361,6 +368,7 @@ namespace TopOutTrainer
                     Minute = getReadyTime / 60;
                     Second = getReadyTime % 60;
 
+
                     if (Second <= 9)
                     {
                         secondString = String.Concat('0', Second);
@@ -387,6 +395,7 @@ namespace TopOutTrainer
                             SetText(String.Concat(minuteString, ':', secondString), "Get Ready");
                         });
                     }
+
                 }
             }
 
@@ -408,14 +417,12 @@ namespace TopOutTrainer
                 return;
             }
 
-            if (timeLabel != null)
-            {
 
-                Device.BeginInvokeOnMainThread(() =>
-                {
-                    SetText(String.Concat(minuteString, ':', secondString));
-                });
-            }
+            Device.BeginInvokeOnMainThread(() =>
+            {
+                SetText(String.Concat(minuteString, ':', secondString));
+            });
+            
 
         }
     }
