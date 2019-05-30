@@ -26,6 +26,10 @@ namespace TopOutTrainer
 
         private Label timeLabel = null;
         private Label descriptionLabel = null;
+        private Label totalTimeLabel = null;
+        private int totalTime;
+        private int totalTimeMin;
+        private int totalTimeSec;
 
         public int Minute
         {
@@ -45,46 +49,99 @@ namespace TopOutTrainer
             get;
         } = 0;
 
-        public TimerPageStopWatch(Label timeLabelP, Label descriptionLabelP)
+        private bool onGetReady = false;
+        private bool onStart = false;
+        private bool onRepBreak = false;
+        private bool onSetBreak = false;
+        private bool onEnd = false;
+        public TimerPageStopWatch(Label timeLabelP, Label totalTimeLabelP, Label descriptionLabelP)
         {
             // The user presses start ( waits 7 seconds while they get ready )
             // The app then begin ( waits 15 seconds as they do their workout )
 
             // Set label to change for timer
+
             timeLabel = timeLabelP;
             descriptionLabel = descriptionLabelP;
+            totalTimeLabel = totalTimeLabelP;
 
 
-            Minute = getReadyTime / 60;
-            Second = getReadyTime % 60;
+            // totalTime in seconds
+            //int getReadyAndStart = StaticFiles.TimerPageUISettings.reps * StaticFiles.TimerPageUISettings.sets * (StaticFiles.TimerPageUISettings.getReadyTime + StaticFiles.TimerPageUISettings.startTime);
+            //int breakReps = StaticFiles.TimerPageUISettings.reps * (StaticFiles.TimerPageUISettings.reps - 1);
+            //int breakSets = StaticFiles.TimerPageUISettings.sets;
+            //totalTime = getReadyAndStart + (breakReps * StaticFiles.TimerPageUISettings.repsRestTime) + (breakSets * StaticFiles.TimerPageUISettings.setsRestTime);
 
-            // Build string and set it to object
-            if (Second <= 9)
+            if (StaticFiles.TimerPageUISettings.getReadyTime > 0)
             {
-                secondString = String.Concat('0', Second);
+                onGetReady = true;
+                Minute = StaticFiles.TimerPageUISettings.getReadyTime / 60;
+                Second = StaticFiles.TimerPageUISettings.getReadyTime % 60;
+                addedString = "Get Ready";
+            }
+            else
+            if(StaticFiles.TimerPageUISettings.startTime > 0)
+            {
+                onStart = true;
+                Minute = StaticFiles.TimerPageUISettings.startTime / 60;
+                Second = StaticFiles.TimerPageUISettings.startTime % 60;
+                addedString = "Start";
+            }
+            else
+            if (StaticFiles.TimerPageUISettings.reps > 0)
+            {
+                onRepBreak = true;
+                Minute = StaticFiles.TimerPageUISettings.repsRestTime / 60;
+                Second = StaticFiles.TimerPageUISettings.repsRestTime % 60;
+                addedString = "Rep Break";
+            }
+            else
+            if (StaticFiles.TimerPageUISettings.sets > 0)
+            {
+                onSetBreak = true;
+                Minute = StaticFiles.TimerPageUISettings.setsRestTime / 60;
+                Second = StaticFiles.TimerPageUISettings.setsRestTime % 60;
+                addedString = "Set Break";
             }
             else
             {
-                secondString = Second.ToString();
+                addedString = "Finished!";
+                onEnd = true;
             }
+            //totalTimeMin = totalTime / 60;
+            //totalTimeSec = totalTime % 60;
+            //Minute = getReadyTime / 60;
+            //Second = getReadyTime % 60;
 
-            if (Minute <= 9)
-            {
-                minuteString = String.Concat('0', Minute);
-            }
-            else
-            {
-                minuteString = Minute.ToString();
-            }
+            //// Build string and set it to object
+            //if (Second <= 9)
+            //{
+            //    secondString = String.Concat('0', Second);
+            //}
+            //else
+            //{
+            //    secondString = Second.ToString();
+            //}
 
-            if (timeLabel != null)
-            {
+            //if (Minute <= 9)
+            //{
+            //    minuteString = String.Concat('0', Minute);
+            //}
+            //else
+            //{
+            //    minuteString = Minute.ToString();
+            //}
 
-                Device.BeginInvokeOnMainThread(() =>
-                {
-                    SetText(String.Concat(minuteString, ':', secondString), "Get Ready");
-                });
-            }
+            //addedString = "Get Ready";
+
+            //if (timeLabel != null)
+            //{
+
+            //    Device.BeginInvokeOnMainThread(() =>
+            //    {
+            //        SetText(String.Concat(minuteString, ':', secondString), "Get Ready");
+            //    });
+            //}
 
         }
 
@@ -137,15 +194,48 @@ namespace TopOutTrainer
                 descriptionLabel.Text = descriptionText;
             }
         }
+        
+        private void ReduceTotalTime()
+        {
+            // No matter what the totalTime will reduce by one second
+            // Build string and set it to object
+            totalTimeSec -= 1;
+            if(totalTimeSec < 0)
+            {
+                totalTimeSec = 59;
+                totalTimeMin -= 1;
+            }
+
+            string ttSecondString;
+            string ttMinuteString;
+            if (Second <= 9)
+            {
+                ttSecondString = String.Concat('0', totalTimeSec);
+            }
+            else
+            {
+                ttSecondString = totalTimeSec.ToString();
+            }
+
+            if (Minute <= 9)
+            {
+                ttMinuteString = String.Concat('0', totalTimeMin);
+            }
+            else
+            {
+                ttMinuteString = totalTimeMin.ToString();
+            }
+
+            Device.BeginInvokeOnMainThread(() =>
+            {
+                totalTimeLabel.Text = String.Concat(ttMinuteString, ':', ttSecondString);
+            });
+        }
 
 
-        private bool onGetReady = true;
-        private bool onStart = false;
-        private bool onRepBreak = false;
-        private bool onSetBreak = false;
-        private bool onEnd = false;
         private int repCountIndex = 0;
         private int setBreakIndex = 0;
+        private string addedString = null;
         private void OnTimedEvent(Object source, ElapsedEventArgs e)
         {
             MilliSecond += elapsedMilliSec;
@@ -162,40 +252,165 @@ namespace TopOutTrainer
                 Minute -= 1;
             }
 
-
-
             // Build string and set it to object
-            if (Second <= 9)
-            {
-                secondString = String.Concat('0', Second);
-            }
-            else
-            {
-                secondString = Second.ToString();
-            }
-
-            if (Minute <= 9)
-            {
-                minuteString = String.Concat('0', Minute);
-            }
-            else
-            {
-                minuteString = Minute.ToString();
-            }
-
             if (onGetReady)
             {
                 // Done with get ready time
-                if( Minute < 0 )
+                if (Minute < 0)
                 {
                     // Move to next phase
                     onGetReady = false;
                     onStart = true;
+                    addedString = "Start";
                     // Prep start
                     Minute = startTime / 60;
-                    Second = startTime % 60;
-                    MilliSecond = 0;
-                    if (timeLabel != null)
+                    Second = (startTime % 60) - 1;
+
+                    Device.BeginInvokeOnMainThread(() =>
+                    {
+                        if (Second <= 9)
+                        {
+                            secondString = String.Concat('0', Second);
+                        }
+                        else
+                        {
+                            secondString = Second.ToString();
+                        }
+
+                        if (Minute <= 9)
+                        {
+                            minuteString = String.Concat('0', Minute);
+                        }
+                        else
+                        {
+                            minuteString = Minute.ToString();
+                        }
+
+                        SetText(String.Concat(minuteString, ':', secondString), addedString);
+                    });
+
+                    return;
+
+                }
+                else
+                {
+
+                    Device.BeginInvokeOnMainThread(() =>
+                    {
+                        if (Second <= 9)
+                        {
+                            secondString = String.Concat('0', Second);
+                        }
+                        else
+                        {
+                            secondString = Second.ToString();
+                        }
+
+                        if (Minute <= 9)
+                        {
+                            minuteString = String.Concat('0', Minute);
+                        }
+                        else
+                        {
+                            minuteString = Minute.ToString();
+                        }
+
+                        SetText(String.Concat(minuteString, ':', secondString), addedString);
+                    });
+
+                    return;
+                }
+
+            }
+
+            if (onStart)
+            {
+
+                // Done with get ready start rep or set break
+                if (Minute < 0)
+                {
+                    onStart = false;
+                    repCountIndex++;
+
+                    // Determine if rep break or set break
+                    if (repCountIndex <= repCount - 1)
+                    {
+                        Minute = repBreakTime / 60;
+                        Second = (repBreakTime % 60) - 1;
+                        onRepBreak = true;
+                        addedString = "Rep Break";
+
+                        Device.BeginInvokeOnMainThread(() =>
+                        {
+                            if (Second <= 9)
+                            {
+                                secondString = String.Concat('0', Second);
+                            }
+                            else
+                            {
+                                secondString = Second.ToString();
+                            }
+
+                            if (Minute <= 9)
+                            {
+                                minuteString = String.Concat('0', Minute);
+                            }
+                            else
+                            {
+                                minuteString = Minute.ToString();
+                            }
+
+                            SetText(String.Concat(minuteString, ':', secondString), addedString);
+                        });
+
+                        return;
+
+                    }
+                    else // Set break
+                    {
+
+                        setBreakIndex++;
+                        if (setBreakIndex < setCount)
+                        {
+                            Minute = setBreakTime / 60;
+                            Second = (setBreakTime % 60) - 1;
+                            onSetBreak = true;
+                            addedString = "Set Break";
+                            repCountIndex = 0;
+
+                            Device.BeginInvokeOnMainThread(() =>
+                            {
+                                if (Second <= 9)
+                                {
+                                    secondString = String.Concat('0', Second);
+                                }
+                                else
+                                {
+                                    secondString = Second.ToString();
+                                }
+
+                                if (Minute <= 9)
+                                {
+                                    minuteString = String.Concat('0', Minute);
+                                }
+                                else
+                                {
+                                    minuteString = Minute.ToString();
+                                }
+                                SetText(String.Concat(minuteString, ':', secondString), addedString);
+                            });
+
+                            return;
+                        }
+                        else
+                        {
+                            onEnd = true;
+                        }
+                    }
+                }else
+                {
+
+                    Device.BeginInvokeOnMainThread(() =>
                     {
 
                         if (Second <= 9)
@@ -216,146 +431,78 @@ namespace TopOutTrainer
                             minuteString = Minute.ToString();
                         }
 
-                        Device.BeginInvokeOnMainThread(() =>
-                        {
-                            SetText(String.Concat(minuteString, ':', secondString), "Start");
-                        });
-                    }
+                        SetText(String.Concat(minuteString, ':', secondString), addedString);
+                    });
 
+                    return;
                 }
-            }
-
-            if(onStart)
-            {
-
-                // Done with get ready start rep or set break
-                if ( Minute < 0)
-                {
-                    onStart = false;
-                    repCountIndex++;
-
-                    // Determine if rep break or set break
-                    if(repCountIndex <= repCount - 1)
-                    {
-                        Minute = repBreakTime / 60;
-                        Second = repBreakTime % 60;
-                        onRepBreak = true;
-
-                        if (timeLabel != null)
-                        {
-
-                            if (Second <= 9)
-                            {
-                                secondString = String.Concat('0', Second);
-                            }
-                            else
-                            {
-                                secondString = Second.ToString();
-                            }
-
-                            if (Minute <= 9)
-                            {
-                                minuteString = String.Concat('0', Minute);
-                            }
-                            else
-                            {
-                                minuteString = Minute.ToString();
-                            }
-
-                            Device.BeginInvokeOnMainThread(() =>
-                            {
-                                SetText(String.Concat(minuteString, ':', secondString), "Rep Break");
-                            });
-
-                        }
-                    }
-                    else // Set break
-                    {
-
-                        setBreakIndex++;
-                        if(setBreakIndex < setCount)
-                        {
-                            Minute = setBreakTime / 60;
-                            Second = setBreakTime % 60;
-                            onSetBreak = true;
-                            repCountIndex = 0;
-                        }else
-                        {
-                            onEnd = true;
-                        }
-
-                        if (timeLabel != null)
-                        {
-
-                            if (Second <= 9)
-                            {
-                                secondString = String.Concat('0', Second);
-                            }
-                            else
-                            {
-                                secondString = Second.ToString();
-                            }
-
-                            if (Minute <= 9)
-                            {
-                                minuteString = String.Concat('0', Minute);
-                            }
-                            else
-                            {
-                                minuteString = Minute.ToString();
-                            }
-
-                            Device.BeginInvokeOnMainThread(() =>
-                            {
-                                SetText(String.Concat(minuteString, ':', secondString), "Set Break");
-                            });
-
-                        }
-                    }
-
-                }
-
             }
 
             if (onRepBreak)
             {
-                if ( Minute < 0 )
+                if (Minute < 0)
                 {
                     // Breaks done so get ready again
                     onRepBreak = false;
                     onGetReady = true;
+                    addedString = "Get Ready";
                     Minute = getReadyTime / 60;
-                    Second = getReadyTime % 60;
+                    Second = (getReadyTime % 60) - 1;
 
-
-                    if (Second <= 9)
+                    Device.BeginInvokeOnMainThread(() =>
                     {
-                        secondString = String.Concat('0', Second);
-                    }
-                    else
-                    {
-                        secondString = Second.ToString();
-                    }
-
-                    if (Minute <= 9)
-                    {
-                        minuteString = String.Concat('0', Minute);
-                    }
-                    else
-                    {
-                        minuteString = Minute.ToString();
-                    }
-
-                    if (timeLabel != null)
-                    {
-
-                        Device.BeginInvokeOnMainThread(() =>
+                        if (Second <= 9)
                         {
-                            SetText(String.Concat(minuteString, ':', secondString), "Get Ready");
-                        });
-                    }
+                            secondString = String.Concat('0', Second);
+                        }
+                        else
+                        {
+                            secondString = Second.ToString();
+                        }
 
+                        if (Minute <= 9)
+                        {
+                            minuteString = String.Concat('0', Minute);
+                        }
+                        else
+                        {
+                            minuteString = Minute.ToString();
+                        }
+
+                        SetText(String.Concat(minuteString, ':', secondString), addedString);
+                    });
+
+                    return;
                 }
+                else
+                {
+                    Device.BeginInvokeOnMainThread(() =>
+                    {
+                        if (Second <= 9)
+                        {
+                            secondString = String.Concat('0', Second);
+                        }
+                        else
+                        {
+                            secondString = Second.ToString();
+                        }
+
+                        if (Minute <= 9)
+                        {
+                            minuteString = String.Concat('0', Minute);
+                        }
+                        else
+                        {
+                            minuteString = Minute.ToString();
+                        }
+
+                        SetText(String.Concat(minuteString, ':', secondString), addedString);
+                    });
+
+                    return;
+                }
+
+
             }
 
             if (onSetBreak)
@@ -366,47 +513,69 @@ namespace TopOutTrainer
                     onSetBreak = false;
                     onGetReady = true;
                     Minute = getReadyTime / 60;
-                    Second = getReadyTime % 60;
+                    Second = (getReadyTime % 60) - 1;
 
-
-                    if (Second <= 9)
+                    Device.BeginInvokeOnMainThread(() =>
                     {
-                        secondString = String.Concat('0', Second);
-                    }
-                    else
-                    {
-                        secondString = Second.ToString();
-                    }
-
-                    if (Minute <= 9)
-                    {
-                        minuteString = String.Concat('0', Minute);
-                    }
-                    else
-                    {
-                        minuteString = Minute.ToString();
-                    }
-
-                    if (timeLabel != null)
-                    {
-
-                        Device.BeginInvokeOnMainThread(() =>
+                        if (Second <= 9)
                         {
-                            SetText(String.Concat(minuteString, ':', secondString), "Get Ready");
-                        });
-                    }
+                            secondString = String.Concat('0', Second);
+                        }
+                        else
+                        {
+                            secondString = Second.ToString();
+                        }
 
+                        if (Minute <= 9)
+                        {
+                            minuteString = String.Concat('0', Minute);
+                        }
+                        else
+                        {
+                            minuteString = Minute.ToString();
+                        }
+
+                        SetText(String.Concat(minuteString, ':', secondString), addedString);
+                    });
+
+                    return;
+
+                } else
+                {
+                    Device.BeginInvokeOnMainThread(() =>
+                    {
+                        if (Second <= 9)
+                        {
+                            secondString = String.Concat('0', Second);
+                        }
+                        else
+                        {
+                            secondString = Second.ToString();
+                        }
+
+                        if (Minute <= 9)
+                        {
+                            minuteString = String.Concat('0', Minute);
+                        }
+                        else
+                        {
+                            minuteString = Minute.ToString();
+                        }
+
+                        SetText(String.Concat(minuteString, ':', secondString), addedString);
+                    });
+
+                    return;
                 }
             }
 
-            if(onEnd)
+            if (onEnd)
             {
                 // Breaks done so get ready again
                 setBreakIndex = 0;
 
                 if (timeLabel != null)
                 {
-
                     Device.BeginInvokeOnMainThread(() =>
                     {
                         SetText("Finished!", "");
@@ -416,13 +585,6 @@ namespace TopOutTrainer
                 this.Stop();
                 return;
             }
-
-
-            Device.BeginInvokeOnMainThread(() =>
-            {
-                SetText(String.Concat(minuteString, ':', secondString));
-            });
-            
 
         }
     }
