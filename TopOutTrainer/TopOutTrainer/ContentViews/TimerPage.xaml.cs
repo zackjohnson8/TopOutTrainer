@@ -81,7 +81,7 @@ namespace TopOutTrainer.ContentViews
 
             // Number of breaks we'll be taking both rep and set total time
             int breakReps = StaticFiles.TimerPageUISettings.reps * (StaticFiles.TimerPageUISettings.reps - 1);
-            int breakSets = StaticFiles.TimerPageUISettings.sets;
+            int breakSets = StaticFiles.TimerPageUISettings.sets - 1;
 
             int totalTime = getReadyAndStart + (breakReps * StaticFiles.TimerPageUISettings.repsRestTime) + (breakSets * StaticFiles.TimerPageUISettings.setsRestTime);
             int totalTimeMinutes = totalTime / 60;
@@ -437,13 +437,18 @@ namespace TopOutTrainer.ContentViews
 
             int getReadyAndStart = StaticFiles.TimerPageUISettings.reps * StaticFiles.TimerPageUISettings.sets *(StaticFiles.TimerPageUISettings.getReadyTime + StaticFiles.TimerPageUISettings.startTime);
             int breakReps = StaticFiles.TimerPageUISettings.reps * (StaticFiles.TimerPageUISettings.reps - 1);
-            int breakSets = StaticFiles.TimerPageUISettings.sets;
+            int breakSets = StaticFiles.TimerPageUISettings.sets - 1;
             int totalTime = getReadyAndStart + (breakReps * StaticFiles.TimerPageUISettings.repsRestTime) + (breakSets * StaticFiles.TimerPageUISettings.setsRestTime);
-            totalTimeTimer = new StopWatch(timerNumL, StopWatch.CountDirection.COUNTDOWN, totalTime);
 
-            countDownTimer = new TimerPageStopWatch(timerL, getReadyL);
-            countDownTimer.Start();
+
+            totalTimeTimer = new StopWatch(timerNumL, StopWatch.CountDirection.COUNTDOWN, totalTime);
             totalTimeTimer.Start();
+
+
+            // TODO(zack): Combine the two timers into the TimerPageStopWatch.
+            //              This should allow for consistent count on both timers
+            countDownTimer = new TimerPageStopWatch(timerL, timerNumL, getReadyL);
+            countDownTimer.Start();
 
         }
 
