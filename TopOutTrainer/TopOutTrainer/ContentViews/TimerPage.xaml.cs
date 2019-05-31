@@ -384,9 +384,20 @@ namespace TopOutTrainer.ContentViews
 
         }
 
-        private void OptionButtonClicked(object sender, EventArgs args)
+        private void ResetAll()
         {
-            Navigation.PushAsync(new TimerPageSettings() { Title = "Settings" });
+            // Stop the timer. Reset the timer. Load the grid.
+            GridChildrenInitialize();
+            MainGridInitialize();
+            Content = mainG;
+        }
+
+        private async void OptionButtonClicked(object sender, EventArgs args)
+        {
+            await Navigation.PushAsync(new TimerPageSettings() { Title = "Settings" });
+
+            // Reset all
+            ResetAll();
         }
 
         private void GraphButtonClicked(object sender, EventArgs args)
