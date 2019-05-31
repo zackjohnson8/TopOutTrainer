@@ -75,6 +75,15 @@ namespace TopOutTrainer.StaticFiles
             if (name == "RepsTime")
             {
                 repsRestTime = value;
+            }else
+            if (name == "GetReadyTime") 
+            {
+                getReadyTime = value;
+            }
+            else
+            if (name == "StartTime")
+            {
+                startTime = value;
             }
         }
 

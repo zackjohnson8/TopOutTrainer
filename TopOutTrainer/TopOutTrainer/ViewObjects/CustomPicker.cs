@@ -28,7 +28,6 @@ namespace TopOutTrainer.ViewObjects
         protected override void OnTabIndexPropertyChanged(int oldValue, int newValue)
         {
             base.OnTabIndexPropertyChanged(oldValue, newValue);
-            Debug.Write("here");
             SelectedIndex = newValue;
         }
         

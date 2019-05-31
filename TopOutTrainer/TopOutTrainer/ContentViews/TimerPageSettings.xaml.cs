@@ -27,6 +27,10 @@ namespace TopOutTrainer.ContentViews
         private ViewObjects.CustomPicker repsSecPicker;
         private ViewObjects.CustomPicker setsMinPicker;
         private ViewObjects.CustomPicker setsSecPicker;
+        private ViewObjects.CustomPicker getReadyMinPicker;
+        private ViewObjects.CustomPicker getReadySecPicker;
+        private ViewObjects.CustomPicker startMinPicker;
+        private ViewObjects.CustomPicker startSecPicker;
 
         private IList<string> numberChoiceReps = new List<string>();
         private IList<string> numberChoiceSets = new List<string>();
@@ -42,6 +46,10 @@ namespace TopOutTrainer.ContentViews
         private int holdRepMin;
         private int holdSetSec;
         private int holdSetMin;
+        private int holdGetReadyMin;
+        private int holdGetReadySec;
+        private int holdStartMin;
+        private int holdStartSec;
 
 
         public TimerPageSettings()
@@ -54,6 +62,10 @@ namespace TopOutTrainer.ContentViews
             holdSetMin = StaticFiles.TimerPageUISettings.setsRestTime / 60;
             holdRepSec = StaticFiles.TimerPageUISettings.repsRestTime % 60;
             holdRepMin = StaticFiles.TimerPageUISettings.repsRestTime / 60;
+            holdGetReadyMin = StaticFiles.TimerPageUISettings.getReadyTime / 60;
+            holdGetReadySec = StaticFiles.TimerPageUISettings.getReadyTime % 60;
+            holdStartMin = StaticFiles.TimerPageUISettings.startTime / 60;
+            holdStartSec = StaticFiles.TimerPageUISettings.startTime % 60;
             //SetView();
             SizeChanged += OnSizeChanged;
         }
@@ -75,6 +87,10 @@ namespace TopOutTrainer.ContentViews
             holdSetMin = setsMinPicker.GetSelectedNumber();
             holdRepSec = repsSecPicker.GetSelectedNumber();
             holdRepMin = repsMinPicker.GetSelectedNumber();
+            holdGetReadySec = getReadySecPicker.GetSelectedNumber();
+            holdGetReadyMin = getReadyMinPicker.GetSelectedNumber();
+            holdStartSec = startSecPicker.GetSelectedNumber();
+            holdStartMin = startMinPicker.GetSelectedNumber();
 
 
             StaticFiles.TimerPageUISettings.reps = holdRep;
@@ -108,12 +124,44 @@ namespace TopOutTrainer.ContentViews
                 int totalTimeInSeconds = (int)holdSetSec + (int)(holdSetMin * 60);
                 StaticFiles.TimerPageUISettings.setsRestTime = totalTimeInSeconds;
             }
-            
+
+            if (holdGetReadySec == 0)
+            {
+                StaticFiles.TimerPageUISettings.getReadyTime = (int)(holdGetReadyMin * 60);
+            }
+            else
+            if (holdGetReadyMin == 0)
+            {
+                StaticFiles.TimerPageUISettings.getReadyTime = (int)holdGetReadySec;
+            }
+            else
+            {
+                int totalTimeInSeconds = (int)holdGetReadySec + (int)(holdGetReadyMin * 60);
+                StaticFiles.TimerPageUISettings.getReadyTime = totalTimeInSeconds;
+            }
+
+            if (holdStartSec == 0)
+            {
+                StaticFiles.TimerPageUISettings.startTime = (int)(holdStartMin * 60);
+            }
+            else
+            if (holdStartMin == 0)
+            {
+                StaticFiles.TimerPageUISettings.startTime = (int)holdStartSec;
+            }
+            else
+            {
+                int totalTimeInSeconds = (int)holdStartSec + (int)(holdStartMin * 60);
+                StaticFiles.TimerPageUISettings.startTime = totalTimeInSeconds;
+            }
+
 
             await file.WriteAllTextAsync("Reps:" + StaticFiles.TimerPageUISettings.reps.ToString() + ";" +
                                          "Sets:" + StaticFiles.TimerPageUISettings.sets.ToString() + ";" +
                                          "RepsTime:" + StaticFiles.TimerPageUISettings.repsRestTime.ToString() + ";" +
-                                         "SetsTime:" + StaticFiles.TimerPageUISettings.setsRestTime.ToString() + ";");
+                                         "SetsTime:" + StaticFiles.TimerPageUISettings.setsRestTime.ToString() + ";" +
+                                         "GetReadyTime:" + StaticFiles.TimerPageUISettings.getReadyTime.ToString() + ";" +
+                                         "StartTime:" + StaticFiles.TimerPageUISettings.startTime.ToString() + ";");
 
             return true;
         }
@@ -127,7 +175,6 @@ namespace TopOutTrainer.ContentViews
 
         private void OnSizeChanged(object sender, EventArgs e)
         {
-            Debug.Write("well");
             // Handle sizing of labels based on screen size
             if (this.Width > 0)
             {
@@ -242,7 +289,65 @@ namespace TopOutTrainer.ContentViews
 
                                 }
 
-                            }
+                            },
+                            new ViewObjects.PickerCell()
+                            {
+
+                                Label1 = new Label
+                                {
+                                    HorizontalTextAlignment = TextAlignment.Center,
+                                    VerticalTextAlignment = TextAlignment.Center,
+                                    TextColor = textColor,
+                                    Text = "Get Ready Time:",
+                                    FontSize = this.Width/24
+                                },
+                                Picker1 = getReadyMinPicker = new ViewObjects.CustomPicker()
+                                {
+                                    Title = "Minutes",
+                                    ItemsSource = (System.Collections.IList)numberChoiceMinutes,
+                                    HorizontalOptions = LayoutOptions.End,
+                                    FontSize = this.Width/20,
+                                    SelectedIndex = holdGetReadyMin
+                                },
+                                Picker2 = getReadySecPicker = new ViewObjects.CustomPicker()
+                                {
+                                    Title = "Seconds",
+                                    ItemsSource = (System.Collections.IList)numberChoiceSeconds,
+                                    HorizontalOptions = LayoutOptions.End,
+                                    FontSize = this.Width/20,
+                                    SelectedIndex = holdGetReadySec
+                                }
+
+                            },
+                            new ViewObjects.PickerCell()
+                            {
+
+                                Label1 = new Label
+                                {
+                                    HorizontalTextAlignment = TextAlignment.Center,
+                                    VerticalTextAlignment = TextAlignment.Center,
+                                    TextColor = textColor,
+                                    Text = "Start Time:",
+                                    FontSize = this.Width/24
+                                },
+                                Picker1 = startMinPicker = new ViewObjects.CustomPicker()
+                                {
+                                    Title = "Minutes",
+                                    ItemsSource = (System.Collections.IList)numberChoiceMinutes,
+                                    HorizontalOptions = LayoutOptions.End,
+                                    FontSize = this.Width/20,
+                                    SelectedIndex = holdStartMin
+                                },
+                                Picker2 = startSecPicker = new ViewObjects.CustomPicker()
+                                {
+                                    Title = "Seconds",
+                                    ItemsSource = (System.Collections.IList)numberChoiceSeconds,
+                                    HorizontalOptions = LayoutOptions.End,
+                                    FontSize = this.Width/20,
+                                    SelectedIndex = holdStartSec
+                                }
+
+                            },
                         }
                     },
                     Intent = TableIntent.Settings
@@ -254,6 +359,10 @@ namespace TopOutTrainer.ContentViews
                 repsMinPicker.SelectedIndexChanged += RepsMinPicker_SelectedIndexChanged;
                 repsPicker.SelectedIndexChanged += RepsPicker_SelectedIndexChanged;
                 setsPicker.SelectedIndexChanged += SetsPicker_SelectedIndexChanged;
+                getReadySecPicker.SelectedIndexChanged += GetReadySecPicker_SelectedIndexChanged;
+                getReadyMinPicker.SelectedIndexChanged += GetReadyMinPicker_SelectedIndexChanged;
+                startSecPicker.SelectedIndexChanged += StartSecPicker_SelectedIndexChanged;
+                startMinPicker.SelectedIndexChanged += StartMinPicker_SelectedIndexChanged;
             }
         }
 
@@ -291,6 +400,26 @@ namespace TopOutTrainer.ContentViews
         {
             Debug.Write("changed to: " + repsMinPicker.SelectedIndex);
             holdRepMin = repsMinPicker.SelectedIndex;
+        }
+
+        void GetReadySecPicker_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            holdGetReadySec = getReadySecPicker.SelectedIndex;
+        }
+
+        void GetReadyMinPicker_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            holdGetReadyMin = getReadyMinPicker.SelectedIndex;
+        }
+
+        void StartSecPicker_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            holdStartSec = startSecPicker.SelectedIndex;
+        }
+
+        void StartMinPicker_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            holdStartMin = startMinPicker.SelectedIndex;
         }
 
     }

@@ -107,7 +107,31 @@ namespace TopOutTrainer
             {
                 addedString = "Finished!";
                 onEnd = true;
+                return;
             }
+
+            Device.BeginInvokeOnMainThread(() =>
+            {
+                if (Second <= 9)
+                {
+                    secondString = String.Concat('0', Second);
+                }
+                else
+                {
+                    secondString = Second.ToString();
+                }
+
+                if (Minute <= 9)
+                {
+                    minuteString = String.Concat('0', Minute);
+                }
+                else
+                {
+                    minuteString = Minute.ToString();
+                }
+
+                SetText(String.Concat(minuteString, ':', secondString), addedString);
+            });
             //totalTimeMin = totalTime / 60;
             //totalTimeSec = totalTime % 60;
             //Minute = getReadyTime / 60;
