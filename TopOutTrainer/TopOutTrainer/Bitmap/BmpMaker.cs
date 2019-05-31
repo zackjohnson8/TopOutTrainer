@@ -2,14 +2,19 @@
 using System.IO;
 using System.Text;
 using Xamarin.Forms;
+using SkiaSharp.Views.Forms;
 
 namespace TopOutTrainer
 {
+
     public class BmpMaker
     {
         const int headerSize = 54;
         readonly byte[] buffer;
 
+        private Color mainColor;
+        private Color secondaryColor;
+        
         public BmpMaker(int width, int height)
         {
             Width = width;
@@ -59,6 +64,7 @@ namespace TopOutTrainer
                 return memoryStream;
             });
             return imageSource;
+            
         }
 
         public int Width
@@ -88,6 +94,22 @@ namespace TopOutTrainer
             buffer[index + 1] = (byte)g;
             buffer[index + 2] = (byte)r;
             buffer[index + 3] = (byte)a;
+        }
+
+        public void DrawLine(Color fillColor, Color emptyColor, double currentTime, double totalTime)
+        {
+            // Create a bitmap of the size asked. No need to do calculations
+            // for the exact size of the box asked. Why would you... 
+            // Needed items:
+            // Fill (Color) and Empty space (White) for current app
+            for(int column = 0; column < Width; column++)
+            {
+                for(int row = 0; row < Height; row++)
+                {
+                    SetPixel(column, row, mainColor);
+                }
+            }
+
         }
 
         public void DrawCircle(int row, int col, int thickness, int hangTime, int restTime, int hangIntervals)

@@ -1,17 +1,11 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
-using PCLStorage;
-using System.Diagnostics;
-using Xamarin.Forms.Internals;
 
 namespace TopOutTrainer.ContentViews
 {
-	[XamlCompilation(XamlCompilationOptions.Compile)]
+    [XamlCompilation(XamlCompilationOptions.Compile)]
 	public partial class TimerPage : ContentPage
 	{
         //private TopOutTrainer.ContentViews.TimerPageSettings myTimerSettings;
@@ -430,6 +424,7 @@ namespace TopOutTrainer.ContentViews
                     new RowDefinition { Height = new GridLength(1, GridUnitType.Star) },
                     new RowDefinition { Height = new GridLength(1, GridUnitType.Star) },
                     new RowDefinition { Height = new GridLength(1, GridUnitType.Star) },
+
                 },
                 ColumnDefinitions =
                 {
@@ -443,13 +438,23 @@ namespace TopOutTrainer.ContentViews
 
             getReadyG.Children.Add(getReadyL, 0, 0);
             getReadyG.Children.Add(timerL, 0, 1);
-            mainG.Children.Add(getReadyG, 0, 4);
-            Grid.SetColumnSpan(getReadyG, 4);
 
-            int getReadyAndStart = StaticFiles.TimerPageUISettings.reps * StaticFiles.TimerPageUISettings.sets *(StaticFiles.TimerPageUISettings.getReadyTime + StaticFiles.TimerPageUISettings.startTime);
+            // The bitmap would be 0, 2 and 0, 3
+            int getReadyAndStart = StaticFiles.TimerPageUISettings.reps * StaticFiles.TimerPageUISettings.sets * (StaticFiles.TimerPageUISettings.getReadyTime + StaticFiles.TimerPageUISettings.startTime);
             int breakReps = StaticFiles.TimerPageUISettings.reps * (StaticFiles.TimerPageUISettings.reps - 1);
             int breakSets = StaticFiles.TimerPageUISettings.sets - 1;
             int totalTime = getReadyAndStart + (breakReps * StaticFiles.TimerPageUISettings.repsRestTime) + (breakSets * StaticFiles.TimerPageUISettings.setsRestTime);
+
+
+            //BmpMaker bitMapLine = new BmpMaker((int)this.Width/16, (int)this.Height/16);
+            //getReadyG.Children.Add(new StackLayout().Children.Add(bitMapLine.Generate()), 0, 2);
+            //Grid.SetColumnSpan(bitMapLine.Generate(), 2);
+            Bitmap.BitmapCountDown bitmapView = new Bitmap.BitmapCountDown(totalTime, Color.Violet, Color.White);
+            getReadyG.Children.Add(bitmapView, 0, 2);
+            Grid.SetRowSpan(bitmapView, 2);
+
+            mainG.Children.Add(getReadyG, 0, 4);
+            Grid.SetColumnSpan(getReadyG, 4);
 
 
             totalTimeTimer = new StopWatch(timerNumL, StopWatch.CountDirection.COUNTDOWN, totalTime);
@@ -462,6 +467,7 @@ namespace TopOutTrainer.ContentViews
             countDownTimer.Start();
 
         }
+
 
         private async void OnSizeChanged(object sender, EventArgs e)
         {
