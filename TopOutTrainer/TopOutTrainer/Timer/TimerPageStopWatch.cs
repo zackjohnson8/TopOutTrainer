@@ -31,6 +31,8 @@ namespace TopOutTrainer
         private int totalTimeMin;
         private int totalTimeSec;
 
+        private Bitmap.BitmapCountDown bitmapAnimation;
+
         public int Minute
         {
             private set;
@@ -54,7 +56,7 @@ namespace TopOutTrainer
         private bool onRepBreak = false;
         private bool onSetBreak = false;
         private bool onEnd = false;
-        public TimerPageStopWatch(Label timeLabelP, Label totalTimeLabelP, Label descriptionLabelP)
+        public TimerPageStopWatch(Label timeLabelP, Label totalTimeLabelP, Label descriptionLabelP, Bitmap.BitmapCountDown bitmapP)
         {
             // The user presses start ( waits 7 seconds while they get ready )
             // The app then begin ( waits 15 seconds as they do their workout )
@@ -65,6 +67,7 @@ namespace TopOutTrainer
             descriptionLabel = descriptionLabelP;
             totalTimeLabel = totalTimeLabelP;
 
+            bitmapAnimation = bitmapP;
 
             // totalTime in seconds
             //int getReadyAndStart = StaticFiles.TimerPageUISettings.reps * StaticFiles.TimerPageUISettings.sets * (StaticFiles.TimerPageUISettings.getReadyTime + StaticFiles.TimerPageUISettings.startTime);
@@ -78,6 +81,11 @@ namespace TopOutTrainer
                 Minute = StaticFiles.TimerPageUISettings.getReadyTime / 60;
                 Second = StaticFiles.TimerPageUISettings.getReadyTime % 60;
                 addedString = "Get Ready";
+
+                bitmapP.UpdatePrimaryColor(StaticFiles.ColorSettings.getReadyColor);
+                bitmapP.UpdateTotalTime((Minute * 60) + Second);
+                bitmapP.UpdateCurrentTime(0);
+                bitmapP.InvalidateSurface();
             }
             else
             if(StaticFiles.TimerPageUISettings.startTime > 0)
@@ -259,10 +267,12 @@ namespace TopOutTrainer
 
         private int repCountIndex = 0;
         private int setBreakIndex = 0;
+        private int bmCurrentTimeHolder = 0;
         private string addedString = null;
         private void OnTimedEvent(Object source, ElapsedEventArgs e)
         {
             MilliSecond += elapsedMilliSec;
+            bmCurrentTimeHolder += 1;
 
             if (MilliSecond >= 1000)
             {
@@ -282,6 +292,9 @@ namespace TopOutTrainer
                 // Done with get ready time
                 if (Minute < 0)
                 {
+
+                    bitmapAnimation.UpdateCurrentTime(0);
+                    bitmapAnimation.InvalidateSurface();
                     // Move to next phase
                     onGetReady = false;
                     onStart = true;
@@ -292,6 +305,8 @@ namespace TopOutTrainer
 
                     Device.BeginInvokeOnMainThread(() =>
                     {
+
+
                         if (Second <= 9)
                         {
                             secondString = String.Concat('0', Second);
@@ -318,9 +333,10 @@ namespace TopOutTrainer
                 }
                 else
                 {
-
+                    bitmapAnimation.UpdateCurrentTime(bmCurrentTimeHolder);
                     Device.BeginInvokeOnMainThread(() =>
                     {
+                        bitmapAnimation.InvalidateSurface();
                         if (Second <= 9)
                         {
                             secondString = String.Concat('0', Second);

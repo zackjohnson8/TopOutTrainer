@@ -39,6 +39,8 @@ namespace TopOutTrainer.ContentViews
         private ImageButton button4;
         private ImageButton startbutton;
 
+        private Bitmap.BitmapCountDown bitmapView;
+
 
         public TimerPage()
         { 
@@ -449,7 +451,7 @@ namespace TopOutTrainer.ContentViews
             //BmpMaker bitMapLine = new BmpMaker((int)this.Width/16, (int)this.Height/16);
             //getReadyG.Children.Add(new StackLayout().Children.Add(bitMapLine.Generate()), 0, 2);
             //Grid.SetColumnSpan(bitMapLine.Generate(), 2);
-            Bitmap.BitmapCountDown bitmapView = new Bitmap.BitmapCountDown(totalTime, Color.Violet, Color.White);
+            bitmapView = new Bitmap.BitmapCountDown(totalTime, Color.FromHex("#FF6600"), Color.White);
             getReadyG.Children.Add(bitmapView, 0, 2);
             Grid.SetRowSpan(bitmapView, 2);
 
@@ -463,7 +465,7 @@ namespace TopOutTrainer.ContentViews
 
             // TODO(zack): Combine the two timers into the TimerPageStopWatch.
             //              This should allow for consistent count on both timers
-            countDownTimer = new TimerPageStopWatch(timerL, timerNumL, getReadyL);
+            countDownTimer = new TimerPageStopWatch(timerL, timerNumL, getReadyL, bitmapView);
             countDownTimer.Start();
 
         }
