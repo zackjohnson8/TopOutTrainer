@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Threading.Tasks;
+using System.Threading;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
 
@@ -382,6 +383,17 @@ namespace TopOutTrainer.ContentViews
 
         private void ResetAll()
         {
+            try
+            {
+                countDownTimer.Stop();
+                totalTimeTimer.Stop();
+                bitmapView.Stop();
+            }
+            catch(Exception e)
+            {
+            }
+
+
             // Stop the timer. Reset the timer. Load the grid.
             GridChildrenInitialize();
             MainGridInitialize();
@@ -399,11 +411,15 @@ namespace TopOutTrainer.ContentViews
         private void GraphButtonClicked(object sender, EventArgs args)
         {
             Navigation.PushAsync(new GraphPage());
+
+            ResetAll();
         }
 
         private void PlannerButtonClicked(object sender, EventArgs args)
         {
             Navigation.PushAsync(new PlannerPage());
+
+            ResetAll();
         }
 
         private void StartButtonClicked(object sender, EventArgs args)
@@ -452,6 +468,9 @@ namespace TopOutTrainer.ContentViews
             //getReadyG.Children.Add(new StackLayout().Children.Add(bitMapLine.Generate()), 0, 2);
             //Grid.SetColumnSpan(bitMapLine.Generate(), 2);
             bitmapView = new Bitmap.BitmapCountDown(totalTime, Color.FromHex("#FF6600"), Color.White);
+            Thread bitmapViewThread = new Thread(bitmapView.Start);
+            //bitmapView.Start();
+
             getReadyG.Children.Add(bitmapView, 0, 2);
             Grid.SetRowSpan(bitmapView, 2);
 
@@ -459,14 +478,20 @@ namespace TopOutTrainer.ContentViews
             Grid.SetColumnSpan(getReadyG, 4);
 
 
-            totalTimeTimer = new StopWatch(timerNumL, StopWatch.CountDirection.COUNTDOWN, totalTime);
-            totalTimeTimer.Start();
 
+            totalTimeTimer = new StopWatch(timerNumL, StopWatch.CountDirection.COUNTDOWN, totalTime);
+            Thread totalTimeThread = new Thread(totalTimeTimer.Start);
 
             // TODO(zack): Combine the two timers into the TimerPageStopWatch.
             //              This should allow for consistent count on both timers
-            countDownTimer = new TimerPageStopWatch(timerL, timerNumL, getReadyL, bitmapView);
-            countDownTimer.Start();
+            countDownTimer = new TimerPageStopWatch(timerL, getReadyL);
+            Thread countDownTimerThread = new Thread(countDownTimer.Start);
+            //countDownTimer.Start();
+
+            bitmapViewThread.Start();
+            totalTimeThread.Start();
+            countDownTimerThread.Start();
+
 
         }
 
