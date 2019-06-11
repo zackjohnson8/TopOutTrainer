@@ -3,6 +3,8 @@ using SkiaSharp;
 using SkiaSharp.Views.Forms;
 using Xamarin.Forms;
 using System.Timers;
+using System.Diagnostics;
+
 namespace TopOutTrainer.Bitmap
 {
     public enum ShapeType
@@ -34,6 +36,19 @@ namespace TopOutTrainer.Bitmap
         private bool clearBitMap = false;
         private CountSetting BitSetting = CountSetting.GETREADY;
 
+        SKSurface surface;
+        SKCanvas canvas;
+        int width = 0;
+        int height = 0;
+
+        private bool onGetReady = false;
+        private bool onStart = false;
+        private bool onRepBreak = false;
+        private bool onSetBreak = false;
+        //private bool onEnd = false;
+        private int repCountIndex = 0;
+        private int setCountIndex = 0;
+
         SKPaint primaryColorFillPaint;
         SKPaint primaryLinePaint = new SKPaint
         {
@@ -41,6 +56,16 @@ namespace TopOutTrainer.Bitmap
             StrokeWidth = 2,
             StrokeCap = SKStrokeCap.Round,
             IsAntialias = true,
+        };
+
+        SKPaint secondaryColorFillPaint;
+        SKPaint secondaryLinePaint = new SKPaint
+        {
+            Style = SKPaintStyle.Stroke,
+            StrokeWidth = 2,
+            StrokeCap = SKStrokeCap.Round,
+            IsAntialias = true,
+
         };
 
         public BitmapCountDown(float totalTimeP, Color primaryColorP, Color secondaryColorP)
@@ -58,44 +83,17 @@ namespace TopOutTrainer.Bitmap
             };
             primaryLinePaint.Color = primaryColorP.ToSKColor();
 
+            secondaryColorFillPaint = new SKPaint
+            {
+                Style = SKPaintStyle.Fill,
+                Color = secondaryColor.ToSKColor()
+            };
+            secondaryLinePaint.Color = secondaryColorP.ToSKColor();
+
+            StartCheck();
+
             SizeChanged += BitmapCountDown_SizeChanged;
 
-        }
-
-        SKSurface surface;
-        SKCanvas canvas;
-        int width = 0;
-        int height = 0;
-        void Handle_PaintSurface(object sender, SKPaintSurfaceEventArgs e)
-        {
-
-            if (!clearBitMap) 
-            {
-                surface = e.Surface;
-                canvas = surface.Canvas;
-                width = e.Info.Width;
-                height = e.Info.Height;
-                canvas.Clear(StaticFiles.ColorSettings.mainGrayColor.ToSKColor());
-                primaryLinePaint.Color = primaryColor.ToSKColor();
-
-                canvas.Translate(0, height / 2);
-                //canvas.Scale(width / 200f);
-                primaryLinePaint.StrokeWidth = (int)(height * .15);
-
-                float completedTime = ((float)currentTime / (float)totalTime);
-                int leftPoint = (int)(width * .25); // 100
-                int rightPoint = (int)(width * .75); // 1080
-                int totalPixelLeftToRight = rightPoint - leftPoint; // 980
-                float totalReduction = totalPixelLeftToRight * completedTime;
-                rightPoint = rightPoint - (int)totalReduction;
-
-                //int rightPoint = (int)(width - (width / 1.05));
-                //canvas.DrawCircle(new SKPoint(0, 0), 10, primaryColorFillPaint);
-                canvas.DrawLine(new SKPoint(leftPoint, 0), new SKPoint(rightPoint, 0), primaryLinePaint);
-                //canvas.Clear(primaryColor.ToSKColor());
-                return;
-            }
-            
         }
 
         void BitmapCountDown_SizeChanged(object sender, EventArgs e)
@@ -119,39 +117,17 @@ namespace TopOutTrainer.Bitmap
             currentTime = currentTimeP;
         }
 
-
-        private bool onGetReady = false;
-        private bool onStart = false;
-        private bool onRepBreak = false;
-        private bool onSetBreak = false;
-        //private bool onEnd = false;
-        private int repCountIndex = 0;
-        private int setCountIndex = 0;
         public void Start()
         {
-            if (StartCheck())
+
+            if (!eventRunning)
             {
-
-                if (!eventRunning)
-                {
-                    aTimer.Elapsed += OnTimedEvent;
-                    eventRunning = true;
-                }
-                aTimer.AutoReset = true;
-                aTimer.Enabled = true;
-
-                //startTimer = true;
-                //Device.StartTimer(TimeSpan.FromSeconds(1f / 60), () =>
-                //{
-                //    currentTime += 1f / 60;
-                //    if (currentTime >= totalTime)
-                //    {
-                //        NextTimer();
-                //    }
-                //    this.InvalidateSurface();
-                //    return startTimer;
-                //});
+                aTimer.Elapsed += OnTimedEvent;
+                eventRunning = true;
             }
+            aTimer.AutoReset = true;
+            aTimer.Enabled = true;
+
         }
 
         //private int MilliSecond = 0;
@@ -174,35 +150,40 @@ namespace TopOutTrainer.Bitmap
                 onGetReady = true;
                 totalTime = StaticFiles.TimerPageUISettings.getReadyTime + 1;
                 primaryColor = StaticFiles.ColorSettings.getReadyColor;
+                primaryLinePaint.Color = StaticFiles.ColorSettings.getReadyColor.ToSKColor();
                 return true;
             }
             else
-              if (StaticFiles.TimerPageUISettings.startTime > 0)
+            if (StaticFiles.TimerPageUISettings.startTime > 0)
             {
                 onStart = true;
                 totalTime = StaticFiles.TimerPageUISettings.startTime + 1;
                 primaryColor = StaticFiles.ColorSettings.startColor;
+                primaryLinePaint.Color = StaticFiles.ColorSettings.startColor.ToSKColor();
                 return true;
             }
             else
-              if (StaticFiles.TimerPageUISettings.reps > 0)
+            if (StaticFiles.TimerPageUISettings.reps > 0)
             {
                 onRepBreak = true;
                 totalTime = StaticFiles.TimerPageUISettings.repsRestTime + 1;
                 primaryColor = StaticFiles.ColorSettings.repBreakColor;
+                primaryLinePaint.Color = StaticFiles.ColorSettings.repBreakColor.ToSKColor();
                 return true;
             }
             else
-              if (StaticFiles.TimerPageUISettings.sets > 0)
+            if (StaticFiles.TimerPageUISettings.sets > 0)
             {
                 onSetBreak = true;
                 totalTime = StaticFiles.TimerPageUISettings.setsRestTime + 1;
                 primaryColor = StaticFiles.ColorSettings.setBreakColor;
+                primaryLinePaint.Color = StaticFiles.ColorSettings.setBreakColor.ToSKColor();
                 return true;
             }
             else
             {
                 //onEnd = true;
+                this.Stop();
                 return false;
             }
         }
@@ -220,6 +201,7 @@ namespace TopOutTrainer.Bitmap
                 {
                     totalTime = StaticFiles.TimerPageUISettings.startTime;
                     primaryColor = StaticFiles.ColorSettings.startColor;
+                    primaryLinePaint.Color = StaticFiles.ColorSettings.startColor.ToSKColor();
                 }
 
             }else
@@ -227,21 +209,21 @@ namespace TopOutTrainer.Bitmap
             {
                 onStart = false;
                 repCountIndex++;
-
-                if(repCountIndex <= StaticFiles.TimerPageUISettings.reps)
+                if(repCountIndex < StaticFiles.TimerPageUISettings.reps)
                 {
                     totalTime = StaticFiles.TimerPageUISettings.repsRestTime;
                     primaryColor = StaticFiles.ColorSettings.repBreakColor;
+                    primaryLinePaint.Color = StaticFiles.ColorSettings.repBreakColor.ToSKColor();
                     onRepBreak = true;
                 }else // Set break
                 {
                     setCountIndex++;
-
                     if (setCountIndex < StaticFiles.TimerPageUISettings.sets)
                     {
                         repCountIndex = 0;
                         totalTime = StaticFiles.TimerPageUISettings.setsRestTime;
                         primaryColor = StaticFiles.ColorSettings.setBreakColor;
+                        primaryLinePaint.Color = StaticFiles.ColorSettings.setBreakColor.ToSKColor();
                         onSetBreak = true;
                     }else
                     {
@@ -251,26 +233,23 @@ namespace TopOutTrainer.Bitmap
                 }
             }
             else
-            if (onRepBreak)
+            if (onRepBreak || onSetBreak)
             {
+                onSetBreak = false;
                 onRepBreak = false;
                 onGetReady = true;
                 totalTime = StaticFiles.TimerPageUISettings.getReadyTime;
                 primaryColor = StaticFiles.ColorSettings.getReadyColor;
-            }
-            else
-            if (onSetBreak)
-            {
-                onSetBreak = false;
-                onGetReady = true;
-                totalTime = StaticFiles.TimerPageUISettings.getReadyTime;
-                primaryColor = StaticFiles.ColorSettings.getReadyColor;
+                primaryLinePaint.Color = StaticFiles.ColorSettings.getReadyColor.ToSKColor();
             }
 
         }
 
         public void Stop()
         {
+            primaryLinePaint.Color = StaticFiles.ColorSettings.mainGrayColor.ToSKColor();
+            secondaryLinePaint.Color = StaticFiles.ColorSettings.mainGrayColor.ToSKColor();
+            this.InvalidateSurface();
             aTimer.Enabled = false;
         }
 
@@ -318,6 +297,35 @@ namespace TopOutTrainer.Bitmap
                 default:
                     break;
             }
+        }
+
+        void Handle_PaintSurface(object sender, SKPaintSurfaceEventArgs e)
+        {
+            surface = e.Surface;
+            canvas = surface.Canvas;
+            width = e.Info.Width;
+            height = e.Info.Height;
+            canvas.Save();
+            canvas.Clear(StaticFiles.ColorSettings.mainGrayColor.ToSKColor());
+            canvas.Translate(0, height / 2);
+            //canvas.Scale(width / 200f);
+            primaryLinePaint.StrokeWidth = (int)(height * .15);
+            secondaryLinePaint.StrokeWidth = (int)(height * .15);
+
+            float completedTime = ((float)currentTime / (float)totalTime);
+            int leftPoint = (int)(width * .25); // 100
+            int rightPoint = (int)(width * .75); // 1080
+            int totalPixelLeftToRight = rightPoint - leftPoint; // 980
+            float totalReduction = totalPixelLeftToRight * completedTime;
+            rightPoint = rightPoint - (int)totalReduction;
+
+            //int rightPoint = (int)(width - (width / 1.05));
+            //canvas.DrawCircle(new SKPoint(0, 0), 10, primaryColorFillPaint);
+            canvas.DrawLine(new SKPoint(leftPoint, 0), new SKPoint((int)(width * .75), 0), secondaryLinePaint);
+            canvas.DrawLine(new SKPoint(leftPoint, 0), new SKPoint(rightPoint, 0), primaryLinePaint);
+            //canvas.Clear(primaryColor.ToSKColor());
+            canvas.Restore();
+            return;
         }
 
     }
