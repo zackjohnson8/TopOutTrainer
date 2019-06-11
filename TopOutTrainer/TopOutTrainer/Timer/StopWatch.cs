@@ -15,7 +15,7 @@ namespace TopOutTrainer
             COUNTDOWN
         }
 
-        private const int elapsedMilliSec = 1000;
+        private const int elapsedMilliSec = 10;
         private System.Timers.Timer aTimer = new System.Timers.Timer(elapsedMilliSec);
         private bool eventRunning = false;
         private CountDirection countChoice = CountDirection.COUNTUP;
@@ -187,6 +187,9 @@ namespace TopOutTrainer
                 {
                     MilliSecond = 0;
                     Second -= 1;
+                }else
+                {
+                    return;
                 }
 
                 if (Second < 0)
