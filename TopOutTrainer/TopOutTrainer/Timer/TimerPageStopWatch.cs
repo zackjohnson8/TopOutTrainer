@@ -112,6 +112,7 @@ namespace TopOutTrainer
             }
             else
             {
+                currentColor = endTimerType.color;
                 this.Stop();
                 return;
             }
@@ -145,21 +146,18 @@ namespace TopOutTrainer
         public void Stop()
         {
             aTimer.Enabled = false;
+            Device.BeginInvokeOnMainThread(() =>
+            {
+                SetText("00", "00", endTimerType);
+            });
         }
 
         private void SetText(string minute, string second, TimerType selectedTimerType)
         {
             descriptionLabel.TextColor = currentColor;
 
-            if(selectedTimerType.Equals(endTimerType))
-            {
-                descriptionLabel.Text = selectedTimerType.displayText;
-                timeLabel.Text = "";
-            }else
-            {
-                descriptionLabel.Text = selectedTimerType.displayText;
-                timeLabel.Text = string.Concat(minute, ":", second);
-            }
+            descriptionLabel.Text = selectedTimerType.displayText;
+            timeLabel.Text = string.Concat(minute, ":", second);
         }
 
         private void SetMinuteString(int minuteValue)
@@ -199,15 +197,14 @@ namespace TopOutTrainer
                 SetMinuteString(Minute);
                 SetSecondString(Second);
                 return true;
-            }
-
+            }else
             if(startTimerType.focus)
             {
                 startTimerType.focus = false;
 
                 // Either rep or set break
                 repCountIndex++;
-                if(repCountIndex <= StaticFiles.TimerPageUISettings.reps)
+                if(repCountIndex < StaticFiles.TimerPageUISettings.reps)
                 {
                     repTimerType.focus = true;
                     Minute = repTimerType.minute;
@@ -233,12 +230,12 @@ namespace TopOutTrainer
                     }
                     else
                     {
+                        currentColor = endTimerType.color;
                         this.Stop(); // No more sets- end process
                         return false;
                     }
                 }
-            }
-
+            }else
             if(repTimerType.focus || setTimerType.focus)
             {
                 repTimerType.focus = false;

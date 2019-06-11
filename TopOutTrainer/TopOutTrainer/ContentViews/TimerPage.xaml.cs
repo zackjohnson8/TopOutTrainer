@@ -3,6 +3,7 @@ using System.Threading.Tasks;
 using System.Threading;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
+using System.Diagnostics;
 
 namespace TopOutTrainer.ContentViews
 {
@@ -29,6 +30,8 @@ namespace TopOutTrainer.ContentViews
         private TimerPageStopWatch countDownTimer;
         private StopWatch totalTimeTimer;
 
+        private Timer.TimerHandler timerHandler;
+
         //private Image bitmapI;
         //private StackLayout bitmapContainer;
         //private BmpMaker bmpMaker;
@@ -41,7 +44,6 @@ namespace TopOutTrainer.ContentViews
         private ImageButton startbutton;
 
         private Bitmap.BitmapCountDown bitmapView;
-
 
         public TimerPage()
         { 
@@ -383,17 +385,8 @@ namespace TopOutTrainer.ContentViews
 
         private void ResetAll()
         {
-            try
-            {
-                countDownTimer.Stop();
-                totalTimeTimer.Stop();
-                bitmapView.Stop();
-            }
-            catch(Exception e)
-            {
-            }
 
-
+            timerHandler.Stop();
             // Stop the timer. Reset the timer. Load the grid.
             GridChildrenInitialize();
             MainGridInitialize();
@@ -402,24 +395,23 @@ namespace TopOutTrainer.ContentViews
 
         private async void OptionButtonClicked(object sender, EventArgs args)
         {
-            await Navigation.PushAsync(new TimerPageSettings() { Title = "Settings" });
-
             // Reset all
             ResetAll();
+            await Navigation.PushAsync(new TimerPageSettings() { Title = "Settings" });
+
+
         }
 
         private void GraphButtonClicked(object sender, EventArgs args)
         {
-            Navigation.PushAsync(new GraphPage());
-
             ResetAll();
+            Navigation.PushAsync(new GraphPage());
         }
 
         private void PlannerButtonClicked(object sender, EventArgs args)
         {
-            Navigation.PushAsync(new PlannerPage());
-
             ResetAll();
+            Navigation.PushAsync(new PlannerPage());
         }
 
         private void StartButtonClicked(object sender, EventArgs args)
@@ -467,8 +459,7 @@ namespace TopOutTrainer.ContentViews
             //BmpMaker bitMapLine = new BmpMaker((int)this.Width/16, (int)this.Height/16);
             //getReadyG.Children.Add(new StackLayout().Children.Add(bitMapLine.Generate()), 0, 2);
             //Grid.SetColumnSpan(bitMapLine.Generate(), 2);
-            bitmapView = new Bitmap.BitmapCountDown(totalTime, Color.FromHex("#FF6600"), Color.White);
-            Thread bitmapViewThread = new Thread(bitmapView.Start);
+            bitmapView = new Bitmap.BitmapCountDown(totalTime, Color.FromHex("#FF6600"), Color.FromHex("#DCDCDC"));
             //bitmapView.Start();
 
             getReadyG.Children.Add(bitmapView, 0, 2);
@@ -477,21 +468,15 @@ namespace TopOutTrainer.ContentViews
             mainG.Children.Add(getReadyG, 0, 4);
             Grid.SetColumnSpan(getReadyG, 4);
 
-
-
             totalTimeTimer = new StopWatch(timerNumL, StopWatch.CountDirection.COUNTDOWN, totalTime);
-            Thread totalTimeThread = new Thread(totalTimeTimer.Start);
 
             // TODO(zack): Combine the two timers into the TimerPageStopWatch.
             //              This should allow for consistent count on both timers
             countDownTimer = new TimerPageStopWatch(timerL, getReadyL);
-            Thread countDownTimerThread = new Thread(countDownTimer.Start);
             //countDownTimer.Start();
 
-            bitmapViewThread.Start();
-            totalTimeThread.Start();
-            countDownTimerThread.Start();
-
+            timerHandler = new Timer.TimerHandler(totalTimeTimer, countDownTimer, bitmapView);
+            timerHandler.Start();
 
         }
 

@@ -24,6 +24,7 @@ namespace TopOutTrainer
         private string minuteString;
         private string secondString;
 
+        private bool StartComplete { get; set; } = false;
 
         private Label mainObjectLabel = null;
 
