@@ -32,8 +32,6 @@ namespace TopOutTrainer.Bitmap
         private Color secondaryColor;
         private float totalTime = 5;
         private float currentTime = 0;
-        private bool startTimer;
-        private bool clearBitMap = false;
         private CountSetting BitSetting = CountSetting.GETREADY;
 
         SKSurface surface;
@@ -49,7 +47,6 @@ namespace TopOutTrainer.Bitmap
         private int repCountIndex = 0;
         private int setCountIndex = 0;
 
-        SKPaint primaryColorFillPaint;
         SKPaint primaryLinePaint = new SKPaint
         {
             Style = SKPaintStyle.Stroke,
@@ -58,7 +55,6 @@ namespace TopOutTrainer.Bitmap
             IsAntialias = true,
         };
 
-        SKPaint secondaryColorFillPaint;
         SKPaint secondaryLinePaint = new SKPaint
         {
             Style = SKPaintStyle.Stroke,
@@ -68,28 +64,12 @@ namespace TopOutTrainer.Bitmap
 
         };
 
-        public BitmapCountDown(float totalTimeP, Color primaryColorP, Color secondaryColorP)
-        {// , int width, int height,
-            totalTime = totalTimeP;
-            currentTime = 0;
-            primaryColor = primaryColorP;
-            secondaryColor = secondaryColorP;
+        public BitmapCountDown()
+        {
+            // Repaint event
             this.PaintSurface += Handle_PaintSurface;
 
-            primaryColorFillPaint = new SKPaint
-            {
-                Style = SKPaintStyle.Fill,
-                Color = primaryColor.ToSKColor()
-            };
-            primaryLinePaint.Color = primaryColorP.ToSKColor();
-
-            secondaryColorFillPaint = new SKPaint
-            {
-                Style = SKPaintStyle.Fill,
-                Color = secondaryColor.ToSKColor()
-            };
-            secondaryLinePaint.Color = secondaryColorP.ToSKColor();
-
+            // Set values needed for BitmapCountDown to work
             StartCheck();
 
             SizeChanged += BitmapCountDown_SizeChanged;
@@ -130,6 +110,48 @@ namespace TopOutTrainer.Bitmap
 
         }
 
+        public void Pause()
+        {
+            aTimer.Enabled = false;
+        }
+
+        public void Resume()
+        {
+            aTimer.Enabled = true;
+        }
+
+        public void Reset()
+        {
+            //aTimer.Enabled = false;
+
+            currentTime = 0;
+            repCountIndex = 0;
+            setCountIndex = 0;
+            onGetReady = false;
+            onStart = false;
+            onRepBreak = false;
+            onSetBreak = false;
+
+            StartCheck();
+            this.InvalidateSurface();
+
+            //aTimer.Enabled = true;
+
+        }
+
+        public void Stop()
+        {
+            primaryLinePaint.Color = StaticFiles.ColorSettings.mainGrayColor.ToSKColor();
+            secondaryLinePaint.Color = StaticFiles.ColorSettings.mainGrayColor.ToSKColor();
+            this.InvalidateSurface();
+            aTimer.Enabled = false;
+        }
+
+        public void Clear()
+        {
+            this.InvalidateSurface();
+        }
+
         //private int MilliSecond = 0;
         private void OnTimedEvent(Object source, ElapsedEventArgs e)
         {
@@ -148,7 +170,7 @@ namespace TopOutTrainer.Bitmap
             if (StaticFiles.TimerPageUISettings.getReadyTime > 0)
             {
                 onGetReady = true;
-                totalTime = StaticFiles.TimerPageUISettings.getReadyTime + 1;
+                totalTime = StaticFiles.TimerPageUISettings.getReadyTime;
                 primaryColor = StaticFiles.ColorSettings.getReadyColor;
                 primaryLinePaint.Color = StaticFiles.ColorSettings.getReadyColor.ToSKColor();
                 return true;
@@ -157,7 +179,7 @@ namespace TopOutTrainer.Bitmap
             if (StaticFiles.TimerPageUISettings.startTime > 0)
             {
                 onStart = true;
-                totalTime = StaticFiles.TimerPageUISettings.startTime + 1;
+                totalTime = StaticFiles.TimerPageUISettings.startTime;
                 primaryColor = StaticFiles.ColorSettings.startColor;
                 primaryLinePaint.Color = StaticFiles.ColorSettings.startColor.ToSKColor();
                 return true;
@@ -166,7 +188,7 @@ namespace TopOutTrainer.Bitmap
             if (StaticFiles.TimerPageUISettings.reps > 0)
             {
                 onRepBreak = true;
-                totalTime = StaticFiles.TimerPageUISettings.repsRestTime + 1;
+                totalTime = StaticFiles.TimerPageUISettings.repsRestTime;
                 primaryColor = StaticFiles.ColorSettings.repBreakColor;
                 primaryLinePaint.Color = StaticFiles.ColorSettings.repBreakColor.ToSKColor();
                 return true;
@@ -175,7 +197,7 @@ namespace TopOutTrainer.Bitmap
             if (StaticFiles.TimerPageUISettings.sets > 0)
             {
                 onSetBreak = true;
-                totalTime = StaticFiles.TimerPageUISettings.setsRestTime + 1;
+                totalTime = StaticFiles.TimerPageUISettings.setsRestTime;
                 primaryColor = StaticFiles.ColorSettings.setBreakColor;
                 primaryLinePaint.Color = StaticFiles.ColorSettings.setBreakColor.ToSKColor();
                 return true;
@@ -245,20 +267,6 @@ namespace TopOutTrainer.Bitmap
 
         }
 
-        public void Stop()
-        {
-            primaryLinePaint.Color = StaticFiles.ColorSettings.mainGrayColor.ToSKColor();
-            secondaryLinePaint.Color = StaticFiles.ColorSettings.mainGrayColor.ToSKColor();
-            this.InvalidateSurface();
-            aTimer.Enabled = false;
-        }
-
-        public void Clear()
-        {
-            clearBitMap = true;
-            this.InvalidateSurface();
-        }
-
         public void SetTimerSetting(CountSetting selection)
         {
 
@@ -309,8 +317,8 @@ namespace TopOutTrainer.Bitmap
             canvas.Clear(StaticFiles.ColorSettings.mainGrayColor.ToSKColor());
             canvas.Translate(0, height / 2);
             //canvas.Scale(width / 200f);
-            primaryLinePaint.StrokeWidth = (int)(height * .15);
-            secondaryLinePaint.StrokeWidth = (int)(height * .15);
+            primaryLinePaint.StrokeWidth = (int)(height * .25);
+            secondaryLinePaint.StrokeWidth = (int)(height * .25);
 
             float completedTime = ((float)currentTime / (float)totalTime);
             int leftPoint = (int)(width * .25); // 100
