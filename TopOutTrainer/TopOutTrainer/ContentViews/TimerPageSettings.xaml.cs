@@ -40,8 +40,12 @@ namespace TopOutTrainer.ContentViews
         private Color textColor = Color.FromHex("#303030");
 
         /////////
-        private int holdRep;
-        private int holdSet;
+        private int holdRepValue;
+        private int holdRepIndex;
+
+        private int holdSetValue;
+        private int holdSetIndex;
+
         private int holdRepSec;
         private int holdRepMin;
         private int holdSetSec;
@@ -54,9 +58,11 @@ namespace TopOutTrainer.ContentViews
 
         public TimerPageSettings()
         {
-
-            holdRep = StaticFiles.TimerPageUISettings.reps;
-            holdSet = StaticFiles.TimerPageUISettings.sets;
+            // Reps is a value
+            holdRepValue = StaticFiles.TimerPageUISettings.reps;
+            holdSetValue = StaticFiles.TimerPageUISettings.sets;
+            holdRepIndex = StaticFiles.TimerPageUISettings.reps - 1;
+            holdSetIndex = StaticFiles.TimerPageUISettings.sets - 1;
 
             holdSetSec = StaticFiles.TimerPageUISettings.setsRestTime % 60;
             holdSetMin = StaticFiles.TimerPageUISettings.setsRestTime / 60;
@@ -80,9 +86,7 @@ namespace TopOutTrainer.ContentViews
             String fileName = "setting.txt";
             IFile file = await folder.CreateFileAsync(fileName, CreationCollisionOption.ReplaceExisting);
 
-            holdRep = repsPicker.GetSelectedNumber();
-            holdSet = setsPicker.GetSelectedNumber();
-
+            // Save the value in selected index, all times are their corresponding index
             holdSetSec = setsSecPicker.GetSelectedNumber();
             holdSetMin = setsMinPicker.GetSelectedNumber();
             holdRepSec = repsSecPicker.GetSelectedNumber();
@@ -92,9 +96,13 @@ namespace TopOutTrainer.ContentViews
             holdStartSec = startSecPicker.GetSelectedNumber();
             holdStartMin = startMinPicker.GetSelectedNumber();
 
+            // Saving the value
+            holdRepValue = repsPicker.GetSelectedNumber() + 1;
+            holdSetValue = setsPicker.GetSelectedNumber() + 1;
 
-            StaticFiles.TimerPageUISettings.reps = holdRep;
-            StaticFiles.TimerPageUISettings.sets = holdSet;
+
+            StaticFiles.TimerPageUISettings.reps = holdRepValue;
+            StaticFiles.TimerPageUISettings.sets = holdSetValue;
             if (holdRepSec == 0 )
             {
                 StaticFiles.TimerPageUISettings.repsRestTime = (int)(holdRepMin * 60);
@@ -182,8 +190,11 @@ namespace TopOutTrainer.ContentViews
                 {
                     numberChoiceMinutes.Add(index.ToString() + " minutes");
                     numberChoiceSeconds.Add(index.ToString() + " seconds");
-                    numberChoiceReps.Add(index.ToString() + " reps");
-                    numberChoiceSets.Add(index.ToString() + " sets");
+                    if (index != 0)
+                    {
+                        numberChoiceReps.Add(index.ToString() + " reps");
+                        numberChoiceSets.Add(index.ToString() + " sets");
+                    }
                 }
 
                 Content = new TableView
@@ -207,7 +218,7 @@ namespace TopOutTrainer.ContentViews
                                     ItemsSource = (System.Collections.IList)numberChoiceReps,
                                     HorizontalOptions = LayoutOptions.End,
                                     FontSize = this.Width/20,
-                                    SelectedIndex = holdRep
+                                    SelectedIndex = holdRepIndex
                                 }
                             },
                             new ViewObjects.PickerCell()
@@ -227,7 +238,7 @@ namespace TopOutTrainer.ContentViews
                                     ItemsSource = (System.Collections.IList)numberChoiceSets,
                                     HorizontalOptions = LayoutOptions.End,
                                     FontSize = this.Width/20,
-                                    SelectedIndex = holdSet
+                                    SelectedIndex = holdSetIndex
 
                                 }
                             },
@@ -381,13 +392,15 @@ namespace TopOutTrainer.ContentViews
         void RepsPicker_SelectedIndexChanged(object sender, EventArgs e)
         {
             Debug.Write("changed to: " + repsPicker.SelectedIndex);
-            holdRep = repsPicker.SelectedIndex;
+            holdRepIndex = repsPicker.SelectedIndex;
+            holdRepValue = repsPicker.SelectedIndex + 1;
         }
 
         void SetsPicker_SelectedIndexChanged(object sender, EventArgs e)
         {
             Debug.Write("changed to: " + setsPicker.SelectedIndex);
-            holdSet = setsPicker.SelectedIndex;
+            holdSetIndex = setsPicker.SelectedIndex;
+            holdSetValue = setsPicker.SelectedIndex + 1;
         }
 
         void SetsMinPicker_SelectedIndexChanged(object sender, EventArgs e)
