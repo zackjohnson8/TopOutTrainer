@@ -38,6 +38,8 @@ namespace TopOutTrainer
         private TimerType repTimerType;
         private TimerType endTimerType;
 
+        public bool IsComplete { get; set; } = false;
+
         private Color currentColor;
 
         public int Minute
@@ -66,8 +68,62 @@ namespace TopOutTrainer
             descriptionLabel = descriptionLabelP;
 
             HandleTimerType();
+            ActivateBeginTimer();
+        }
 
-            if(readyTimerType.active)
+        public void Reset()
+        {
+
+            //aTimer.Enabled = false;
+            MilliSecond = 0;
+            repCountIndex = 0;
+            setBreakIndex = 0;
+            readyTimerType.focus = false;
+            startTimerType.focus = false;
+            setTimerType.focus = false;
+            repTimerType.focus = false;
+            endTimerType.focus = false;
+
+            ActivateBeginTimer();
+            //aTimer.Enabled = true;
+    }
+
+        public void Start()
+        {
+            // Hook up the Elapsed event for the timer. 
+            if (!eventRunning)
+            {
+                aTimer.Elapsed += OnTimedEvent;
+                eventRunning = true;
+            }
+            aTimer.AutoReset = true;
+            aTimer.Enabled = true;
+
+        }
+
+        public void Pause()
+        {
+            aTimer.Enabled = false;
+        }
+
+        public void Resume()
+        {
+            aTimer.Enabled = true;
+        }
+
+        public void Stop()
+        {
+            aTimer.Enabled = false;
+            IsComplete = true;
+            Device.BeginInvokeOnMainThread(() =>
+            {
+                SetText("00", "00", endTimerType);
+            });
+        }
+
+        private void ActivateBeginTimer()
+        {
+            if (readyTimerType.active)
             {
                 readyTimerType.focus = true;
                 currentColor = readyTimerType.color;
@@ -78,7 +134,7 @@ namespace TopOutTrainer
                 SetText(minuteString, secondString, readyTimerType);
             }
             else
-            if(startTimerType.active)
+            if (startTimerType.active)
             {
                 startTimerType.focus = true;
                 currentColor = startTimerType.color;
@@ -116,40 +172,6 @@ namespace TopOutTrainer
                 this.Stop();
                 return;
             }
-
-
-
-        }
-
-        public void Reset()
-        {
-            MilliSecond = 0;
-            Second = 0;
-            Minute = 0;
-            repCountIndex = 0;
-            setBreakIndex = 0;
-        }
-
-        public void Start()
-        {
-            // Hook up the Elapsed event for the timer. 
-            if (!eventRunning)
-            {
-                aTimer.Elapsed += OnTimedEvent;
-                eventRunning = true;
-            }
-            aTimer.AutoReset = true;
-            aTimer.Enabled = true;
-
-        }
-
-        public void Stop()
-        {
-            aTimer.Enabled = false;
-            Device.BeginInvokeOnMainThread(() =>
-            {
-                SetText("00", "00", endTimerType);
-            });
         }
 
         private void SetText(string minute, string second, TimerType selectedTimerType)
@@ -192,7 +214,7 @@ namespace TopOutTrainer
                 readyTimerType.focus = false;
                 startTimerType.focus = true;
                 Minute = startTimerType.minute;
-                Second = startTimerType.second - 1;
+                Second = startTimerType.second;
                 currentColor = startTimerType.color;
                 SetMinuteString(Minute);
                 SetSecondString(Second);
@@ -208,7 +230,7 @@ namespace TopOutTrainer
                 {
                     repTimerType.focus = true;
                     Minute = repTimerType.minute;
-                    Second = repTimerType.second - 1;
+                    Second = repTimerType.second;
                     currentColor = repTimerType.color;
                     SetMinuteString(Minute);
                     SetSecondString(Second);
@@ -222,7 +244,7 @@ namespace TopOutTrainer
                         repCountIndex = 0;
                         setTimerType.focus = true;
                         Minute = setTimerType.minute;
-                        Second = setTimerType.second - 1;
+                        Second = setTimerType.second;
                         currentColor = setTimerType.color;
                         SetMinuteString(Minute);
                         SetSecondString(Second);
@@ -242,7 +264,7 @@ namespace TopOutTrainer
                 setTimerType.focus = false;
                 readyTimerType.focus = true;
                 Minute = readyTimerType.minute;
-                Second = readyTimerType.second - 1;
+                Second = readyTimerType.second;
                 currentColor = readyTimerType.color;
                 SetMinuteString(Minute);
                 SetSecondString(Second);
@@ -359,7 +381,7 @@ namespace TopOutTrainer
             if (readyTimerType.focus)
             {
                 // Done with get ready time
-                if (Minute < 0)
+                if (Minute == 0 && Second == 0)
                 {
 
                     if (ChangeFocusTimerType())
@@ -384,7 +406,7 @@ namespace TopOutTrainer
             if (startTimerType.focus)
             {
                 // Done with get ready start rep or set break
-                if (Minute < 0)
+                if (Minute == 0 && Second == 0)
                 {
 
                     if (ChangeFocusTimerType())
@@ -406,7 +428,7 @@ namespace TopOutTrainer
             }else
             if (repTimerType.focus)
             {
-                if (Minute < 0)
+                if (Minute == 0 && Second == 0)
                 {
 
                     if(ChangeFocusTimerType())
@@ -429,7 +451,7 @@ namespace TopOutTrainer
             }else
             if (setTimerType.focus)
             {
-                if (Minute < 0)
+                if (Minute == 0 && Second == 0)
                 {
                     if (ChangeFocusTimerType())
                     { 

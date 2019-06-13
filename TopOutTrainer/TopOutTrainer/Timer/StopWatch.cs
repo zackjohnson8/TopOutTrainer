@@ -101,6 +101,16 @@ namespace TopOutTrainer
             aTimer.Enabled = false;
         }
 
+        public void Pause()
+        {
+            aTimer.Enabled = false;
+        }
+
+        public void Resume()
+        {
+            aTimer.Enabled = true;
+        }
+
         public void Start()
         {
             // Hook up the Elapsed event for the timer. 
@@ -115,18 +125,42 @@ namespace TopOutTrainer
 
         public void Reset()
         {
+            //aTimer.Enabled = false;
             MilliSecond = 0;
-            Second = 0;
-            Minute = 0;
+
+
+            Minute = timerDuration / 60;
+            Second = timerDuration % 60;
+
+                // Build string and set it to object
+            if (Second <= 9)
+            {
+                secondString = String.Concat('0', Second);
+            }
+            else
+            {
+                secondString = Second.ToString();
+            }
+
+            if (Minute <= 9)
+            {
+                minuteString = String.Concat('0', Minute);
+            }
+            else
+            {
+                minuteString = Minute.ToString();
+            }
 
             if (mainObjectLabel != null)
             {
 
-                Device.BeginInvokeOnMainThread(() => {
-                    SetText(String.Concat("00", ':', "00"));
+                Device.BeginInvokeOnMainThread(() =>
+                {
+                    SetText(String.Concat(minuteString, ':', secondString));
                 });
             }
 
+            //aTimer.Enabled = true;
         }
         
         private void SetText(string myString)
