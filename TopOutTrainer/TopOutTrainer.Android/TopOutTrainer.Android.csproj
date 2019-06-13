@@ -144,6 +144,9 @@
     <AndroidResource Include="Resources\drawable\start_blue.png" />
     <AndroidResource Include="Resources\drawable\start_lightblue.png" />
     <AndroidResource Include="Resources\drawable\stopwatch_orange_trans.png" />
+    <AndroidResource Include="Resources\drawable\pause_white.png" />
+    <AndroidResource Include="Resources\drawable\reset_white.png" />
+    <AndroidResource Include="Resources\drawable\start_white_text.png" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Resources\drawable-hdpi\" />

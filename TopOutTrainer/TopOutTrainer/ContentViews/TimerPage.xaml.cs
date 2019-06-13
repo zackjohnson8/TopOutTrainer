@@ -14,42 +14,36 @@ namespace TopOutTrainer.ContentViews
 
         private Color mainColor = Color.FromHex("#303030");
         private Color textColor = Color.White;
-        private Grid mainG;
-        private ImageButton optionB;
-        private Label intervalL;
-        private Label repsL;
-        private Label setsL;
-        private Label totalTimeL;
-        private Label timerNumL;
-        private Label repsNumL;
-        private Label setsNumL;
+        private Grid mainG = null;
+        private ImageButton optionB = null;
+        private Label intervalL = null;
+        private Label repsL = null;
+        private Label setsL = null;
+        private Label totalTimeL = null;
+        private Label timerNumL = null;
+        private Label repsNumL = null;
+        private Label setsNumL = null;
 
-        private Label getReadyL;
-        private Label timerL;
+        private Label getReadyL = null;
+        private Label timerL = null;
 
-        private TimerPageStopWatch countDownTimer;
-        private StopWatch totalTimeTimer;
-        private Bitmap.BitmapCountDown bitmapView;
-        private Timer.TimerHandler timerHandler;
+        private TimerPageStopWatch countDownTimer = null;
+        private StopWatch totalTimeTimer = null;
+        private Bitmap.BitmapCountDown bitmapView = null;
+        private Timer.TimerHandler timerHandler = null;
 
-        //private Image bitmapI;
-        //private StackLayout bitmapContainer;
-        //private BmpMaker bmpMaker;
+        private ImageButton timerButton = null;
+        private ImageButton calendarButton = null;
+        private ImageButton graphButton = null;
+        private ImageButton button4 = null;
+        private ImageButton startbutton = null;
+        private ImageButton stopButton = null;
+        private ImageButton resetButton = null;
 
-        // TODO default button names until determined
-        private ImageButton timerButton;
-        private ImageButton calendarButton;
-        private ImageButton graphButton;
-        private ImageButton button4;
-        private ImageButton startbutton;
-        private Button stopButton;
-        private Button resetButton;
-
-
+        // Pause, Reset, Resume/Start
 
         public TimerPage()
         { 
-
             // Hide nav bar and begin building of contentpage
             NavigationPage.SetHasNavigationBar(this, false);
             GridChildrenInitialize();
@@ -60,7 +54,6 @@ namespace TopOutTrainer.ContentViews
 
             // Load screen 
             Content = mainG;
-
         }
 
         private async Task<bool> GetSavedData()
@@ -108,6 +101,8 @@ namespace TopOutTrainer.ContentViews
                 timeSec = totalTimeSeconds.ToString();
             }
             timerNumL.Text = string.Concat(timeMin + ':' + timeSec);
+
+            Content = mainG;
         }
 
         protected override void OnAppearing()
@@ -120,8 +115,22 @@ namespace TopOutTrainer.ContentViews
 
         }
 
+        private void ResetAll()
+        {
+            if(timerHandler != null)
+            {
+                timerHandler.Stop();
+            }
+
+            // Stop the timer. Reset the timer. Load the grid.
+            GridChildrenInitialize();
+            MainGridInitialize();
+            //Content = mainG;
+        }
+
         private void MainGridInitialize()
         {
+
             mainG = new Grid
             {
                 Padding = new Thickness(0),
@@ -194,133 +203,136 @@ namespace TopOutTrainer.ContentViews
         {
 
             // Row 0 right (0, 4) settings button
-            optionB = new ImageButton
+            if (optionB == null)
             {
-                WidthRequest = 50,
-                HeightRequest = 50,
-                Margin = 0,
-                CornerRadius = 0,
-                BackgroundColor = StaticFiles.ColorSettings.darkGrayColor,
-                Source = "options_gimp_white.png",
-                //HorizontalOptions = LayoutOptions.CenterAndExpand,
-                //VerticalOptions = LayoutOptions.CenterAndExpand,
-                Aspect = Aspect.AspectFill
+                optionB = new ImageButton
+                {
+                    WidthRequest = 50,
+                    HeightRequest = 50,
+                    Margin = 0,
+                    CornerRadius = 0,
+                    BackgroundColor = StaticFiles.ColorSettings.darkGrayColor,
+                    Source = "options_gimp_white.png",
+                    //HorizontalOptions = LayoutOptions.CenterAndExpand,
+                    //VerticalOptions = LayoutOptions.CenterAndExpand,
+                    Aspect = Aspect.AspectFill
 
-            };
-            optionB.Clicked += OptionButtonClicked;
-
-            // Row 0 left (0,0) leave blank for now TODO
+                };
+                optionB.Clicked += OptionButtonClicked;
+            }
 
             // Row 1 interval training label
-            intervalL = new Label
-            {
-                HorizontalTextAlignment = TextAlignment.Center,
-                VerticalTextAlignment = TextAlignment.Center,
-                TextColor = textColor,
-                Text = "Interval Training",
-                BackgroundColor = StaticFiles.ColorSettings.mainGrayColor,
-            };
+            if (intervalL == null) 
+            {  
+                intervalL = new Label
+                {
+                    HorizontalTextAlignment = TextAlignment.Center,
+                    VerticalTextAlignment = TextAlignment.Center,
+                    TextColor = textColor,
+                    Text = "Interval Training",
+                    BackgroundColor = StaticFiles.ColorSettings.mainGrayColor,
+                };
+            }
 
             // Row 2 reps label
-            repsL = new Label
+            if (repsL == null)
             {
-                HorizontalTextAlignment = TextAlignment.Center,
-                VerticalTextAlignment = TextAlignment.Center,
-                TextColor = textColor,
-                BackgroundColor = StaticFiles.ColorSettings.mainGrayColor,
-                Text = "Reps"
-            };
+                repsL = new Label
+                {
+                    HorizontalTextAlignment = TextAlignment.Center,
+                    VerticalTextAlignment = TextAlignment.Center,
+                    TextColor = textColor,
+                    BackgroundColor = StaticFiles.ColorSettings.mainGrayColor,
+                    Text = "Reps"
+                };
+            }
 
             // Row 2 total time label
-            totalTimeL = new Label
+            if (totalTimeL == null)
             {
-                HorizontalTextAlignment = TextAlignment.Center,
-                VerticalTextAlignment = TextAlignment.Center,
-                TextColor = textColor,
-                BackgroundColor = StaticFiles.ColorSettings.mainGrayColor,
-                Text = "Total Time"
-            };
+                totalTimeL = new Label
+                {
+                    HorizontalTextAlignment = TextAlignment.Center,
+                    VerticalTextAlignment = TextAlignment.Center,
+                    TextColor = textColor,
+                    BackgroundColor = StaticFiles.ColorSettings.mainGrayColor,
+                    Text = "Total Time"
+                };
+            }
 
-            timerNumL = new Label
+            if (timerNumL == null)
             {
-                HorizontalTextAlignment = TextAlignment.Center,
-                VerticalTextAlignment = TextAlignment.Center,
-                TextColor = textColor,
-                BackgroundColor = StaticFiles.ColorSettings.mainGrayColor,
-                Text = "00:00"
-            };
+                timerNumL = new Label
+                {
+                    HorizontalTextAlignment = TextAlignment.Center,
+                    VerticalTextAlignment = TextAlignment.Center,
+                    TextColor = textColor,
+                    BackgroundColor = StaticFiles.ColorSettings.mainGrayColor,
+                    Text = "00:00"
+                };
+            }
 
-            setsNumL = new Label
+            if (setsNumL == null)
             {
-                HorizontalTextAlignment = TextAlignment.Center,
-                VerticalTextAlignment = TextAlignment.Center,
-                TextColor = textColor,
-                BackgroundColor = StaticFiles.ColorSettings.mainGrayColor,
-                Text = StaticFiles.TimerPageUISettings.sets.ToString()
+                setsNumL = new Label
+                {
+                    HorizontalTextAlignment = TextAlignment.Center,
+                    VerticalTextAlignment = TextAlignment.Center,
+                    TextColor = textColor,
+                    BackgroundColor = StaticFiles.ColorSettings.mainGrayColor,
+                    Text = StaticFiles.TimerPageUISettings.sets.ToString()
 
-            };
+                };
+            }
 
-
-            repsNumL = new Label
+            if (repsNumL == null)
             {
-                HorizontalTextAlignment = TextAlignment.Center,
-                VerticalTextAlignment = TextAlignment.Center,
-                TextColor = textColor,
-                BackgroundColor = StaticFiles.ColorSettings.mainGrayColor,
-                Text = StaticFiles.TimerPageUISettings.reps.ToString()
-            };
+                repsNumL = new Label
+                {
+                    HorizontalTextAlignment = TextAlignment.Center,
+                    VerticalTextAlignment = TextAlignment.Center,
+                    TextColor = textColor,
+                    BackgroundColor = StaticFiles.ColorSettings.mainGrayColor,
+                    Text = StaticFiles.TimerPageUISettings.reps.ToString()
+                };
+            }
 
             // Row 2 sets label
-            setsL = new Label
+            if (setsL == null)
             {
-                HorizontalTextAlignment = TextAlignment.Center,
-                VerticalTextAlignment = TextAlignment.Center,
-                TextColor = textColor,
-                BackgroundColor = StaticFiles.ColorSettings.mainGrayColor,
-                Text = "Sets"
-            };
+                setsL = new Label
+                {
+                    HorizontalTextAlignment = TextAlignment.Center,
+                    VerticalTextAlignment = TextAlignment.Center,
+                    TextColor = textColor,
+                    BackgroundColor = StaticFiles.ColorSettings.mainGrayColor,
+                    Text = "Sets"
+                };
+            }
 
-            getReadyL = new Label
+            if (getReadyL == null)
             {
-                HorizontalTextAlignment = TextAlignment.Center,
-                VerticalTextAlignment = TextAlignment.Start,
-                TextColor = Color.FromHex("#FF6600"),
-                BackgroundColor = StaticFiles.ColorSettings.mainGrayColor,
-                Text = "Get Ready"
-            };
+                getReadyL = new Label
+                {
+                    HorizontalTextAlignment = TextAlignment.Center,
+                    VerticalTextAlignment = TextAlignment.Start,
+                    TextColor = Color.FromHex("#FF6600"),
+                    BackgroundColor = StaticFiles.ColorSettings.mainGrayColor,
+                    Text = "Get Ready"
+                };
+            }
 
-            timerL = new Label
+            if (timerL == null)
             {
-                HorizontalTextAlignment = TextAlignment.Center,
-                VerticalTextAlignment = TextAlignment.Center,
-                TextColor = textColor,
-                BackgroundColor = StaticFiles.ColorSettings.mainGrayColor,
-                Text = "00:00"
-            };
-
-            stopButton = new Button
-            {
-                BackgroundColor = StaticFiles.ColorSettings.mainGrayColor,
-                Margin = 0,
-                CornerRadius = 0,
-                Text = "Pause",
-                TextColor = Color.White,
-                BorderColor = Color.White,
-                BorderWidth = 2
-            };
-            stopButton.Clicked += StopButton_Clicked;
-
-            resetButton = new Button
-            {
-                BackgroundColor = StaticFiles.ColorSettings.mainGrayColor,
-                Margin = 0,
-                CornerRadius = 0,
-                Text = "Reset",
-                TextColor = Color.White,
-                BorderColor = Color.White,
-                BorderWidth = 2
-            };
-            resetButton.Clicked += ResetButton_Clicked;
+                timerL = new Label
+                {
+                    HorizontalTextAlignment = TextAlignment.Center,
+                    VerticalTextAlignment = TextAlignment.Center,
+                    TextColor = textColor,
+                    BackgroundColor = StaticFiles.ColorSettings.mainGrayColor,
+                    Text = "00:00"
+                };
+            }
 
             //Font-Family
             if (Device.RuntimePlatform == Device.iOS)
@@ -334,8 +346,6 @@ namespace TopOutTrainer.ContentViews
                 setsNumL.FontFamily = "OpenSans-Regular";
                 getReadyL.FontFamily = "OpenSans-Regular";
                 timerL.FontFamily = "OpenSans-Regular";
-                stopButton.FontFamily = "OpenSans-Regular";
-                resetButton.FontFamily = "OpenSans-Regular";
 
             }
             if (Device.RuntimePlatform == Device.Android)
@@ -349,75 +359,107 @@ namespace TopOutTrainer.ContentViews
                 setsNumL.FontFamily = "font/montserrat/MontserratAlternates-Bold.otf#MontserratAlternates-Bold";
                 getReadyL.FontFamily = "font/montserrat/MontserratAlternates-Bold.otf#MontserratAlternates-Bold";
                 timerL.FontFamily = "font/montserrat/MontserratAlternates-Bold.otf#MontserratAlternates-Bold";
-                stopButton.FontFamily = "font/montserrat/MontserratAlternates-Bold.otf#MontserratAlternates-Bold";
-                resetButton.FontFamily = "font/montserrat/MontserratAlternates-Bold.otf#MontserratAlternates-Bold";
             }
 
-            startbutton = new ImageButton
+            if (stopButton == null)
             {
-                BackgroundColor = StaticFiles.ColorSettings.mainGrayColor,
-                Margin = 0,
-                Source = "start_orange.png",
-                Aspect = Aspect.AspectFit
-            };
-            startbutton.Clicked += StartButtonClicked;
+                stopButton = new ImageButton
+                {
+                    BackgroundColor = StaticFiles.ColorSettings.mainGrayColor,
+                    Margin = 0,
+                    Source = "pause_white.png",
+                    BorderColor = Color.White,
+                    BorderWidth = 2,
+                    Aspect = Aspect.AspectFit
+                };
+                stopButton.Clicked += StopButton_Clicked;
+            }
+
+            if (resetButton == null)
+            {
+                resetButton = new ImageButton
+                {
+                    BackgroundColor = StaticFiles.ColorSettings.mainGrayColor,
+                    Margin = 0,
+                    Source = "reset_white.png",
+                    BorderColor = Color.White,
+                    BorderWidth = 2,
+                    Aspect = Aspect.AspectFit
+                };
+                resetButton.Clicked += ResetButton_Clicked;
+            }
+
+            if (startbutton == null)
+            {
+                startbutton = new ImageButton
+                {
+                    BackgroundColor = StaticFiles.ColorSettings.mainGrayColor,
+                    Margin = 0,
+                    Source = "start_orange.png",
+                    Aspect = Aspect.AspectFit
+                };
+                startbutton.Clicked += StartButtonClicked;
+            }
 
             // Row 5 tab bar buttons
             // (4,0)
-            timerButton = new ImageButton
+            if (timerButton == null)
             {
+                timerButton = new ImageButton
+                {
 
-                BackgroundColor = StaticFiles.ColorSettings.darkGrayColor,
-                Margin = 0,
-                CornerRadius = 0,
-                Source = "stopwatch_orange_trans.png",
-                Aspect = Aspect.AspectFit
+                    BackgroundColor = StaticFiles.ColorSettings.darkGrayColor,
+                    Margin = 0,
+                    CornerRadius = 0,
+                    Source = "stopwatch_orange_trans.png",
+                    Aspect = Aspect.AspectFit
 
-            };
-            
+                };
+            }
+
             // (4,1)
-            calendarButton = new ImageButton
+            if (calendarButton == null)
             {
-                BackgroundColor = StaticFiles.ColorSettings.darkGrayColor,
-                Margin = 0,
-                CornerRadius = 0,
-                Source = "calendar.png",
-                Aspect = Aspect.AspectFit
+                calendarButton = new ImageButton
+                {
+                    BackgroundColor = StaticFiles.ColorSettings.darkGrayColor,
+                    Margin = 0,
+                    CornerRadius = 0,
+                    Source = "calendar.png",
+                    Aspect = Aspect.AspectFit
 
 
-            };
-            calendarButton.Clicked += PlannerButtonClicked;
+                };
+                calendarButton.Clicked += PlannerButtonClicked;
+            }
+
             // (4,2)
-            graphButton = new ImageButton
+            if (graphButton == null)
             {
-                BackgroundColor = StaticFiles.ColorSettings.darkGrayColor,
-                Margin = 0,
-                CornerRadius = 0,
-                Source = "graph_white.png",
-                Aspect = Aspect.AspectFit
+                graphButton = new ImageButton
+                {
+                    BackgroundColor = StaticFiles.ColorSettings.darkGrayColor,
+                    Margin = 0,
+                    CornerRadius = 0,
+                    Source = "graph_white.png",
+                    Aspect = Aspect.AspectFit
 
-            };
-            graphButton.Clicked += GraphButtonClicked;
+                };
+                graphButton.Clicked += GraphButtonClicked;
+            }
             // (4,3)
-            button4 = new ImageButton
+            if (button4 == null)
             {
-                WidthRequest = 50,
-                HeightRequest = 50,
-                BackgroundColor = StaticFiles.ColorSettings.darkGrayColor,
-                Margin = 0,
-                CornerRadius = 0
+                button4 = new ImageButton
+                {
+                    WidthRequest = 50,
+                    HeightRequest = 50,
+                    BackgroundColor = StaticFiles.ColorSettings.darkGrayColor,
+                    Margin = 0,
+                    CornerRadius = 0
 
-            };
-        }
-
-        private void ResetAll()
-        {
-
-            timerHandler.Stop();
-            // Stop the timer. Reset the timer. Load the grid.
-            GridChildrenInitialize();
-            MainGridInitialize();
-            Content = mainG;
+                };
+            }
         }
 
         private async void OnSizeChanged(object sender, EventArgs e)
@@ -438,8 +480,6 @@ namespace TopOutTrainer.ContentViews
                 stopButton.HeightRequest = this.Height;
                 resetButton.Margin = this.Width / 20;
                 stopButton.Margin = this.Width / 20;
-                resetButton.FontSize = this.Width / 20;
-                stopButton.FontSize = this.Width / 20;
 
                 // Numbers
                 timerNumL.FontSize = this.Width / 8;
@@ -487,8 +527,6 @@ namespace TopOutTrainer.ContentViews
                 },
                 RowSpacing = 0,
                 ColumnSpacing = 0,
-                //HorizontalOptions = LayoutOptions.CenterAndExpand,
-                //VerticalOptions = LayoutOptions.CenterAndExpand
             };
 
             // Total time calculations
@@ -505,7 +543,6 @@ namespace TopOutTrainer.ContentViews
             bitmapView = new Bitmap.BitmapCountDown();
             getReadyG.Children.Add(bitmapView, 0, 2);
             Grid.SetColumnSpan(bitmapView, 2);
-            //Grid.SetRowSpan(bitmapView, 2);
 
             //Add buttons for Stop / Reset
             getReadyG.Children.Add(stopButton, 0, 3);
@@ -523,21 +560,26 @@ namespace TopOutTrainer.ContentViews
 
         private async void OptionButtonClicked(object sender, EventArgs args)
         {
+
+            // Blackout/opacity clear
+            Content = null;
+            await Navigation.PushAsync(new TimerPageSettings() { Title = "Settings" });
             // Reset all
             ResetAll();
-            await Navigation.PushAsync(new TimerPageSettings() { Title = "Settings" });
         }
 
         private void GraphButtonClicked(object sender, EventArgs args)
         {
-            ResetAll();
+            Content = null;
             Navigation.PushAsync(new GraphPage());
+            ResetAll();
         }
 
         private void PlannerButtonClicked(object sender, EventArgs args)
         {
-            ResetAll();
+            Content = null;
             Navigation.PushAsync(new PlannerPage());
+            ResetAll();
         }
 
         bool stopbool = false;
@@ -555,7 +597,7 @@ namespace TopOutTrainer.ContentViews
                 timerHandler.Pause();
                 Device.BeginInvokeOnMainThread(() =>
                 {
-                    stopButton.Text = "Resume";
+                    stopButton.Source = "start_white_text.png";
                 });
             }
             else
@@ -564,7 +606,7 @@ namespace TopOutTrainer.ContentViews
                 timerHandler.Resume();
                 Device.BeginInvokeOnMainThread(() =>
                 {
-                    stopButton.Text = "Pause";
+                    stopButton.Source = "pause_white";
                 });
             }
         }

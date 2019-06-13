@@ -41,9 +41,12 @@ namespace TopOutTrainer.Timer
             if (isRunning)
             {
                 isRunning = false;
-                totalTimeThread.Abort();
-                bitmapTimeThread.Abort();
-                phaseTimeThread.Abort();
+                //totalTimeThread.Abort();
+                //bitmapTimeThread.Abort();
+                //phaseTimeThread.Abort();
+                totalTime.Stop();
+                phaseTime.Stop();
+                bitmapTime.Stop();
             }
             
         }
