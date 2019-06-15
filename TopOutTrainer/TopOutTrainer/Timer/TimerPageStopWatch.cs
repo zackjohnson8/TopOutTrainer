@@ -145,8 +145,9 @@ namespace TopOutTrainer
                 SetText(minuteString, secondString, startTimerType);
             }
             else
-            if (repTimerType.active)
-            {
+            if (repTimerType.active && ((repCountIndex + 1) < StaticFiles.TimerPageUISettings.reps))
+            { // if its active but also we need to check if theres going to be a rep break
+                repCountIndex++;
                 repTimerType.focus = true;
                 currentColor = repTimerType.color;
                 Minute = repTimerType.minute;
@@ -156,8 +157,9 @@ namespace TopOutTrainer
                 SetText(minuteString, secondString, repTimerType);
             }
             else
-            if (setTimerType.active)
+            if (setTimerType.active && ((setBreakIndex + 1) < StaticFiles.TimerPageUISettings.sets))
             {
+                setBreakIndex++;
                 setTimerType.focus = true;
                 currentColor = setTimerType.color;
                 Minute = setTimerType.minute;
@@ -208,47 +210,73 @@ namespace TopOutTrainer
 
         private bool ChangeFocusTimerType()
         {
+            aTimer.Enabled = false;
+
             // Move to next phase
             if (readyTimerType.focus)
             {
+                // Check if next phase is active
+                if (startTimerType.active)
+                {
+                    readyTimerType.focus = false;
+                    startTimerType.focus = true;
+                    Minute = startTimerType.minute;
+                    Second = startTimerType.second;
+                    currentColor = startTimerType.color;
+                    SetMinuteString(Minute);
+                    SetSecondString(Second);
+                    aTimer.Enabled = true;
+                    return true;
+                }
+
                 readyTimerType.focus = false;
                 startTimerType.focus = true;
-                Minute = startTimerType.minute;
-                Second = startTimerType.second;
-                currentColor = startTimerType.color;
-                SetMinuteString(Minute);
-                SetSecondString(Second);
-                return true;
+                return ChangeFocusTimerType();
+
+
             }else
             if(startTimerType.focus)
             {
-                startTimerType.focus = false;
-
                 // Either rep or set break
+                startTimerType.focus = false;
                 repCountIndex++;
                 if(repCountIndex < StaticFiles.TimerPageUISettings.reps)
                 {
+                    if (repTimerType.active)
+                    {
+                        repTimerType.focus = true;
+                        Minute = repTimerType.minute;
+                        Second = repTimerType.second;
+                        currentColor = repTimerType.color;
+                        SetMinuteString(Minute);
+                        SetSecondString(Second);
+                        aTimer.Enabled = true;
+                        return true;
+                    }
+
                     repTimerType.focus = true;
-                    Minute = repTimerType.minute;
-                    Second = repTimerType.second;
-                    currentColor = repTimerType.color;
-                    SetMinuteString(Minute);
-                    SetSecondString(Second);
-                    return true;
+                    return ChangeFocusTimerType();
                 }
                 else // sets
                 {
                     setBreakIndex++;
                     if (setBreakIndex < StaticFiles.TimerPageUISettings.sets)
                     {
-                        repCountIndex = 0;
+                        if (setTimerType.active)
+                        {
+                            repCountIndex = 0;
+                            setTimerType.focus = true;
+                            Minute = setTimerType.minute;
+                            Second = setTimerType.second;
+                            currentColor = setTimerType.color;
+                            SetMinuteString(Minute);
+                            SetSecondString(Second);
+                            aTimer.Enabled = true;
+                            return true;
+                        }
+
                         setTimerType.focus = true;
-                        Minute = setTimerType.minute;
-                        Second = setTimerType.second;
-                        currentColor = setTimerType.color;
-                        SetMinuteString(Minute);
-                        SetSecondString(Second);
-                        return true;
+                        return ChangeFocusTimerType();
                     }
                     else
                     {
@@ -258,17 +286,43 @@ namespace TopOutTrainer
                     }
                 }
             }else
-            if(repTimerType.focus || setTimerType.focus)
+            if(repTimerType.focus)
             {
+                if (readyTimerType.active)
+                {
+                    repTimerType.focus = false;
+                    readyTimerType.focus = true;
+                    Minute = readyTimerType.minute;
+                    Second = readyTimerType.second;
+                    currentColor = readyTimerType.color;
+                    SetMinuteString(Minute);
+                    SetSecondString(Second);
+                    aTimer.Enabled = true;
+                    return true;
+                }
+
                 repTimerType.focus = false;
+                readyTimerType.focus = true;
+                return ChangeFocusTimerType();
+            }else
+            if(setTimerType.focus)
+            {
+                if (readyTimerType.active)
+                {
+                    setTimerType.focus = false;
+                    readyTimerType.focus = true;
+                    Minute = readyTimerType.minute;
+                    Second = readyTimerType.second;
+                    currentColor = readyTimerType.color;
+                    SetMinuteString(Minute);
+                    SetSecondString(Second);
+                    aTimer.Enabled = true;
+                    return true;
+                }
+
                 setTimerType.focus = false;
                 readyTimerType.focus = true;
-                Minute = readyTimerType.minute;
-                Second = readyTimerType.second;
-                currentColor = readyTimerType.color;
-                SetMinuteString(Minute);
-                SetSecondString(Second);
-                return true;
+                return ChangeFocusTimerType();
             }
 
             return false;
