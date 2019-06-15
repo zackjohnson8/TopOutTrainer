@@ -78,6 +78,15 @@ namespace TopOutTrainer.Timer
             totalTime.Reset();
             bitmapTime.Reset();
             phaseTime.Reset();
+
+            if(TimerComplete())
+            {
+                //this.Start();
+                totalTime.Start();
+                bitmapTime.Start();
+                phaseTime.Start();
+                phaseTime.IsComplete = false;
+            }
         }
     }
 }

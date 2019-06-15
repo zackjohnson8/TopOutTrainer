@@ -39,10 +39,21 @@ namespace TopOutTrainer.Bitmap
         int width = 0;
         int height = 0;
 
-        private bool onGetReady = false;
-        private bool onStart = false;
-        private bool onRepBreak = false;
-        private bool onSetBreak = false;
+        private struct TimerType
+        {
+            public bool active; // does the user have this set larger than 0
+            public bool focus; // currently being used
+            public Color color;
+            public int totalTime;
+
+        };
+
+        private TimerType readyTimerType;
+        private TimerType startTimerType;
+        private TimerType repTimerType;
+        private TimerType setTimerType;
+        private TimerType endTimerType;
+
         //private bool onEnd = false;
         private int repCountIndex = 0;
         private int setCountIndex = 0;
@@ -70,31 +81,11 @@ namespace TopOutTrainer.Bitmap
             this.PaintSurface += Handle_PaintSurface;
 
             // Set values needed for BitmapCountDown to work
+            TimerTypeFactory();
             StartCheck();
 
             SizeChanged += BitmapCountDown_SizeChanged;
 
-        }
-
-        void BitmapCountDown_SizeChanged(object sender, EventArgs e)
-        {
-            this.InvalidateSurface();
-        }
-
-        public void UpdatePrimaryColor(Color colorP)
-        {
-            primaryColor = colorP;
-            primaryLinePaint.Color = primaryColor.ToSKColor();
-        }
-
-        public void UpdateTotalTime(float totalTimeP)
-        {
-            totalTime = totalTimeP;
-        }
-
-        public void UpdateCurrentTime(float currentTimeP)
-        {
-            currentTime = currentTimeP;
         }
 
         public void Start()
@@ -122,21 +113,16 @@ namespace TopOutTrainer.Bitmap
 
         public void Reset()
         {
-            //aTimer.Enabled = false;
-
             currentTime = 0;
             repCountIndex = 0;
             setCountIndex = 0;
-            onGetReady = false;
-            onStart = false;
-            onRepBreak = false;
-            onSetBreak = false;
+            readyTimerType.focus = false;
+            startTimerType.focus = false;
+            repTimerType.focus = false;
+            setTimerType.focus = false;
 
             StartCheck();
             this.InvalidateSurface();
-
-            //aTimer.Enabled = true;
-
         }
 
         public void Stop()
@@ -152,101 +138,176 @@ namespace TopOutTrainer.Bitmap
             this.InvalidateSurface();
         }
 
-        //private int MilliSecond = 0;
-        private void OnTimedEvent(Object source, ElapsedEventArgs e)
-        {
-            currentTime += elapsedMilliSec / 1000f;
-
-            if (currentTime >= totalTime)
-            {
-                NextTimer();
-            }
-            this.InvalidateSurface();
-        }
-
-
-        private bool StartCheck()
+        private void TimerTypeFactory()
         {
             if (StaticFiles.TimerPageUISettings.getReadyTime > 0)
             {
-                onGetReady = true;
-                totalTime = StaticFiles.TimerPageUISettings.getReadyTime;
-                primaryColor = StaticFiles.ColorSettings.getReadyColor;
-                primaryLinePaint.Color = StaticFiles.ColorSettings.getReadyColor.ToSKColor();
+                readyTimerType.color = StaticFiles.ColorSettings.getReadyColor;
+                readyTimerType.active = true;
+                readyTimerType.focus = false;
+                readyTimerType.totalTime = StaticFiles.TimerPageUISettings.getReadyTime;
+            }
+            else
+            {
+                readyTimerType.color = StaticFiles.ColorSettings.getReadyColor;
+                readyTimerType.active = false;
+                readyTimerType.focus = false;
+                readyTimerType.totalTime = StaticFiles.TimerPageUISettings.getReadyTime;
+            }
+
+            if (StaticFiles.TimerPageUISettings.startTime > 0)
+            {
+                startTimerType.color = StaticFiles.ColorSettings.startColor;
+                startTimerType.active = true;
+                startTimerType.focus = false;
+                startTimerType.totalTime = StaticFiles.TimerPageUISettings.startTime;
+            }
+            else
+            {
+                startTimerType.color = StaticFiles.ColorSettings.startColor;
+                startTimerType.active = false;
+                startTimerType.focus = false;
+                startTimerType.totalTime = StaticFiles.TimerPageUISettings.startTime;
+            }
+
+            if (StaticFiles.TimerPageUISettings.reps > 0)
+            {
+                repTimerType.color = StaticFiles.ColorSettings.repBreakColor;
+                repTimerType.active = true;
+                repTimerType.focus = false;
+                repTimerType.totalTime = StaticFiles.TimerPageUISettings.repsRestTime;
+            }
+            else
+            {
+                repTimerType.color = StaticFiles.ColorSettings.repBreakColor;
+                repTimerType.active = false;
+                repTimerType.focus = false;
+                repTimerType.totalTime = StaticFiles.TimerPageUISettings.repsRestTime;
+            }
+
+            if (StaticFiles.TimerPageUISettings.sets > 0)
+            {
+                setTimerType.color = StaticFiles.ColorSettings.setBreakColor;
+                setTimerType.active = true;
+                setTimerType.focus = false;
+                setTimerType.totalTime = StaticFiles.TimerPageUISettings.setsRestTime;
+            }
+            else
+            {
+                setTimerType.color = StaticFiles.ColorSettings.setBreakColor;
+                setTimerType.active = false;
+                setTimerType.focus = false;
+                setTimerType.totalTime = StaticFiles.TimerPageUISettings.setsRestTime;
+            }
+
+            endTimerType.color = StaticFiles.ColorSettings.mainGrayColor;
+            endTimerType.active = true;
+            endTimerType.focus = false;
+        }
+
+        private bool StartCheck()
+        {
+            secondaryLinePaint.Color = StaticFiles.ColorSettings.darkGrayColor.ToSKColor();
+
+            if (StaticFiles.TimerPageUISettings.getReadyTime > 0)
+            {
+                readyTimerType.focus = true;
+                totalTime = readyTimerType.totalTime;
+                primaryLinePaint.Color = readyTimerType.color.ToSKColor();
                 return true;
             }
             else
             if (StaticFiles.TimerPageUISettings.startTime > 0)
             {
-                onStart = true;
+                startTimerType.focus = true;
                 totalTime = StaticFiles.TimerPageUISettings.startTime;
-                primaryColor = StaticFiles.ColorSettings.startColor;
                 primaryLinePaint.Color = StaticFiles.ColorSettings.startColor.ToSKColor();
                 return true;
             }
             else
-            if (StaticFiles.TimerPageUISettings.reps > 0)
+            if (StaticFiles.TimerPageUISettings.reps > 0 && ((repCountIndex + 1) < StaticFiles.TimerPageUISettings.reps))
             {
-                onRepBreak = true;
+                repCountIndex++;
+                repTimerType.focus = true;
                 totalTime = StaticFiles.TimerPageUISettings.repsRestTime;
-                primaryColor = StaticFiles.ColorSettings.repBreakColor;
                 primaryLinePaint.Color = StaticFiles.ColorSettings.repBreakColor.ToSKColor();
                 return true;
             }
             else
-            if (StaticFiles.TimerPageUISettings.sets > 0)
+            if (StaticFiles.TimerPageUISettings.sets > 0 && ((setCountIndex + 1) < StaticFiles.TimerPageUISettings.sets))
             {
-                onSetBreak = true;
+                setCountIndex++;
+                setTimerType.focus = true;
                 totalTime = StaticFiles.TimerPageUISettings.setsRestTime;
-                primaryColor = StaticFiles.ColorSettings.setBreakColor;
                 primaryLinePaint.Color = StaticFiles.ColorSettings.setBreakColor.ToSKColor();
                 return true;
             }
             else
             {
-                //onEnd = true;
                 this.Stop();
                 return false;
             }
         }
 
 
-        private void NextTimer()
+        private bool NextTimer()
         {
+            aTimer.Enabled = false;
             currentTime = 0;
 
-            if(onGetReady)
+            if(readyTimerType.focus)
             {
-                onGetReady = false;
-                onStart = true;
-                if(StaticFiles.TimerPageUISettings.startTime > 0)
+                if(startTimerType.active)
                 {
-                    totalTime = StaticFiles.TimerPageUISettings.startTime;
-                    primaryColor = StaticFiles.ColorSettings.startColor;
+                    readyTimerType.focus = false;
+                    startTimerType.focus = true;
+                    totalTime = startTimerType.totalTime;
                     primaryLinePaint.Color = StaticFiles.ColorSettings.startColor.ToSKColor();
+                    aTimer.Enabled = true;
+                    return true;
                 }
 
+                readyTimerType.focus = false;
+                startTimerType.focus = true;
+                return NextTimer();
+
             }else
-            if(onStart)
+            if(startTimerType.focus)
             {
-                onStart = false;
+                startTimerType.focus = false;
                 repCountIndex++;
                 if(repCountIndex < StaticFiles.TimerPageUISettings.reps)
                 {
-                    totalTime = StaticFiles.TimerPageUISettings.repsRestTime;
-                    primaryColor = StaticFiles.ColorSettings.repBreakColor;
-                    primaryLinePaint.Color = StaticFiles.ColorSettings.repBreakColor.ToSKColor();
-                    onRepBreak = true;
+                    if(repTimerType.active)
+                    {
+                        repTimerType.focus = true;
+                        totalTime = repTimerType.totalTime;
+                        primaryLinePaint.Color = repTimerType.color.ToSKColor();
+                        aTimer.Enabled = true;
+                        return true;
+                    }
+
+                    repTimerType.focus = true;
+                    return NextTimer();
+
                 }else // Set break
                 {
                     setCountIndex++;
                     if (setCountIndex < StaticFiles.TimerPageUISettings.sets)
                     {
-                        repCountIndex = 0;
-                        totalTime = StaticFiles.TimerPageUISettings.setsRestTime;
-                        primaryColor = StaticFiles.ColorSettings.setBreakColor;
-                        primaryLinePaint.Color = StaticFiles.ColorSettings.setBreakColor.ToSKColor();
-                        onSetBreak = true;
+                        if (setTimerType.active)
+                        {
+                            repCountIndex = 0;
+                            setTimerType.focus = true;
+                            totalTime = setTimerType.totalTime;
+                            primaryLinePaint.Color = setTimerType.color.ToSKColor();
+                            aTimer.Enabled = true;
+                            return true;
+                        }
+
+                        setTimerType.focus = true;
+                        return NextTimer();
+
                     }else
                     {
                         this.Stop();
@@ -255,15 +316,43 @@ namespace TopOutTrainer.Bitmap
                 }
             }
             else
-            if (onRepBreak || onSetBreak)
+            if (repTimerType.focus)
             {
-                onSetBreak = false;
-                onRepBreak = false;
-                onGetReady = true;
-                totalTime = StaticFiles.TimerPageUISettings.getReadyTime;
-                primaryColor = StaticFiles.ColorSettings.getReadyColor;
-                primaryLinePaint.Color = StaticFiles.ColorSettings.getReadyColor.ToSKColor();
+                if (readyTimerType.active)
+                {
+                    repTimerType.focus = false;
+                    readyTimerType.focus = true;
+                    totalTime = readyTimerType.totalTime;
+                    primaryLinePaint.Color = readyTimerType.color.ToSKColor();
+                    aTimer.Enabled = true;
+                    return true;
+                }
+
+                repTimerType.focus = false;
+                readyTimerType.focus = true;
+                return NextTimer();
+
+            }else
+            if (setTimerType.focus)
+            {
+
+                if (readyTimerType.active)
+                {
+                    setTimerType.focus = false;
+                    readyTimerType.focus = true;
+                    totalTime = readyTimerType.totalTime;
+                    primaryLinePaint.Color = readyTimerType.color.ToSKColor();
+                    aTimer.Enabled = true;
+                    return true;
+                }
+
+                setTimerType.focus = false;
+                readyTimerType.focus = true;
+                return NextTimer();
+
             }
+
+            return false;
 
         }
 
@@ -307,6 +396,8 @@ namespace TopOutTrainer.Bitmap
             }
         }
 
+        // EVENTS //
+
         void Handle_PaintSurface(object sender, SKPaintSurfaceEventArgs e)
         {
             surface = e.Surface;
@@ -328,12 +419,27 @@ namespace TopOutTrainer.Bitmap
             rightPoint = rightPoint - (int)totalReduction;
 
             //int rightPoint = (int)(width - (width / 1.05));
-            //canvas.DrawCircle(new SKPoint(0, 0), 10, primaryColorFillPaint);
             canvas.DrawLine(new SKPoint(leftPoint, 0), new SKPoint((int)(width * .75), 0), secondaryLinePaint);
             canvas.DrawLine(new SKPoint(leftPoint, 0), new SKPoint(rightPoint, 0), primaryLinePaint);
-            //canvas.Clear(primaryColor.ToSKColor());
             canvas.Restore();
             return;
+        }
+
+        //private int MilliSecond = 0;
+        private void OnTimedEvent(Object source, ElapsedEventArgs e)
+        {
+            currentTime += elapsedMilliSec / 1000f;
+
+            if (currentTime >= totalTime)
+            {
+                NextTimer();
+            }
+            this.InvalidateSurface();
+        }
+
+        void BitmapCountDown_SizeChanged(object sender, EventArgs e)
+        {
+            this.InvalidateSurface();
         }
 
     }
