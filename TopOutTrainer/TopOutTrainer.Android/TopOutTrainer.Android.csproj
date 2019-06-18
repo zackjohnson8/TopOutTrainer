@@ -147,6 +147,7 @@
     <AndroidResource Include="Resources\drawable\pause_white.png" />
     <AndroidResource Include="Resources\drawable\reset_white.png" />
     <AndroidResource Include="Resources\drawable\start_white_text.png" />
+    <AndroidResource Include="Resources\drawable\calendar_orange.png" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Resources\drawable-hdpi\" />

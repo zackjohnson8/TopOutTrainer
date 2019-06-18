@@ -86,7 +86,7 @@ namespace TopOutTrainer
 
             ActivateBeginTimer();
             //aTimer.Enabled = true;
-    }
+        }
 
         public void Start()
         {
@@ -97,6 +97,9 @@ namespace TopOutTrainer
                 eventRunning = true;
             }
             aTimer.AutoReset = true;
+
+            Timer.TimerLock.UnlockPhaseLocker();
+            while(!Timer.TimerLock.ReadyCheck()) { }
             aTimer.Enabled = true;
 
         }

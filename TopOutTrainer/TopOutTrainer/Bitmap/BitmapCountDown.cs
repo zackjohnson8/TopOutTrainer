@@ -97,6 +97,9 @@ namespace TopOutTrainer.Bitmap
                 eventRunning = true;
             }
             aTimer.AutoReset = true;
+
+            Timer.TimerLock.UnlockBitMapLocker();
+            while (!Timer.TimerLock.ReadyCheck()) { }
             aTimer.Enabled = true;
 
         }
