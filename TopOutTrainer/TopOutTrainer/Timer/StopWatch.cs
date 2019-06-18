@@ -120,6 +120,9 @@ namespace TopOutTrainer
                 eventRunning = true;
             }
             aTimer.AutoReset = true;
+
+            Timer.TimerLock.UnlockTotalTimeLocker();
+            while (!Timer.TimerLock.ReadyCheck()) { }
             aTimer.Enabled = true;
         }
 

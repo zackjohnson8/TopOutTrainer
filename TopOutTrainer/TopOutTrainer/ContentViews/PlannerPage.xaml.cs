@@ -8,7 +8,7 @@ namespace TopOutTrainer.ContentViews
     public partial class PlannerPage : ContentPage
     {
 
-        private Color mainColor = Color.FromHex("#303030");
+        private Color mainColor = StaticFiles.ColorSettings.darkGrayColor;
 
         public PlannerPage()
         {
@@ -70,7 +70,7 @@ namespace TopOutTrainer.ContentViews
                 BackgroundColor = Color.FromHex("#D3EFFC"),
                 Margin = 0,
                 CornerRadius = 0,
-                Source = "calendar.png",
+                Source = "calendar_orange.png",
                 Aspect = Aspect.AspectFit
 
 
@@ -82,7 +82,7 @@ namespace TopOutTrainer.ContentViews
                 BackgroundColor = mainColor,
                 Margin = 0,
                 CornerRadius = 0,
-                Source = "graph_white.png",
+                //Source = "graph_white.png",
                 Aspect = Aspect.AspectFit
 
             };
@@ -109,7 +109,7 @@ namespace TopOutTrainer.ContentViews
 
         private void GraphButtonClicked(object sender, EventArgs args)
         {
-            Navigation.PushAsync(new GraphPage());
+            //Navigation.PushAsync(new GraphPage());
         }
 
         private void TimerButtonClicked(object sender, EventArgs args)

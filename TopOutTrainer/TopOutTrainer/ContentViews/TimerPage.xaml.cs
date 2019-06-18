@@ -441,7 +441,7 @@ namespace TopOutTrainer.ContentViews
                     BackgroundColor = StaticFiles.ColorSettings.darkGrayColor,
                     Margin = 0,
                     CornerRadius = 0,
-                    Source = "graph_white.png",
+                    //Source = "graph_white.png",
                     Aspect = Aspect.AspectFit
 
                 };
@@ -570,9 +570,9 @@ namespace TopOutTrainer.ContentViews
 
         private void GraphButtonClicked(object sender, EventArgs args)
         {
-            Content = null;
-            Navigation.PushAsync(new GraphPage());
-            ResetAll();
+            //Content = null;
+            //Navigation.PushAsync(new GraphPage());
+            //ResetAll();
         }
 
         private void PlannerButtonClicked(object sender, EventArgs args)
