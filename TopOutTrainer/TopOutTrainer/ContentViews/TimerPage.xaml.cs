@@ -65,6 +65,9 @@ namespace TopOutTrainer.ContentViews
         private void RefreshContent()
         {
 
+            GridChildrenInitialize();
+            MainGridInitialize();
+
             // Set reps and sets for change
             repsNumL.Text = StaticFiles.TimerPageUISettings.reps.ToString();
             setsNumL.Text = StaticFiles.TimerPageUISettings.sets.ToString();
