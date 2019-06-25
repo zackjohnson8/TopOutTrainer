@@ -379,39 +379,38 @@ namespace TopOutTrainer.ContentViews
 
         void SetsSecPicker_SelectedIndexChanged(object sender, EventArgs e)
         {
-            Debug.Write("changed to: " + setsSecPicker.SelectedIndex);
             holdSetSec = setsSecPicker.SelectedIndex;
         }
 
         void RepsSecPicker_SelectedIndexChanged(object sender, EventArgs e)
         {
-            Debug.Write("changed to: " + repsSecPicker.SelectedIndex);
+            
             holdRepSec = repsSecPicker.SelectedIndex;
         }
 
         void RepsPicker_SelectedIndexChanged(object sender, EventArgs e)
         {
-            Debug.Write("changed to: " + repsPicker.SelectedIndex);
+            
             holdRepIndex = repsPicker.SelectedIndex;
             holdRepValue = repsPicker.SelectedIndex + 1;
         }
 
         void SetsPicker_SelectedIndexChanged(object sender, EventArgs e)
         {
-            Debug.Write("changed to: " + setsPicker.SelectedIndex);
+            
             holdSetIndex = setsPicker.SelectedIndex;
             holdSetValue = setsPicker.SelectedIndex + 1;
         }
 
         void SetsMinPicker_SelectedIndexChanged(object sender, EventArgs e)
         {
-            Debug.Write("changed to: " + setsMinPicker.SelectedIndex);
+            
             holdSetMin = setsMinPicker.SelectedIndex;
         }
 
         void RepsMinPicker_SelectedIndexChanged(object sender, EventArgs e)
         {
-            Debug.Write("changed to: " + repsMinPicker.SelectedIndex);
+           
             holdRepMin = repsMinPicker.SelectedIndex;
         }
 

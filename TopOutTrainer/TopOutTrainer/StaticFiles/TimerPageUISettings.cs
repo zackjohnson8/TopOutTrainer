@@ -49,9 +49,7 @@ namespace TopOutTrainer.StaticFiles
                 return true;
             }
             catch (Exception ex)
-            {
-                Debug.Write("here");
-                Debug.Write(ex);
+            { 
                 return false;
             }
         }

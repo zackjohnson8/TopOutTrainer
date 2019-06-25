@@ -3,7 +3,7 @@ using SkiaSharp;
 using SkiaSharp.Views.Forms;
 using Xamarin.Forms;
 using System.Timers;
-using System.Diagnostics;
+using UIKit;
 
 namespace TopOutTrainer.Bitmap
 {
@@ -125,20 +125,29 @@ namespace TopOutTrainer.Bitmap
             setTimerType.focus = false;
 
             StartCheck();
-            this.InvalidateSurface();
+            Device.BeginInvokeOnMainThread(() =>
+            {
+                this.InvalidateSurface();
+            });
         }
 
         public void Stop()
         {
             primaryLinePaint.Color = StaticFiles.ColorSettings.mainGrayColor.ToSKColor();
             secondaryLinePaint.Color = StaticFiles.ColorSettings.mainGrayColor.ToSKColor();
-            this.InvalidateSurface();
+            Device.BeginInvokeOnMainThread(() =>
+            {
+                this.InvalidateSurface();
+            });
             aTimer.Enabled = false;
         }
 
         public void Clear()
         {
-            this.InvalidateSurface();
+            Device.BeginInvokeOnMainThread(() =>
+            {
+                this.InvalidateSurface();
+            });
         }
 
         private void TimerTypeFactory()
@@ -403,6 +412,7 @@ namespace TopOutTrainer.Bitmap
 
         void Handle_PaintSurface(object sender, SKPaintSurfaceEventArgs e)
         {
+
             surface = e.Surface;
             canvas = surface.Canvas;
             width = e.Info.Width;
@@ -437,12 +447,19 @@ namespace TopOutTrainer.Bitmap
             {
                 NextTimer();
             }
-            this.InvalidateSurface();
+            Device.BeginInvokeOnMainThread(() =>
+            {
+                this.InvalidateSurface();
+            });
+            //this.InvalidateSurface();
         }
 
         void BitmapCountDown_SizeChanged(object sender, EventArgs e)
         {
-            this.InvalidateSurface();
+            Device.BeginInvokeOnMainThread(() =>
+            {
+                this.InvalidateSurface();
+            });
         }
 
     }
