@@ -340,15 +340,15 @@ namespace TopOutTrainer.ContentViews
             //Font-Family
             if (Device.RuntimePlatform == Device.iOS)
             {
-                intervalL.FontFamily = "OpenSans-Regular";
-                repsL.FontFamily = "OpenSans-Regular";
-                totalTimeL.FontFamily = "OpenSans-Regular";
-                setsL.FontFamily = "OpenSans-Regular";
-                timerNumL.FontFamily = "OpenSans-Regular";
-                repsNumL.FontFamily = "OpenSans-Regular";
-                setsNumL.FontFamily = "OpenSans-Regular";
-                getReadyL.FontFamily = "OpenSans-Regular";
-                timerL.FontFamily = "OpenSans-Regular";
+                intervalL.FontFamily = "MontserratAlternates-Bold";
+                repsL.FontFamily = "MontserratAlternates-Bold";
+                totalTimeL.FontFamily = "MontserratAlternates-Bold";
+                setsL.FontFamily = "MontserratAlternates-Bold";
+                timerNumL.FontFamily = "MontserratAlternates-Bold";
+                repsNumL.FontFamily = "MontserratAlternates-Bold";
+                setsNumL.FontFamily = "MontserratAlternates-Bold";
+                getReadyL.FontFamily = "MontserratAlternates-Bold";
+                timerL.FontFamily = "MontserratAlternates-Bold";
 
             }
             if (Device.RuntimePlatform == Device.Android)
