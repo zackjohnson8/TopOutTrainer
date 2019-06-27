@@ -106,7 +106,6 @@
     <AndroidAsset Include="Assets\font\montserrat\MontserratAlternates-SemiBoldItalic.otf" />
     <AndroidAsset Include="Assets\font\montserrat\MontserratAlternates-Thin.otf" />
     <AndroidAsset Include="Assets\font\montserrat\MontserratAlternates-ThinItalic.otf" />
-    <None Include="Assets\font\OpenSans-Regular.ttf" />
     <AndroidAsset Include="Assets\Lobster.otf" />
     <AndroidAsset Include="Assets\OpenSans.ttf" />
     <None Include="Resources\AboutResources.txt" />
@@ -174,7 +173,7 @@
     <AndroidResource Include="Resources\drawable\stopwatch_white_trans.png" />
     <AndroidResource Include="Resources\drawable\start.png" />
     <AndroidResource Include="Resources\drawable\graph_white.png" />
-    <AndroidResource Include="Resources\drawable\calendar.png" />
+    <AndroidResource Include="Resources\drawable\calendar_white.png" />
     <AndroidResource Include="Resources\drawable\construction.png" />
     <AndroidResource Include="Resources\drawable\start_orange.png" />
     <AndroidResource Include="Resources\drawable\start_blue.png" />

@@ -71,7 +71,7 @@ namespace TopOutTrainer.ContentViews
                 BackgroundColor = mainColor,
                 Margin = 0,
                 CornerRadius = 0,
-                Source = "calendar.png",
+                Source = "calendar_white.png",
                 Aspect = Aspect.AspectFit
 
 

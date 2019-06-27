@@ -45,7 +45,15 @@ namespace TopOutTrainer.ContentViews
         public TimerPage()
         { 
             // Hide nav bar and begin building of contentpage
-            NavigationPage.SetHasNavigationBar(this, false);
+            switch(Device.RuntimePlatform)
+            {
+                case Device.iOS:
+                    NavigationPage.SetHasNavigationBar(this, false);
+                    break;
+                case Device.Android:
+                    NavigationPage.SetHasNavigationBar(this, false);
+                    break;
+            }
             GridChildrenInitialize();
             MainGridInitialize();
 
@@ -69,8 +77,12 @@ namespace TopOutTrainer.ContentViews
             MainGridInitialize();
 
             // Set reps and sets for change
-            repsNumL.Text = StaticFiles.TimerPageUISettings.reps.ToString();
-            setsNumL.Text = StaticFiles.TimerPageUISettings.sets.ToString();
+            Device.BeginInvokeOnMainThread(() =>
+            {
+                repsNumL.Text = StaticFiles.TimerPageUISettings.reps.ToString();
+                setsNumL.Text = StaticFiles.TimerPageUISettings.sets.ToString();
+            });
+            
 
             // Set timerNumL with new total minutes and seconds
             // Each rep and set break follows with a get ready and start time
@@ -103,9 +115,13 @@ namespace TopOutTrainer.ContentViews
             {
                 timeSec = totalTimeSeconds.ToString();
             }
-            timerNumL.Text = string.Concat(timeMin + ':' + timeSec);
+            Device.BeginInvokeOnMainThread(() =>
+            {
+                timerNumL.Text = string.Concat(timeMin + ':' + timeSec);
+            });
 
             Content = mainG;
+
         }
 
         protected override void OnAppearing()
@@ -133,36 +149,68 @@ namespace TopOutTrainer.ContentViews
 
         private void MainGridInitialize()
         {
-
-            mainG = new Grid
+            switch (Device.RuntimePlatform)
             {
-                Padding = new Thickness(0),
-                Margin = new Thickness(0),
-                BackgroundColor = mainColor,
-                RowDefinitions =
-                {
-                    // 5 Rows
-                    new RowDefinition { Height = new GridLength(.8, GridUnitType.Star) },
-                    new RowDefinition { Height = new GridLength(1, GridUnitType.Star) },
-                    new RowDefinition { Height = new GridLength(1, GridUnitType.Star) },
-                    new RowDefinition { Height = new GridLength(1.5, GridUnitType.Star) },
-                    new RowDefinition { Height = new GridLength(5.95, GridUnitType.Star) },
-                    new RowDefinition { Height = new GridLength(.75, GridUnitType.Star) },
-                },
-                ColumnDefinitions =
-                {
-                    new ColumnDefinition { Width = new GridLength(1, GridUnitType.Star) },
-                    new ColumnDefinition { Width = new GridLength(1, GridUnitType.Star) },
-                    new ColumnDefinition { Width = new GridLength(1, GridUnitType.Star) },
-                    new ColumnDefinition { Width = new GridLength(1, GridUnitType.Star) },
-                },
-                RowSpacing = 0,
-                ColumnSpacing = 0,
-                //HorizontalOptions = LayoutOptions.CenterAndExpand,
-                //VerticalOptions = LayoutOptions.CenterAndExpand
-            };
-
-
+                case Device.iOS:
+                    mainG = new Grid
+                    {
+                        Padding = new Thickness(0),
+                        Margin = new Thickness(0),
+                        BackgroundColor = mainColor,
+                        RowDefinitions =
+                    {
+                        // 5 Rows
+                        new RowDefinition { Height = new GridLength(1.4, GridUnitType.Star) },
+                        new RowDefinition { Height = new GridLength(1, GridUnitType.Star) },
+                        new RowDefinition { Height = new GridLength(1, GridUnitType.Star) },
+                        new RowDefinition { Height = new GridLength(1.5, GridUnitType.Star) },
+                        new RowDefinition { Height = new GridLength(5.95, GridUnitType.Star) },
+                        new RowDefinition { Height = new GridLength(.75, GridUnitType.Star) },
+                    },
+                            ColumnDefinitions =
+                    {
+                        new ColumnDefinition { Width = new GridLength(1, GridUnitType.Star) },
+                        new ColumnDefinition { Width = new GridLength(1, GridUnitType.Star) },
+                        new ColumnDefinition { Width = new GridLength(1, GridUnitType.Star) },
+                        new ColumnDefinition { Width = new GridLength(1, GridUnitType.Star) },
+                    },
+                        RowSpacing = 0,
+                        ColumnSpacing = 0,
+                        //HorizontalOptions = LayoutOptions.CenterAndExpand,
+                        //VerticalOptions = LayoutOptions.CenterAndExpand
+                    };
+                    break;
+                case Device.Android:
+                    mainG = new Grid
+                    {
+                        Padding = new Thickness(0),
+                        Margin = new Thickness(0),
+                        BackgroundColor = mainColor,
+                        RowDefinitions =
+                    {
+                        // 5 Rows
+                        new RowDefinition { Height = new GridLength(.8, GridUnitType.Star) },
+                        new RowDefinition { Height = new GridLength(1, GridUnitType.Star) },
+                        new RowDefinition { Height = new GridLength(1, GridUnitType.Star) },
+                        new RowDefinition { Height = new GridLength(1.5, GridUnitType.Star) },
+                        new RowDefinition { Height = new GridLength(5.95, GridUnitType.Star) },
+                        new RowDefinition { Height = new GridLength(.75, GridUnitType.Star) },
+                    },
+                            ColumnDefinitions =
+                    {
+                        new ColumnDefinition { Width = new GridLength(1, GridUnitType.Star) },
+                        new ColumnDefinition { Width = new GridLength(1, GridUnitType.Star) },
+                        new ColumnDefinition { Width = new GridLength(1, GridUnitType.Star) },
+                        new ColumnDefinition { Width = new GridLength(1, GridUnitType.Star) },
+                    },
+                        RowSpacing = 0,
+                        ColumnSpacing = 0,
+                        //HorizontalOptions = LayoutOptions.CenterAndExpand,
+                        //VerticalOptions = LayoutOptions.CenterAndExpand
+                    };
+                    break;
+            }
+            
 
             // Filler
             mainG.Children.Add(new StackLayout { BackgroundColor = StaticFiles.ColorSettings.darkGrayColor }, 0, 0);
@@ -376,6 +424,13 @@ namespace TopOutTrainer.ContentViews
                     Aspect = Aspect.AspectFit
                 };
                 stopButton.Clicked += StopButton_Clicked;
+            }else
+            {
+                stopButton.Source = "pause_white.png";
+                if(stopbool)
+                {
+                    stopbool = false;
+                }
             }
 
             if (resetButton == null)
@@ -428,7 +483,7 @@ namespace TopOutTrainer.ContentViews
                     BackgroundColor = StaticFiles.ColorSettings.darkGrayColor,
                     Margin = 0,
                     CornerRadius = 0,
-                    Source = "calendar.png",
+                    Source = "calendar_white.png",
                     Aspect = Aspect.AspectFit
 
 
@@ -609,7 +664,7 @@ namespace TopOutTrainer.ContentViews
                 timerHandler.Resume();
                 Device.BeginInvokeOnMainThread(() =>
                 {
-                    stopButton.Source = "pause_white";
+                    stopButton.Source = "pause_white.png";
                 });
             }
         }
