@@ -49,6 +49,7 @@
   <ItemGroup>
     <Folder Include="StaticFiles\" />
     <Folder Include="PCLStorageFolder\" />
+    <Folder Include="Factories\" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="Mono.Android">
