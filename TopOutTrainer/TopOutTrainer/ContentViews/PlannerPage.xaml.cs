@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 
 using Xamarin.Forms;
+using TopOutTrainer.Factories;
 
 namespace TopOutTrainer.ContentViews
 {
@@ -9,102 +10,51 @@ namespace TopOutTrainer.ContentViews
     {
 
         private Color mainColor = StaticFiles.ColorSettings.darkGrayColor;
+        private PlannerContentFactory myPlannerContentFactory;
+        SwipeGestureRecognizer SwipeGestureLeft;
+        SwipeGestureRecognizer SwipeGestureRight;
+
+        View currentContent;
 
         public PlannerPage()
         {
             InitializeComponent();
             NavigationPage.SetHasNavigationBar(this, false);
 
-            Grid mainG = new Grid
+            myPlannerContentFactory = new PlannerContentFactory();
+            currentContent = myPlannerContentFactory.CreateViewAuto();
+
+            // Set event for SwipeGesture
+            SwipeGestureLeft = new SwipeGestureRecognizer { Direction = SwipeDirection.Left };
+            SwipeGestureRight = new SwipeGestureRecognizer { Direction = SwipeDirection.Right };
+            SwipeGestureLeft.Swiped += OnSwiped;
+            SwipeGestureRight.Swiped += OnSwiped;
+
+            currentContent.GestureRecognizers.Add(SwipeGestureLeft);
+            currentContent.GestureRecognizers.Add(SwipeGestureRight);
+
+            Content = currentContent;
+        }
+
+        private void OnSwiped(object sender, SwipedEventArgs e)
+        {
+
+            switch (e.Direction)
             {
-                Padding = new Thickness(0),
-                Margin = new Thickness(0),
-                BackgroundColor = StaticFiles.ColorSettings.mainGrayColor,
-                RowDefinitions =
-                {
-                    // 5 Rows
-                    new RowDefinition { Height = new GridLength(10.25, GridUnitType.Star) },
-                    new RowDefinition { Height = new GridLength(.75, GridUnitType.Star) },
-                },
-                ColumnDefinitions =
-                {
-                    new ColumnDefinition { Width = new GridLength(1, GridUnitType.Star) },
-                    new ColumnDefinition { Width = new GridLength(1, GridUnitType.Star) },
-                    new ColumnDefinition { Width = new GridLength(1, GridUnitType.Star) },
-                    new ColumnDefinition { Width = new GridLength(1, GridUnitType.Star) },
-                },
-                RowSpacing = 0,
-                ColumnSpacing = 0,
-            };
-
-            StackLayout aStack = new StackLayout {
-                HorizontalOptions = LayoutOptions.Center,
-                VerticalOptions = LayoutOptions.Center,
-                BackgroundColor = StaticFiles.ColorSettings.mainGrayColor
-            };
-
-            aStack.Children.Add(new Image {
-                BackgroundColor = StaticFiles.ColorSettings.mainGrayColor,
-                Margin = 0,
-                Source = "construction.png", 
-                Aspect = Aspect.AspectFit 
-                });
-
-            mainG.Children.Add(aStack, 0, 0);
-            Grid.SetColumnSpan(aStack, 4);
-
-            ImageButton button1 = new ImageButton
-            {
-
-                BackgroundColor = mainColor,
-                Margin = 0,
-                CornerRadius = 0,
-                Source = "stopwatch_white_trans.png",
-                Aspect = Aspect.AspectFit
-
-            };
-            button1.Clicked += TimerButtonClicked;
-            // (4,1)
-            ImageButton button2 = new ImageButton
-            {
-                BackgroundColor = StaticFiles.ColorSettings.darkGrayColor,
-                Margin = 0,
-                CornerRadius = 0,
-                Source = "calendar_orange.png",
-                Aspect = Aspect.AspectFit
-
-
-            };
-
-            // (4,2)
-            ImageButton button3 = new ImageButton
-            {
-                BackgroundColor = StaticFiles.ColorSettings.darkGrayColor,
-                Margin = 0,
-                CornerRadius = 0,
-                //Source = "graph_white.png",
-                Aspect = Aspect.AspectFit
-
-            };
-            button3.Clicked += GraphButtonClicked;
-            // (4,3)
-            ImageButton button4 = new ImageButton
-            {
-                WidthRequest = 50,
-                HeightRequest = 50,
-                BackgroundColor = StaticFiles.ColorSettings.darkGrayColor,
-                Margin = 0,
-                CornerRadius = 0
-
-            };
-            mainG.Children.Add(button1, 0, 1);
-            mainG.Children.Add(button2, 1, 1);
-            mainG.Children.Add(button3, 2, 1);
-            mainG.Children.Add(button4, 3, 1);
-
-
-            Content = mainG;
-            Content.BackgroundColor = StaticFiles.ColorSettings.mainGrayColor;
+                case SwipeDirection.Right:
+                    currentContent = myPlannerContentFactory.CreateViewRight();
+                    currentContent.GestureRecognizers.Add(SwipeGestureLeft);
+                    currentContent.GestureRecognizers.Add(SwipeGestureRight);
+                    Content = currentContent;
+                    break;
+                case SwipeDirection.Left:
+                    currentContent = myPlannerContentFactory.CreateViewLeft();
+                    currentContent.GestureRecognizers.Add(SwipeGestureLeft);
+                    currentContent.GestureRecognizers.Add(SwipeGestureRight);
+                    Content = currentContent;
+                    break;
+            }
+            // WHAT? Deleting previous object before it runs all events
         }
 
         private void GraphButtonClicked(object sender, EventArgs args)
