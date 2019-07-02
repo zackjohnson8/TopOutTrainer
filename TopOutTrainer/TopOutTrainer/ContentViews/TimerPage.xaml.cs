@@ -16,9 +16,12 @@ namespace TopOutTrainer.ContentViews
         private TimerContentFactory myTimerContentFactory = new TimerContentFactory();
 
         public TimerPage()
-        { 
+        {
+            // When size is determined have an event that fixes sizes based on phone of choice
+            SizeChanged += OnSizeChanged;
+
             // Hide nav bar and begin building of contentpage
-            switch(Device.RuntimePlatform)
+            switch (Device.RuntimePlatform)
             {
                 case Device.iOS:
                     NavigationPage.SetHasNavigationBar(this, false);
@@ -27,9 +30,6 @@ namespace TopOutTrainer.ContentViews
                     NavigationPage.SetHasNavigationBar(this, false);
                     break;
             }
-
-            // When size is determined have an event that fixes sizes based on phone of choice
-            SizeChanged += OnSizeChanged;
 
             View myView = myTimerContentFactory.CreateContentFirstView();
 

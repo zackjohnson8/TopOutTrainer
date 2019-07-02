@@ -19,7 +19,7 @@ namespace TopOutTrainer.ContentViews
             {
                 Padding = new Thickness(0),
                 Margin = new Thickness(0),
-                BackgroundColor = Color.FromHex("#303030"),
+                BackgroundColor = StaticFiles.ColorSettings.mainGrayColor,
                 RowDefinitions =
                 {
                     // 5 Rows
@@ -40,11 +40,11 @@ namespace TopOutTrainer.ContentViews
             StackLayout aStack = new StackLayout {
                 HorizontalOptions = LayoutOptions.Center,
                 VerticalOptions = LayoutOptions.Center,
-                BackgroundColor = Color.FromHex("#FFFFFF")
+                BackgroundColor = StaticFiles.ColorSettings.mainGrayColor
             };
 
             aStack.Children.Add(new Image {
-                BackgroundColor = Color.FromHex("#FFFFFF"),
+                BackgroundColor = StaticFiles.ColorSettings.mainGrayColor,
                 Margin = 0,
                 Source = "construction.png", 
                 Aspect = Aspect.AspectFit 
@@ -67,7 +67,7 @@ namespace TopOutTrainer.ContentViews
             // (4,1)
             ImageButton button2 = new ImageButton
             {
-                BackgroundColor = Color.FromHex("#D3EFFC"),
+                BackgroundColor = StaticFiles.ColorSettings.darkGrayColor,
                 Margin = 0,
                 CornerRadius = 0,
                 Source = "calendar_orange.png",
@@ -79,7 +79,7 @@ namespace TopOutTrainer.ContentViews
             // (4,2)
             ImageButton button3 = new ImageButton
             {
-                BackgroundColor = mainColor,
+                BackgroundColor = StaticFiles.ColorSettings.darkGrayColor,
                 Margin = 0,
                 CornerRadius = 0,
                 //Source = "graph_white.png",
@@ -92,7 +92,7 @@ namespace TopOutTrainer.ContentViews
             {
                 WidthRequest = 50,
                 HeightRequest = 50,
-                BackgroundColor = mainColor,
+                BackgroundColor = StaticFiles.ColorSettings.darkGrayColor,
                 Margin = 0,
                 CornerRadius = 0
 
@@ -104,7 +104,7 @@ namespace TopOutTrainer.ContentViews
 
 
             Content = mainG;
-            Content.BackgroundColor = Color.FromHex("#FFFFFF");
+            Content.BackgroundColor = StaticFiles.ColorSettings.mainGrayColor;
         }
 
         private void GraphButtonClicked(object sender, EventArgs args)
