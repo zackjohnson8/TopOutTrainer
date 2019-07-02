@@ -15,6 +15,7 @@ namespace TopOutTrainer.StaticFiles
         public static Color darkBlueColor { get; set; } = Color.FromHex("#005cb2");
         public static Color blueColor { get; set; } = Color.FromHex("#1e88e5");
         public static Color lightBlueColor { get; set; } = Color.FromHex("#6ab7ff");
+        public static Color textColorWhite { get; set; } = Color.FromHex("#ffffff");
 
     }
 }
