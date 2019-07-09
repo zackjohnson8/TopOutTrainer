@@ -13,14 +13,13 @@ namespace TopOutTrainer.ContentViews
         private PlannerContentFactory myPlannerContentFactory;
         SwipeGestureRecognizer SwipeGestureLeft;
         SwipeGestureRecognizer SwipeGestureRight;
-
         View currentContent;
 
         public PlannerPage()
         {
             InitializeComponent();
             NavigationPage.SetHasNavigationBar(this, false);
-
+            
             myPlannerContentFactory = new PlannerContentFactory();
             currentContent = myPlannerContentFactory.CreateViewAuto();
 
@@ -29,6 +28,8 @@ namespace TopOutTrainer.ContentViews
             SwipeGestureRight = new SwipeGestureRecognizer { Direction = SwipeDirection.Right };
             SwipeGestureLeft.Swiped += OnSwiped;
             SwipeGestureRight.Swiped += OnSwiped;
+            myPlannerContentFactory.timerButton.Clicked += TimerButtonClicked;
+            myPlannerContentFactory.calendarButton.Clicked += CalendarButtonClicked;
 
             currentContent.GestureRecognizers.Add(SwipeGestureLeft);
             currentContent.GestureRecognizers.Add(SwipeGestureRight);
@@ -57,7 +58,7 @@ namespace TopOutTrainer.ContentViews
             // WHAT? Deleting previous object before it runs all events
         }
 
-        private void GraphButtonClicked(object sender, EventArgs args)
+        private void CalendarButtonClicked(object sender, EventArgs args)
         {
             //Navigation.PushAsync(new GraphPage());
         }
