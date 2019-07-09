@@ -185,6 +185,16 @@
     <AndroidResource Include="Resources\drawable\calendar_orange.png" />
     <AndroidResource Include="Resources\font\Lobster.otf" />
     <AndroidResource Include="Resources\font\OpenSans-Regular.ttf" />
+    <AndroidResource Include="Resources\drawable\monday_text.png" />
+    <AndroidResource Include="Resources\drawable\wednesday_text.png" />
+    <AndroidResource Include="Resources\drawable\tuesday_text.png" />
+    <AndroidResource Include="Resources\drawable\wednesday_text_gray.png" />
+    <AndroidResource Include="Resources\drawable\tuesday_text_gray.png" />
+    <AndroidResource Include="Resources\drawable\monday_text_gray.png" />
+    <AndroidResource Include="Resources\drawable\thursday_text_gray.png" />
+    <AndroidResource Include="Resources\drawable\friday_text_gray.png" />
+    <AndroidResource Include="Resources\drawable\saturday_text_gray.png" />
+    <AndroidResource Include="Resources\drawable\sunday_text_gray.png" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Resources\drawable-hdpi\" />
